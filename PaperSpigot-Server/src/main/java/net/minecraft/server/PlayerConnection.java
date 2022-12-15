@@ -3,9 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
-import com.google.common.util.concurrent.Futures;
 import io.netty.buffer.Unpooled;
-import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -148,7 +146,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             --this.m;
         }
 
-        if (this.player.D() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.az() - this.player.D() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
+        if (this.player.D() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.az() - this.player.D() > (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
             this.player.resetIdleTimer(); // CraftBukkit - SPIGOT-854
             this.disconnect("You have been idle for too long!");
         }
@@ -178,19 +176,13 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         // CraftBukkit end
         final ChatComponentText chatcomponenttext = new ChatComponentText(s);
 
-        this.networkManager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener() {
-            public void operationComplete(Future future) throws Exception { // CraftBukkit - fix decompile error
-                PlayerConnection.this.networkManager.close(chatcomponenttext);
-            }
+        this.networkManager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), (GenericFutureListener) future -> { // CraftBukkit - fix decompile error
+            PlayerConnection.this.networkManager.close(chatcomponenttext);
         }, new GenericFutureListener[0]);
         this.a(chatcomponenttext); // CraftBukkit - fire quit instantly
         this.networkManager.k();
         // CraftBukkit - Don't wait
-        this.minecraftServer.postToMainThread(new Runnable() {
-             public void run() {
-                 PlayerConnection.this.networkManager.l();
-            }
-        });
+        this.minecraftServer.postToMainThread(PlayerConnection.this.networkManager::l);
     }
 
     public void a(PacketPlayInSteerVehicle packetplayinsteervehicle) {
@@ -1860,7 +1852,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     public void a(PacketPlayInTransaction packetplayintransaction) {
         if (this.player.dead) return; // CraftBukkit
         PlayerConnectionUtils.ensureMainThread(packetplayintransaction, this, this.player.u());
-        Short oshort = (Short) this.n.get(this.player.activeContainer.windowId);
+        Short oshort = this.n.get(this.player.activeContainer.windowId);
 
         if (oshort != null && packetplayintransaction.b() == oshort.shortValue() && this.player.activeContainer.windowId == packetplayintransaction.a() && !this.player.activeContainer.c(this.player) && !this.player.isSpectator()) {
             this.player.activeContainer.a(this.player, true);

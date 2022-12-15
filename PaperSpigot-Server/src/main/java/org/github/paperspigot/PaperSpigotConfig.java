@@ -22,8 +22,6 @@ public class PaperSpigotConfig {
 
     public static boolean usePacketLimiter;
     public static int maxPacketsPerSecond;
-
-    public static boolean disableVanilaChunkGc;
     public static int maxBytesPerConnection;
     public static String nameLoginHandler;
     public static String nettyIoPrefix;
@@ -64,7 +62,7 @@ public class PaperSpigotConfig {
         config.options().header(HEADER);
         config.options().copyDefaults(true);
 
-        commands = new HashMap<String, Command>();
+        commands = new HashMap<>();
 
         version = getInt("config-version", 9);
         set("config-version", 9);
