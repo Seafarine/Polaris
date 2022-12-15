@@ -246,11 +246,11 @@ public class VersionCommand extends BukkitCommand {
 
     private static int getDistance(String repo, String currentVerInt) { // PaperSpigot
         try {
-            BufferedReader reader = Resources.asCharSource(
+            // PaperSpigot
+            try (BufferedReader reader = Resources.asCharSource(
                     new URL("https://ci.destroystokyo.com/job/PaperSpigot/lastSuccessfulBuild/buildNumber"), // PaperSpigot
                     Charsets.UTF_8
-            ).openBufferedStream();
-            try {
+            ).openBufferedStream()) {
                 // PaperSpigot start
                 int newVer = Integer.decode(reader.readLine());
                 int currentVer = Integer.decode(currentVerInt);
@@ -259,8 +259,6 @@ public class VersionCommand extends BukkitCommand {
                 //ex.printStackTrace();
                 // PaperSpigot end
                 return -1;
-            } finally {
-                reader.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
