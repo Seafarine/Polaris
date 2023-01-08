@@ -21,8 +21,9 @@ import java.util.logging.Level;
 public class PaperSpigotConfig {
 
     public static boolean usePacketLimiter;
-    
     public static boolean verifyChannelBeforeDecode;
+
+    public static String paperSpigotLicense;
     public static int maxPacketsPerSecond;
     public static int maxBytesPerConnection;
     public static String nameLoginHandler;
@@ -151,6 +152,7 @@ public class PaperSpigotConfig {
     }
 
     private static void antiSmasher() {
+        paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
         usePacketLimiter = getBoolean("settings.shieldspigot.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.max-packets-per-second", 750);
         verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);

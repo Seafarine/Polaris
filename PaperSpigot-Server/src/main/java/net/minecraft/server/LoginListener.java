@@ -154,9 +154,9 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                     }
 
                     public void operationComplete(ChannelFuture future) throws Exception { // CraftBukkit - fix decompile error
-                        this.a((ChannelFuture) future);
+                        this.a(future);
                     }
-                }, new GenericFutureListener[0]);
+                });
             }
 
             this.networkManager.handle(new PacketLoginOutSuccess(this.i));
@@ -178,12 +178,12 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
 
     public String d() {
         String socketAddress = networkManager == null ? null : (networkManager.getSocketAddress() == null ? null : networkManager.getSocketAddress().toString());
-        return this.i != null ? this.i.toString() + " (" + socketAddress + ")" : socketAddress;
+        return this.i != null ? this.i + " (" + socketAddress + ")" : socketAddress;
     }
 
     public void a(PacketLoginInStart packetlogininstart) {
         if (!this.checkPacketLimit()) {
-            Validate.validState(this.g == LoginListener.EnumProtocolState.HELLO, "Unexpected hello packet", new Object[0]);
+            Validate.validState(this.g == LoginListener.EnumProtocolState.HELLO, "Unexpected hello packet");
             this.i = packetlogininstart.a();
             if (this.server.getOnlineMode() && !this.networkManager.c()) {
                 this.g = LoginListener.EnumProtocolState.KEY;
@@ -206,7 +206,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
 
     public void a(PacketLoginInEncryptionBegin packetlogininencryptionbegin) {
         if (!this.checkPacketLimit()) {
-            Validate.validState(this.g == LoginListener.EnumProtocolState.KEY, "Unexpected key packet", new Object[0]);
+            Validate.validState(this.g == LoginListener.EnumProtocolState.KEY, "Unexpected key packet");
             PrivateKey privatekey = this.server.Q().getPrivate();
 
             if (!Arrays.equals(this.e, packetlogininencryptionbegin.b(privatekey))) {
@@ -215,46 +215,44 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                 this.loginKey = packetlogininencryptionbegin.a(privatekey);
                 this.g = LoginListener.EnumProtocolState.AUTHENTICATING;
                 this.networkManager.a(this.loginKey);
-                authenticatorPool.execute(new Runnable() {
-                    public void run() {
-                        GameProfile gameprofile = LoginListener.this.i;
+                authenticatorPool.execute(() -> {
+                    GameProfile gameprofile = LoginListener.this.i;
 
-                        try {
-                            String s = (new BigInteger(MinecraftEncryption.a(LoginListener.this.j, LoginListener.this.server.Q().getPublic(), LoginListener.this.loginKey))).toString(16);
+                    try {
+                        String s = (new BigInteger(MinecraftEncryption.a(LoginListener.this.j, LoginListener.this.server.Q().getPublic(), LoginListener.this.loginKey))).toString(16);
 
-                            LoginListener.this.i = LoginListener.this.server.aD().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s);
-                            if (LoginListener.this.i != null) {
-                                // CraftBukkit start - fire PlayerPreLoginEvent
-                                if (!networkManager.g()) {
-                                    return;
-                                }
-
-                                new LoginHandler().fireEvents();
-                            } else if (LoginListener.this.server.T()) {
-                                LoginListener.c.warn("Failed to verify username but will let them in anyway!");
-                                LoginListener.this.i = LoginListener.this.a(gameprofile);
-                                LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
-                            } else {
-                                LoginListener.this.disconnect("Failed to verify username!");
-                                LoginListener.c.error("Username \'" + gameprofile.getName() + "\' tried to join with an invalid session"); // CraftBukkit - fix null pointer
+                        LoginListener.this.i = LoginListener.this.server.aD().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s);
+                        if (LoginListener.this.i != null) {
+                            // CraftBukkit start - fire PlayerPreLoginEvent
+                            if (!networkManager.g()) {
+                                return;
                             }
-                        } catch (AuthenticationUnavailableException authenticationunavailableexception) {
-                            if (LoginListener.this.server.T()) {
-                                LoginListener.c.warn("Authentication servers are down but will let them in anyway!");
-                                LoginListener.this.i = LoginListener.this.a(gameprofile);
-                                LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
-                            } else {
-                                LoginListener.this.disconnect("Authentication servers are down. Please try again later, sorry!");
-                                LoginListener.c.error("Couldn\'t verify username because servers are unavailable");
-                            }
-                            // CraftBukkit start - catch all exceptions
-                        } catch (Exception exception) {
-                            disconnect("Failed to verify username!");
-                            server.server.getLogger().log(java.util.logging.Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
-                            // CraftBukkit end
+
+                            new LoginHandler().fireEvents();
+                        } else if (LoginListener.this.server.T()) {
+                            LoginListener.c.warn("Failed to verify username but will let them in anyway!");
+                            LoginListener.this.i = LoginListener.this.a(gameprofile);
+                            LoginListener.this.g = EnumProtocolState.READY_TO_ACCEPT;
+                        } else {
+                            LoginListener.this.disconnect("Failed to verify username!");
+                            LoginListener.c.error("Username \'" + gameprofile.getName() + "\' tried to join with an invalid session"); // CraftBukkit - fix null pointer
                         }
-
+                    } catch (AuthenticationUnavailableException authenticationunavailableexception) {
+                        if (LoginListener.this.server.T()) {
+                            LoginListener.c.warn("Authentication servers are down but will let them in anyway!");
+                            LoginListener.this.i = LoginListener.this.a(gameprofile);
+                            LoginListener.this.g = EnumProtocolState.READY_TO_ACCEPT;
+                        } else {
+                            LoginListener.this.disconnect("Authentication servers are down. Please try again later, sorry!");
+                            LoginListener.c.error("Couldn\'t verify username because servers are unavailable");
+                        }
+                        // CraftBukkit start - catch all exceptions
+                    } catch (Exception exception) {
+                        disconnect("Failed to verify username!");
+                        server.server.getLogger().log(java.util.logging.Level.WARNING, "Exception verifying " + gameprofile.getName(), exception);
+                        // CraftBukkit end
                     }
+
                 });
             }
         }
@@ -296,18 +294,18 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                     return;
                 }
                 if (asyncEvent.getAddress() == null) {
-                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ComuGamers] Invalid Inet-Socket pool");
+                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ShieldSpigot] Invalid Inet-Socket pool");
                     return;
                 }
 
                 String name = asyncEvent.getName();
                 if (name.length() > PaperSpigotConfig.maxNameLength || name.length() < PaperSpigotConfig.minNameLength) {
-                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ComuGamers] Invalid Name Length");
+                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ShieldSpigot] Invalid Name Length");
                     return;
                 }
 
                 if (!LoginListener.this.nickNameHandler.matcher(name).matches()) {
-                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ComuGamers] Invalid Name Characters");
+                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ShieldSpigot] Invalid Name Characters");
                     return;
                 }
             }

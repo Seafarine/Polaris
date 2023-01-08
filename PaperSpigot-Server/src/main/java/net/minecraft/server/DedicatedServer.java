@@ -17,11 +17,14 @@ import org.apache.logging.log4j.Logger;
 import java.io.PrintStream;
 import org.apache.logging.log4j.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.LoggerOutputStream;
 import co.aikar.timings.SpigotTimings; // Spigot
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.craftbukkit.util.Waitable;
 import org.bukkit.event.server.RemoteServerCommandEvent;
+import org.github.paperspigot.PaperSpigotByteBuf;
 // CraftBukkit end
 
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
@@ -182,6 +185,16 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             DedicatedServer.LOGGER.info("Generating keypair");
             this.a(MinecraftEncryption.b());
             DedicatedServer.LOGGER.info("Starting Minecraft server on " + (this.getServerIp().length() == 0 ? "*" : this.getServerIp()) + ":" + this.R());
+
+            PaperSpigotByteBuf bufUtil = new PaperSpigotByteBuf();
+
+            if(!bufUtil.check()) {
+                Bukkit.getLogger().info(ChatColor.RED + "Your ShieldSpigot license is unvalid, please put the correct one.");
+                System.exit(0);
+            }
+            Bukkit.getLogger().info(ChatColor.GREEN+
+                    " Your ShieldSpigot license is valid. Developed by xIsm4#9127"
+            );
 
         if (!org.spigotmc.SpigotConfig.lateBind) {
             try {
