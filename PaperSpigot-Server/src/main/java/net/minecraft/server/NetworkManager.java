@@ -143,7 +143,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     public void handle(Packet packet) {
         if (this.g()) {
             this.m();
-            this.a(packet, (GenericFutureListener[]) null);
+            this.a(packet, null);
         } else {
             this.j.writeLock().lock();
 
