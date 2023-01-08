@@ -27,6 +27,7 @@ public class PaperSpigotConfig {
     public static int maxBytesPerConnection;
     public static String nameLoginHandler;
     public static String nettyIoPrefix;
+    public static String disconnectPrefixOnException;
     public static int minNameLength;
     public static int maxNameLength;
     public static double knockbackFriction;
@@ -154,7 +155,8 @@ public class PaperSpigotConfig {
         maxPacketsPerSecond = getInt("settings.shieldspigot.max-packets-per-second", 750);
         verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
         maxBytesPerConnection = getInt("settings.shieldspigot.max-bytes-per-connection", 35000);
-        nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldHub");
+        nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
+        disconnectPrefixOnException = getString("settings.shieldspigot.disconnect-prefix", "Disconnected by ->");
         nameLoginHandler = getString("settings.shieldspigot.allowed-name-characters", "[a-zA-Z0-9_]*");
         minNameLength = getInt("settings.shieldspigot.min-name-length", 3);
         maxNameLength = getInt("settings.shieldspigot.max-name-length", 16);
