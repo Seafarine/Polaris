@@ -41,7 +41,7 @@ public class EntityTrackerEntry {
     // PaperSpigot start
     // Replace trackedPlayers Set with a Map. The value is true until the player receives
     // their first update (which is forced to have absolute coordinates), false afterward.
-    public java.util.Map<EntityPlayer, Boolean> trackedPlayerMap = new java.util.HashMap<EntityPlayer, Boolean>();
+    public java.util.Map<EntityPlayer, Boolean> trackedPlayerMap = new java.util.HashMap<>();
     public Set<EntityPlayer> trackedPlayers = trackedPlayerMap.keySet();
     // PaperSpigot end
 
@@ -60,7 +60,7 @@ public class EntityTrackerEntry {
     }
 
     public boolean equals(Object object) {
-        return object instanceof EntityTrackerEntry ? ((EntityTrackerEntry) object).tracker.getId() == this.tracker.getId() : false;
+        return object instanceof EntityTrackerEntry && ((EntityTrackerEntry) object).tracker.getId() == this.tracker.getId();
     }
 
     public int hashCode() {
@@ -89,10 +89,10 @@ public class EntityTrackerEntry {
 
             if (this.m % 10 == 0 && itemstack != null && itemstack.getItem() instanceof ItemWorldMap) { // CraftBukkit - Moved this.m % 10 logic here so item frames do not enter the other blocks
                 WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, this.tracker.world);
-                Iterator iterator = this.trackedPlayers.iterator(); // CraftBukkit
+                // CraftBukkit
 
-                while (iterator.hasNext()) {
-                    EntityHuman entityhuman = (EntityHuman) iterator.next();
+                for (EntityPlayer trackedPlayer : this.trackedPlayers) {
+                    EntityHuman entityhuman = trackedPlayer;
                     EntityPlayer entityplayer = (EntityPlayer) entityhuman;
 
                     worldmap.a(entityplayer, itemstack);
@@ -154,7 +154,7 @@ public class EntityTrackerEntry {
                         this.v = 0;
                         // CraftBukkit start - Refresh list of who can see a player before sending teleport packet
                         if (this.tracker instanceof EntityPlayer) {
-                            this.scanPlayers(new ArrayList<EntityHuman>(this.tracker.world.players));
+                            this.scanPlayers(new ArrayList<>(this.tracker.world.players));
                         }
                         // CraftBukkit end
                         object = new PacketPlayOutEntityTeleport(this.tracker.getId(), i, j, k, (byte) l, (byte) i1, this.tracker.onGround);
@@ -295,11 +295,8 @@ public class EntityTrackerEntry {
     }
 
     public void broadcast(Packet packet) {
-        Iterator iterator = this.trackedPlayers.iterator();
 
-        while (iterator.hasNext()) {
-            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-
+        for (EntityPlayer entityplayer : this.trackedPlayers) {
             entityplayer.playerConnection.sendPacket(packet);
         }
 
@@ -314,11 +311,8 @@ public class EntityTrackerEntry {
     }
 
     public void a() {
-        Iterator iterator = this.trackedPlayers.iterator();
 
-        while (iterator.hasNext()) {
-            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-
+        for (EntityPlayer entityplayer : this.trackedPlayers) {
             entityplayer.d(this.tracker);
         }
 
@@ -345,7 +339,7 @@ public class EntityTrackerEntry {
                         }
                     }
 
-                    entityplayer.removeQueue.remove(Integer.valueOf(this.tracker.getId()));
+                    entityplayer.removeQueue.remove(this.tracker.getId());
                     // CraftBukkit end
                     this.trackedPlayerMap.put(entityplayer, true); // PaperBukkit
                     Packet packet = this.c();
@@ -418,11 +412,8 @@ public class EntityTrackerEntry {
 
                     if (this.tracker instanceof EntityLiving) {
                         EntityLiving entityliving = (EntityLiving) this.tracker;
-                        Iterator iterator = entityliving.getEffects().iterator();
 
-                        while (iterator.hasNext()) {
-                            MobEffect mobeffect = (MobEffect) iterator.next();
-
+                        for (MobEffect mobeffect : entityliving.getEffects()) {
                             entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.tracker.getId(), mobeffect));
                         }
                     }
@@ -449,8 +440,8 @@ public class EntityTrackerEntry {
     }
 
     public void scanPlayers(List<EntityHuman> list) {
-        for (int i = 0; i < list.size(); ++i) {
-            this.updatePlayer((EntityPlayer) list.get(i));
+        for (EntityHuman entityHuman : list) {
+            this.updatePlayer((EntityPlayer) entityHuman);
         }
 
     }
