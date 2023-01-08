@@ -21,6 +21,8 @@ import java.util.logging.Level;
 public class PaperSpigotConfig {
 
     public static boolean usePacketLimiter;
+    
+    public static boolean verifyChannelBeforeDecode;
     public static int maxPacketsPerSecond;
     public static int maxBytesPerConnection;
     public static String nameLoginHandler;
@@ -150,6 +152,7 @@ public class PaperSpigotConfig {
     private static void antiSmasher() {
         usePacketLimiter = getBoolean("settings.shieldspigot.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.max-packets-per-second", 750);
+        verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
         maxBytesPerConnection = getInt("settings.shieldspigot.max-bytes-per-connection", 35000);
         nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldHub");
         nameLoginHandler = getString("settings.shieldspigot.allowed-name-characters", "[a-zA-Z0-9_]*");
