@@ -21,9 +21,9 @@ public class EntityExperienceOrb extends Entity {
         this.setSize(0.5F, 0.5F);
         this.setPosition(d0, d1, d2);
         this.yaw = (float) (Math.random() * 360.0D);
-        this.motX = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-        this.motY = (double) ((float) (Math.random() * 0.2D) * 2.0F);
-        this.motZ = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+        this.motX = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F;
+        this.motY = (float) (Math.random() * 0.2D) * 2.0F;
+        this.motZ = (float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F;
         this.value = i;
     }
 
@@ -51,8 +51,8 @@ public class EntityExperienceOrb extends Entity {
         this.motY -= 0.029999999329447746D;
         if (this.world.getType(new BlockPosition(this)).getBlock().getMaterial() == Material.LAVA) {
             this.motY = 0.20000000298023224D;
-            this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+            this.motX = (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
+            this.motZ = (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
             this.makeSound("random.fizz", 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
@@ -105,9 +105,9 @@ public class EntityExperienceOrb extends Entity {
             f = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().b) - 1, MathHelper.floor(this.locZ))).getBlock().frictionFactor * 0.98F;
         }
 
-        this.motX *= (double) f;
+        this.motX *= f;
         this.motY *= 0.9800000190734863D;
-        this.motZ *= (double) f;
+        this.motZ *= f;
         if (this.onGround) {
             this.motY *= -0.8999999761581421D;
         }
@@ -121,7 +121,7 @@ public class EntityExperienceOrb extends Entity {
     }
 
     public boolean W() {
-        return this.world.a(this.getBoundingBox(), Material.WATER, (Entity) this);
+        return this.world.a(this.getBoundingBox(), Material.WATER, this);
     }
 
     protected void burn(int i) {
@@ -143,15 +143,15 @@ public class EntityExperienceOrb extends Entity {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setShort("Health", (short) ((byte) this.d));
+        nbttagcompound.setShort("Health", (byte) this.d);
         nbttagcompound.setShort("Age", (short) this.b);
-        nbttagcompound.setShort("Value", (short) this.value);
+        nbttagcompound.setInt("Value", this.value); //ShieldSpigot - Use integers
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         this.d = nbttagcompound.getShort("Health") & 255;
         this.b = nbttagcompound.getShort("Age");
-        this.value = nbttagcompound.getShort("Value");
+        this.value = nbttagcompound.getInt("Value"); // ShieldSpigot - Use integers
     }
 
     public void d(EntityHuman entityhuman) {
