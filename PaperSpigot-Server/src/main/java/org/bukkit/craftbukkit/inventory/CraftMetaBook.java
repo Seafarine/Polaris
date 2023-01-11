@@ -1,5 +1,6 @@
 package org.bukkit.craftbukkit.inventory;
 
+import java.awt.print.Paper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import net.minecraft.server.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.IChatBaseComponent;
 import net.minecraft.server.NBTTagString;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
+import org.github.paperspigot.PaperSpigotConfig;
 
 // Spigot start
 import static org.spigotmc.ValidateUtils.*;
@@ -33,8 +35,10 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
     static final ItemMetaKey BOOK_PAGES = new ItemMetaKey("pages");
     static final ItemMetaKey RESOLVED = new ItemMetaKey("resolved");
     static final ItemMetaKey GENERATION = new ItemMetaKey("generation");
-    static final int MAX_PAGE_LENGTH = Short.MAX_VALUE; // TODO: Check me
-    static final int MAX_TITLE_LENGTH = 0xffff;
+
+    static final int MAX_PAGES = PaperSpigotConfig.bookMaxPages;
+    static final int MAX_PAGE_LENGTH = PaperSpigotConfig.bookPageLength;
+    static final int MAX_TITLE_LENGTH = PaperSpigotConfig.bookTitleLength;
 
     protected String title;
     protected String author;
@@ -61,11 +65,11 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
         super(tag);
 
         if (tag.hasKey(BOOK_TITLE.NBT)) {
-            this.title = limit( tag.getString(BOOK_TITLE.NBT), 1024 ); // Spigot
+            this.title = limit( tag.getString(BOOK_TITLE.NBT), MAX_TITLE_LENGTH );
         }
 
         if (tag.hasKey(BOOK_AUTHOR.NBT)) {
-            this.author = limit( tag.getString(BOOK_AUTHOR.NBT), 1024 ); // Spigot
+            this.author = limit( tag.getString(BOOK_AUTHOR.NBT), 16 ); // Spigot
         }
 
         boolean resolved = false;
@@ -80,7 +84,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
         if (tag.hasKey(BOOK_PAGES.NBT) && handlePages) {
             NBTTagList pages = tag.getList(BOOK_PAGES.NBT, 8);
 
-            for (int i = 0; i < pages.size(); i++) {
+            for (int i = 0; i < Math.min(pages.size(), MAX_PAGES); i++) {
                 String page = pages.getString(i);
                 if (resolved) {
                     try {
@@ -90,7 +94,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
                         // Ignore and treat as an old book
                     }
                 }
-                addPage( limit( page, 2048 ) ); // Spigot
+                addPage( limit( page, MAX_PAGE_LENGTH ) );
             }
         }
     }
@@ -104,7 +108,9 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
 
         Iterable<?> pages = SerializableMeta.getObject(Iterable.class, map, BOOK_PAGES.BUKKIT, true);
         if(pages != null) {
+            int pageCount = 0;
             for (Object page : pages) {
+                if (pageCount++ > MAX_PAGES) break;
                 if (page instanceof String) {
                     addPage((String) page);
                 }

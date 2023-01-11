@@ -8,11 +8,11 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+
+import net.shieldcommunity.spigot.FastDecoderException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,6 +101,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     private final org.bukkit.craftbukkit.CraftServer server;
     private int lastTick = MinecraftServer.currentTick;
+    private int lastBookTick = MinecraftServer.currentTick;
     private int lastDropTick = MinecraftServer.currentTick;
     private int dropCount = 0;
     private static final int SURVIVAL_PLACE_DISTANCE_SQUARED = 6 * 6;
@@ -116,7 +117,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     private boolean hasMoved; // Spigot
 
     public CraftPlayer getPlayer() {
-        return (this.player == null) ? null : (CraftPlayer) this.player.getBukkitEntity();
+        return (this.player == null) ? null : this.player.getBukkitEntity();
     }
     private final static HashSet<Integer> invalidItems = new HashSet<Integer>(java.util.Arrays.asList(8, 9, 10, 11, 26, 34, 36, 43, 51, 52, 55, 59, 60, 62, 63, 64, 68, 71, 74, 75, 83, 90, 92, 93, 94, 104, 105, 115, 117, 118, 119, 125, 127, 132, 140, 141, 142, 144)); // TODO: Check after every update.
     // CraftBukkit end
@@ -1967,6 +1968,12 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
         try { // CraftBukkit
         if ("MC|BEdit".equals(packetplayincustompayload.a())) {
+            // PandaSpigot start - Cooldown on book edit
+            if (this.lastBookTick + PaperSpigotConfig.bookTick > MinecraftServer.currentTick) {
+                this.disconnect(PaperSpigotConfig.nettyIoPrefix+" Book edited too quickly!");
+                return;
+            }
+            this.lastBookTick = MinecraftServer.currentTick;
             packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.b()));
 
             try {
@@ -1983,7 +1990,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 if (itemstack1 != null) {
                     if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack.getItem() == itemstack1.getItem()) {
                         itemstack1 = new ItemStack(Items.WRITABLE_BOOK); // CraftBukkit
-                        itemstack1.a("pages", (NBTBase) itemstack.getTag().getList("pages", 8));
+                        itemstack1.a("pages", itemstack.getTag().getList("pages", 8));
                         CraftEventFactory.handleEditBookEvent(player, itemstack1); // CraftBukkit
                     }
 
@@ -1999,6 +2006,13 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
             return;
         } else if ("MC|BSign".equals(packetplayincustompayload.a())) {
+            // PandaSpigot start - Cooldown on book sign
+            if (this.lastBookTick + PaperSpigotConfig.bookTick > MinecraftServer.currentTick) {
+                this.disconnect(PaperSpigotConfig.nettyIoPrefix+" Book edited too quickly!");
+                return;
+            }
+            this.lastBookTick = MinecraftServer.currentTick;
+            // PandaSpigot end
             packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.b()));
 
             try {

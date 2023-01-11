@@ -21,6 +21,10 @@ import java.util.logging.Level;
 public class PaperSpigotConfig {
 
     public static boolean usePacketLimiter;
+    public static int bookTick;
+    public static int bookPageLength;
+    public static int bookTitleLength;
+    public static int bookMaxPages;
     public static int timeOutTime;
     public static boolean verifyChannelBeforeDecode;
     public static boolean logPlayerConnectionSocket;
@@ -157,6 +161,10 @@ public class PaperSpigotConfig {
         usePacketLimiter = getBoolean("settings.shieldspigot.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.max-packets-per-second", 750);
         verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
+        bookPageLength = getInt("settings.shieldspigot.book-page-length", 256);
+        bookMaxPages = getInt("settings.shieldspigot.book-max-pages", 50);
+        bookTick = getInt("settings.shieldspigot.book-last-tick", 20);
+        bookTitleLength = getInt("settings.shieldspigot.book-title-length", 32);
         maxBytesPerConnection = getInt("settings.shieldspigot.max-bytes-per-connection", 35000);
         logPlayerConnectionSocket = getBoolean("settings.shieldspigot.log-player-connection-socket", true);
         timeOutTime = getInt("settings.shieldspigot.timeout-time", 600);
