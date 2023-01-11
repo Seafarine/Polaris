@@ -71,6 +71,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     private PacketListener m;
     private IChatBaseComponent n;
     private boolean o;
+    private static boolean enableExplicitFlush = Boolean.getBoolean("paper.explicit-flush");
     private boolean p;
 
     public NetworkManager(EnumProtocolDirection enumprotocoldirection) {
@@ -234,7 +235,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             ((IUpdatePlayerListBox) this.m).c();
         }
 
-        this.channel.flush();
+        if (enableExplicitFlush) this.channel.eventLoop().execute(() -> this.channel.flush());
     }
 
     public SocketAddress getSocketAddress() {
