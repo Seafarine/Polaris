@@ -14,6 +14,7 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.github.paperspigot.PaperSpigotConfig;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -167,7 +168,7 @@ public class ServerConnection {
                                 throw new ReportedException(crashreport);
                             }
 
-                            ServerConnection.e.warn("Failed to handle packet for " + networkmanager.getSocketAddress(), exception);
+                            ServerConnection.e.warn("Failed to handle packet for " + (PaperSpigotConfig.logPlayerConnectionSocket ? networkmanager.getSocketAddress() : "<ip address withheld>"), exception);
                             final ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
 
                             networkmanager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), (GenericFutureListener) future -> networkmanager.close(chatcomponenttext));

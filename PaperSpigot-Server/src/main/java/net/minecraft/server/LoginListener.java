@@ -88,7 +88,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
             }
         }
 
-        if (this.h++ == 600) {
+        if (this.h++ == 600) { //Todo: Configurable
             this.disconnect("Took too long to log in");
         }
 
@@ -177,8 +177,8 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     }
 
     public String d() {
-        String socketAddress = networkManager == null ? null : (networkManager.getSocketAddress() == null ? null : networkManager.getSocketAddress().toString());
-        return this.i != null ? this.i + " (" + socketAddress + ")" : socketAddress;
+        String ip = PaperSpigotConfig.logPlayerConnectionSocket ? this.networkManager.getSocketAddress().toString() : "<ip address withheld>";
+        return this.i != null ? this.i.toString() + " (" + ip + ")" : ip;
     }
 
     public void a(PacketLoginInStart packetlogininstart) {

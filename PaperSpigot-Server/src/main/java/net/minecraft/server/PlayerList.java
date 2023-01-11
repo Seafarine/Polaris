@@ -36,6 +36,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.util.Vector;
+import org.github.paperspigot.PaperSpigotConfig;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 // CraftBukkit end
 
@@ -120,7 +121,7 @@ public abstract class PlayerList {
         String s1 = "local";
 
         if (networkmanager.getSocketAddress() != null) {
-            s1 = networkmanager.getSocketAddress().toString();
+            s1 = PaperSpigotConfig.logPlayerConnectionSocket ? networkmanager.getSocketAddress().toString() : "<ip address withheld>";
         }
 
         // Spigot start - spawn location event
@@ -142,7 +143,7 @@ public abstract class PlayerList {
         WorldData worlddata = worldserver.getWorldData();
         BlockPosition blockposition = worldserver.getSpawn();
 
-        this.a(entityplayer, (EntityPlayer) null, worldserver);
+        this.a(entityplayer, null, worldserver);
         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
 
         playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimension(), worldserver.getDifficulty(), Math.min(this.getMaxPlayers(), 60), worlddata.getType(), worldserver.getGameRules().getBoolean("reducedDebugInfo"))); // CraftBukkit - cap player list to 60
