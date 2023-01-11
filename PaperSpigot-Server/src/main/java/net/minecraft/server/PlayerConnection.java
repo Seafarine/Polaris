@@ -91,7 +91,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
         this.minecraftServer = minecraftserver;
         this.networkManager = networkmanager;
-        networkmanager.a((PacketListener) this);
+        networkmanager.a(this);
         this.player = entityplayer;
         entityplayer.playerConnection = this;
 
@@ -1831,7 +1831,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
             if (flag1 && flag2 && flag3) {
                 if (itemstack == null) {
-                    this.player.defaultContainer.setItem(packetplayinsetcreativeslot.a(), (ItemStack) null);
+                    this.player.defaultContainer.setItem(packetplayinsetcreativeslot.a(), null);
                 } else {
                     this.player.defaultContainer.setItem(packetplayinsetcreativeslot.a(), itemstack);
                 }
@@ -2085,7 +2085,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         }
 
                         commandblocklistenerabstract.h();
-                        this.player.sendMessage(new ChatMessage("advMode.setCommand.success", new Object[] { s}));
+                        this.player.sendMessage(new ChatMessage("advMode.setCommand.success", s));
                     }
                 } catch (Exception exception3) {
                     PlayerConnection.c.error("Couldn\'t set command block", exception3);
@@ -2094,7 +2094,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     packetdataserializer.release();
                 }
             } else {
-                this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
+                this.player.sendMessage(new ChatMessage("advMode.notAllowed"));
             }
         } else if ("MC|Beacon".equals(packetplayincustompayload.a())) {
             if (this.player.activeContainer instanceof ContainerBeacon) {
@@ -2133,19 +2133,34 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         }
         // CraftBukkit start
         else if (packetplayincustompayload.a().equals("REGISTER")) {
-            String channels = packetplayincustompayload.b().toString(com.google.common.base.Charsets.UTF_8);
-            for (String channel : channels.split("\0")) {
-                getPlayer().addChannel(channel);
+            try {
+                String channels = packetplayincustompayload.b().toString(com.google.common.base.Charsets.UTF_8);
+                for (String channel : channels.split("\0")) {
+                    getPlayer().addChannel(channel);
+                }
+            } catch (Exception ex) {
+                PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                this.disconnect("Invalid payload REGISTER!");
             }
         } else if (packetplayincustompayload.a().equals("UNREGISTER")) {
-            String channels = packetplayincustompayload.b().toString(com.google.common.base.Charsets.UTF_8);
-            for (String channel : channels.split("\0")) {
-                getPlayer().removeChannel(channel);
+            try {
+                String channels = packetplayincustompayload.b().toString(com.google.common.base.Charsets.UTF_8);
+                for (String channel : channels.split("\0")) {
+                    getPlayer().removeChannel(channel);
+                }
+            } catch (Exception ex) {
+                PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                this.disconnect("Invalid payload UNREGISTER!");
             }
         } else {
-            byte[] data = new byte[packetplayincustompayload.b().readableBytes()];
-            packetplayincustompayload.b().readBytes(data);
-            server.getMessenger().dispatchIncomingMessage(player.getBukkitEntity(), packetplayincustompayload.a(), data);
+            try {
+                byte[] data = new byte[packetplayincustompayload.b().readableBytes()];
+                packetplayincustompayload.b().readBytes(data);
+                server.getMessenger().dispatchIncomingMessage(player.getBukkitEntity(), packetplayincustompayload.a(), data);
+            } catch (Exception ex) {
+                PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                this.disconnect("Invalid custom payload!");
+            }
         }
         // CraftBukkit end
         // CraftBukkit start
