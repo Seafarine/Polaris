@@ -1232,6 +1232,8 @@ public abstract class World implements IBlockAccess {
         // Spigot end
 
         if (entity instanceof EntityItem) return arraylist; // PaperSpigot - Optimize item movement
+        if (entity instanceof EntityTNTPrimed) return arraylist; // PandaSpigot - Optimize tnt entity movement
+        if (entity instanceof EntityFallingBlock) return arraylist; // PandaSpigot - Optimize falling block movement
 
         double d0 = 0.25D;
         List list = this.getEntities(entity, axisalignedbb.grow(d0, d0, d0));
@@ -1489,10 +1491,7 @@ public abstract class World implements IBlockAccess {
         this.M = true;
         // CraftBukkit start - From below, clean up tile entities before ticking them
         if (!this.c.isEmpty()) {
-            java.util.Set<TileEntity> toRemove = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
-            toRemove.addAll(c);
-            this.tileEntityList.removeAll(toRemove);
-
+            this.tileEntityList.removeAll(this.c);
             //this.h.removeAll(this.c); // PaperSpigot - Remove unused list
             this.c.clear();
         }
@@ -1975,9 +1974,8 @@ public abstract class World implements IBlockAccess {
         } else {
             // CraftBukkit start
          TileEntity tileentity = null;
-         if (!capturedTileEntities.isEmpty() &&
-                 (tileentity = capturedTileEntities.get(blockposition)) != null) {
-                  return tileentity;
+         if (!capturedTileEntities.isEmpty() && (tileentity = capturedTileEntities.get(blockposition)) != null) {
+                                return tileentity;
             }
             // CraftBukkit end
             int i;

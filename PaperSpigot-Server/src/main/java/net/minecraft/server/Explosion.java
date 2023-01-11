@@ -49,40 +49,44 @@ public class Explosion {
         int i;
         int j;
 
-        for (int k = 0; k < 16; ++k) {
-            for (i = 0; i < 16; ++i) {
-                for (j = 0; j < 16; ++j) {
-                    if (k == 0 || k == 15 || i == 0 || i == 15 || j == 0 || j == 15) {
-                        double d0 = (float) k / 15.0F * 2.0F - 1.0F;
-                        double d1 = (float) i / 15.0F * 2.0F - 1.0F;
-                        double d2 = (float) j / 15.0F * 2.0F - 1.0F;
-                        double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+        Block block = world.getChunkAt((int) posX >> 4, (int) posZ >> 4).getBlockData(new BlockPosition(posX, posY, posZ)).getBlock();
 
-                        d0 /= d3;
-                        d1 /= d3;
-                        d2 /= d3;
-                        float f = this.size * (0.7F + this.world.random.nextFloat() * 0.6F);
-                        double d4 = this.posX;
-                        double d5 = this.posY;
-                        double d6 = this.posZ;
+        if (!this.world.paperSpigotConfig.optimizeLiquidExplosions || !block.getMaterial().isLiquid()) {
+            for (int k = 0; k < 16; ++k) {
+                for (i = 0; i < 16; ++i) {
+                    for (j = 0; j < 16; ++j) {
+                        if (k == 0 || k == 15 || i == 0 || i == 15 || j == 0 || j == 15) {
+                            double d0 = (float) k / 15.0F * 2.0F - 1.0F;
+                            double d1 = (float) i / 15.0F * 2.0F - 1.0F;
+                            double d2 = (float) j / 15.0F * 2.0F - 1.0F;
+                            double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
-                        for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
-                            BlockPosition blockposition = new BlockPosition(d4, d5, d6);
-                            IBlockData iblockdata = this.world.getType(blockposition);
+                            d0 /= d3;
+                            d1 /= d3;
+                            d2 /= d3;
+                            float f = this.size * (0.7F + this.world.random.nextFloat() * 0.6F);
+                            double d4 = this.posX;
+                            double d5 = this.posY;
+                            double d6 = this.posZ;
 
-                            if (iblockdata.getBlock().getMaterial() != Material.AIR) {
-                                float f2 = this.source != null ? this.source.a(this, this.world, blockposition, iblockdata) : iblockdata.getBlock().a((Entity) null);
+                            for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
+                                BlockPosition blockposition = new BlockPosition(d4, d5, d6);
+                                IBlockData iblockdata = this.world.getType(blockposition);
 
-                                f -= (f2 + 0.3F) * 0.3F;
+                                if (iblockdata.getBlock().getMaterial() != Material.AIR) {
+                                    float f2 = this.source != null ? this.source.a(this, this.world, blockposition, iblockdata) : iblockdata.getBlock().a((Entity) null);
+
+                                    f -= (f2 + 0.3F) * 0.3F;
+                                }
+
+                                if (f > 0.0F && (this.source == null || this.source.a(this, this.world, blockposition, iblockdata, f)) && blockposition.getY() < 256 && blockposition.getY() >= 0) { // CraftBukkit - don't wrap explosions
+                                    hashset.add(blockposition);
+                                }
+
+                                d4 += d0 * 0.30000001192092896D;
+                                d5 += d1 * 0.30000001192092896D;
+                                d6 += d2 * 0.30000001192092896D;
                             }
-
-                            if (f > 0.0F && (this.source == null || this.source.a(this, this.world, blockposition, iblockdata, f)) && blockposition.getY() < 256 && blockposition.getY() >= 0) { // CraftBukkit - don't wrap explosions
-                                hashset.add(blockposition);
-                            }
-
-                            d4 += d0 * 0.30000001192092896D;
-                            d5 += d1 * 0.30000001192092896D;
-                            d6 += d2 * 0.30000001192092896D;
                         }
                     }
                 }

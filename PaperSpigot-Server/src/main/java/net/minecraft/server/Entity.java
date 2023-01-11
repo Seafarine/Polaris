@@ -528,7 +528,14 @@ public abstract class Entity implements ICommandListener {
                 }
             }
 
-            List list = this.world.getCubes(this, this.getBoundingBox().a(d0, d1, d2));
+            AxisAlignedBB totalArea = this.getBoundingBox().a(d0, d1, d2);
+            double xLenght = totalArea.d - totalArea.a;
+            double yLenght = totalArea.e - totalArea.b;
+            double zLenght = totalArea.f - totalArea.c;
+            boolean axisScan = this.world.paperSpigotConfig.optimizeExplosions && xLenght * yLenght * zLenght > 10;
+
+            List list = this.world.getCubes(this, axisScan ? this.getBoundingBox().a(0, d1, 0) : totalArea);
+
             AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
             AxisAlignedBB axisalignedbb1;
@@ -539,6 +546,7 @@ public abstract class Entity implements ICommandListener {
 
             this.a(this.getBoundingBox().c(0.0D, d1, 0.0D));
             boolean flag1 = this.onGround || d7 != d1 && d7 < 0.0D;
+            if (axisScan) list = this.world.getCubes(this, this.getBoundingBox().a(d0, 0, 0));
 
             AxisAlignedBB axisalignedbb2;
             Iterator iterator1;
@@ -548,6 +556,7 @@ public abstract class Entity implements ICommandListener {
             }
 
             this.a(this.getBoundingBox().c(d0, 0.0D, 0.0D));
+            if (axisScan) list = this.world.getCubes(this, this.getBoundingBox().a(0, 0, d2));
 
             for (iterator1 = list.iterator(); iterator1.hasNext(); d2 = axisalignedbb2.c(this.getBoundingBox(), d2)) {
                 axisalignedbb2 = (AxisAlignedBB) iterator1.next();

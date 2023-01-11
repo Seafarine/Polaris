@@ -22,6 +22,8 @@ public class PaperSpigotConfig {
 
     public static boolean usePacketLimiter;
     public static int bookTick;
+    public static boolean avoidDoubleCompressUncompressedPackets;
+    public static boolean useCustomEncoder;
     public static int bookPageLength;
     public static int bookTitleLength;
     public static int bookMaxPages;
@@ -143,6 +145,33 @@ public class PaperSpigotConfig {
 
     public static double babyZombieMovementSpeed;
 
+    private static void shieldSpigotConfiguration() {
+        paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
+        useCustomEncoder = getBoolean("settings.shieldspigot.optimizations.use-custom-encoder", false);
+        avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
+        usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
+        maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
+        verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
+        bookPageLength = getInt("settings.shieldspigot.book-page-length", 256);
+        bookMaxPages = getInt("settings.shieldspigot.book-max-pages", 50);
+        bookTick = getInt("settings.shieldspigot.book-last-tick", 20);
+        bookTitleLength = getInt("settings.shieldspigot.book-title-length", 32);
+        maxBytesPerConnection = getInt("settings.shieldspigot.max-bytes-per-connection", 35000);
+        logPlayerConnectionSocket = getBoolean("settings.shieldspigot.log-player-connection-socket", true);
+        timeOutTime = getInt("settings.shieldspigot.timeout-time", 600);
+        nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
+        disconnectPrefixOnException = getString("settings.shieldspigot.prefix.on-disconnect", "Disconnected by ->");
+        nameLoginHandler = getString("settings.shieldspigot.allowed-name-characters", "[a-zA-Z0-9_]*");
+        minNameLength = getInt("settings.shieldspigot.min-name-length", 3);
+        maxNameLength = getInt("settings.shieldspigot.max-name-length", 16);
+        knockbackFriction = getDouble("settings.shieldspigot.knockback.friction", 2.0D);
+        knockbackHorizontal = getDouble("settings.shieldspigot.knockback.horizontal", 0.4D);
+        knockbackVertical = getDouble("settings.shieldspigot.knockback.vertical", 0.4D);
+        knockbackVerticalLimit = getDouble("settings.shieldspigot.knockback.vertical-limit", 0.4D);
+        knockbackExtraHorizontal = getDouble("settings.shieldspigot.knockback.extra-horizontal", 0.5D);
+        knockbackExtraVertical = getDouble("settings.shieldspigot.knockback.extra-vertical", 0.1D);
+    }
+
     private static void babyZombieMovementSpeed() {
         babyZombieMovementSpeed = getDouble("settings.baby-zombie-movement-speed", 0.5D); // Player moves at 0.1F, for reference
     }
@@ -154,31 +183,6 @@ public class PaperSpigotConfig {
         if (!interactLimitEnabled) {
             Bukkit.getLogger().log(Level.INFO, "Disabling player interaction limiter, your server may be more vulnerable to malicious users");
         }
-    }
-
-    private static void antiSmasher() {
-        paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
-        usePacketLimiter = getBoolean("settings.shieldspigot.enable-packet-limiter", true);
-        maxPacketsPerSecond = getInt("settings.shieldspigot.max-packets-per-second", 750);
-        verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
-        bookPageLength = getInt("settings.shieldspigot.book-page-length", 256);
-        bookMaxPages = getInt("settings.shieldspigot.book-max-pages", 50);
-        bookTick = getInt("settings.shieldspigot.book-last-tick", 20);
-        bookTitleLength = getInt("settings.shieldspigot.book-title-length", 32);
-        maxBytesPerConnection = getInt("settings.shieldspigot.max-bytes-per-connection", 35000);
-        logPlayerConnectionSocket = getBoolean("settings.shieldspigot.log-player-connection-socket", true);
-        timeOutTime = getInt("settings.shieldspigot.timeout-time", 600);
-        nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
-        disconnectPrefixOnException = getString("settings.shieldspigot.disconnect-prefix", "Disconnected by ->");
-        nameLoginHandler = getString("settings.shieldspigot.allowed-name-characters", "[a-zA-Z0-9_]*");
-        minNameLength = getInt("settings.shieldspigot.min-name-length", 3);
-        maxNameLength = getInt("settings.shieldspigot.max-name-length", 16);
-        knockbackFriction = getDouble("settings.shieldspigot.knockback.friction", 2.0D);
-        knockbackHorizontal = getDouble("settings.shieldspigot.knockback.horizontal", 0.4D);
-        knockbackVertical = getDouble("settings.shieldspigot.knockback.vertical", 0.4D);
-        knockbackVerticalLimit = getDouble("settings.shieldspigot.knockback.vertical-limit", 0.4D);
-        knockbackExtraHorizontal = getDouble("settings.shieldspigot.knockback.extra-horizontal", 0.5D);
-        knockbackExtraVertical = getDouble("settings.shieldspigot.knockback.extra-vertical", 0.1D);
     }
 
     public static double strengthEffectModifier;

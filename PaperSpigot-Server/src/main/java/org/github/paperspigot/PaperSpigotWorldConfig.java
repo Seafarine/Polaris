@@ -264,6 +264,14 @@ public class PaperSpigotWorldConfig
         generateFlatBedrock = getBoolean( "generator-settings.flat-bedrock", false );
     }
 
+    public boolean optimizeTntMovement;
+    public boolean optimizeLiquidExplosions;
+
+    private void shieldSpigotWorldConfig() {
+        optimizeTntMovement = getBoolean("settings.shieldspigot.optimizations.tnt-movements", false);
+        optimizeLiquidExplosions = getBoolean("settings.shieldspigot.optimizations.liquid-explosions", false);
+    }
+
     public boolean fixCannons;
     private void fixCannons()
     {
