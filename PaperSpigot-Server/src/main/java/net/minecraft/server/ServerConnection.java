@@ -92,7 +92,12 @@ public class ServerConnection {
             this.g.add((new ServerBootstrap()).channel(oclass).childHandler(new ChannelInitializer() {
                 protected void initChannel(Channel channel) throws Exception {
                     try {
-                        channel.config().setOption(ChannelOption.TCP_NODELAY, Boolean.TRUE);
+                        io.netty.channel.ChannelConfig config = channel.config();
+                        config.setOption(ChannelOption.TCP_NODELAY, true);
+                        config.setOption(ChannelOption.TCP_FASTOPEN, PaperSpigotConfig.TcpFastOpenMode); //ShieldSpigot
+                        config.setOption(ChannelOption.TCP_FASTOPEN_CONNECT, PaperSpigotConfig.enableTcpFastOpen); //ShieldSpigot
+                        config.setOption(ChannelOption.IP_TOS, 0x18);
+                        config.setAllocator(io.netty.buffer.ByteBufAllocator.DEFAULT);
                     } catch (ChannelException channelexception) {
                         ;
                     }

@@ -31,6 +31,8 @@ public class PaperSpigotConfig {
     public static boolean verifyChannelBeforeDecode;
     public static boolean logPlayerConnectionSocket;
     public static String paperSpigotLicense;
+    public static boolean enableTcpFastOpen;
+    public static int TcpFastOpenMode;
     public static int maxPacketsPerSecond;
     public static int maxBytesPerConnection;
     public static String nameLoginHandler;
@@ -148,6 +150,8 @@ public class PaperSpigotConfig {
     private static void shieldSpigotConfiguration() {
         paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
         useCustomEncoder = getBoolean("settings.shieldspigot.optimizations.use-custom-encoder", false);
+        enableTcpFastOpen = getBoolean("settings.shieldspigot.optimizations.tcp-use-fast-open", false);
+        TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
