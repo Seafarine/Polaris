@@ -225,8 +225,8 @@ public abstract class World implements IBlockAccess {
             public void b(WorldBorder worldborder, double d0) {}
 
             public void c(WorldBorder worldborder, double d0) {}
-        }); 
-        this.getServer().addWorld(this.world); 
+        });
+        this.getServer().addWorld(this.world);
         // CraftBukkit end
         this.keepSpawnInMemory = this.paperSpigotConfig.keepSpawnInMemory; // PaperSpigot
         timings = new co.aikar.timings.WorldTimingsHandler(this); // Spigot - code below can generate new world and access timings
@@ -770,7 +770,7 @@ public abstract class World implements IBlockAccess {
     {
         return getType( blockposition, true );
     }
-    
+
     public IBlockData getType(BlockPosition blockposition, boolean useCaptured) {
         // CraftBukkit start - tree generation
         if (captureTreeGeneration && useCaptured) {
@@ -1205,10 +1205,10 @@ public abstract class World implements IBlockAccess {
                                 entity.h(true);
                             }
 
-                            IBlockData block; 
+                            IBlockData block;
                             if (!this.getWorldBorder().a(blockposition) && flag1) {
                                 block = Blocks.STONE.getBlockData();
-                            } else 
+                            } else
                             {
                                 block = chunk.getBlockData( blockposition );
                             }
@@ -1971,12 +1971,12 @@ public abstract class World implements IBlockAccess {
             return null;
         } else {
             // CraftBukkit start
-            if (capturedTileEntities.containsKey(blockposition)) {
-                return capturedTileEntities.get(blockposition);
+         TileEntity tileentity = null;
+         if (!capturedTileEntities.isEmpty() &&
+                 (tileentity = capturedTileEntities.get(blockposition)) != null) {
+                  return tileentity;
             }
             // CraftBukkit end
-
-            TileEntity tileentity = null;
             int i;
             TileEntity tileentity1;
 
@@ -2183,9 +2183,9 @@ public abstract class World implements IBlockAccess {
                 this.p = MathHelper.a(this.p, 0.0F, 1.0F);
 
                 // CraftBukkit start
-                for (int idx = 0; idx < this.players.size(); ++idx) {
-                    if (((EntityPlayer) this.players.get(idx)).world == this) {
-                        ((EntityPlayer) this.players.get(idx)).tickWeather();
+                for (EntityHuman player : this.players) {
+                    if (player.world == this) {
+                        ((EntityPlayer) player).tickWeather();
                     }
                 }
                 // CraftBukkit end
@@ -2725,7 +2725,7 @@ public abstract class World implements IBlockAccess {
                     continue;
                 }
             }
-            
+
             if (oclass.isAssignableFrom(entity.getClass())) {
             // if ((!(entity instanceof EntityInsentient) || !((EntityInsentient) entity).isPersistent()) && oclass.isAssignableFrom(entity.getClass())) {
                 // CraftBukkit end
