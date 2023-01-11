@@ -129,17 +129,15 @@ public class EntityExperienceOrb extends Entity {
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.isInvulnerable(damagesource)) {
-            return false;
-        } else {
+        if (!this.isInvulnerable(damagesource)) {
             this.ac();
             this.d = (int) ((float) this.d - f);
             if (this.d <= 0) {
                 this.die();
             }
 
-            return false;
         }
+        return false;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
