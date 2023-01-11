@@ -47,8 +47,9 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public void queueUnload(int i, int j) {
+        long key = LongHash.toLong(i, j);
         // PaperSpigot start - Asynchronous lighting updates
-        Chunk chunk = chunks.get(LongHash.toLong(i, j));
+        Chunk chunk = chunks.get(key); //ShieldSpigot
         if (chunk != null && chunk.world.paperSpigotConfig.useAsyncLighting && (chunk.pendingLightUpdates.get() > 0 || chunk.world.getTime() - chunk.lightUpdateTime < 20)) {
             return;
         }
@@ -69,7 +70,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 // CraftBukkit start
                 this.unloadQueue.add(i, j);
 
-                Chunk c = chunks.get(LongHash.toLong(i, j));
+                Chunk c = chunks.get(key); //ShieldSpigot
                 if (c != null) {
                     c.mustSave = true;
                 }
@@ -79,7 +80,7 @@ public class ChunkProviderServer implements IChunkProvider {
             // CraftBukkit start
             this.unloadQueue.add(i, j);
 
-            Chunk c = chunks.get(LongHash.toLong(i, j));
+            Chunk c = chunks.get(key); //Shieldspigot
             if (c != null) {
                 c.mustSave = true;
             }
@@ -135,8 +136,9 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public Chunk originalGetChunkAt(int i, int j) {
+        long key = LongHash.toLong(i, j);
         this.unloadQueue.remove(i, j);
-        Chunk chunk = this.chunks.get(LongHash.toLong(i, j));
+        Chunk chunk = (Chunk) this.chunks.get(key); //Shieldspigot
         boolean newChunk = false;
         // CraftBukkit end
 
@@ -162,7 +164,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 newChunk = true; // CraftBukkit
             }
 
-            this.chunks.put(LongHash.toLong(i, j), chunk);
+            this.chunks.put(key, chunk); //Shieldspigot
 
             chunk.addEntities();
 
