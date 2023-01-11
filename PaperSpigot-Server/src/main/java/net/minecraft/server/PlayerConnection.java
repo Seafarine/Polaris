@@ -178,7 +178,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
         this.networkManager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), (GenericFutureListener) future -> { // CraftBukkit - fix decompile error
             PlayerConnection.this.networkManager.close(chatcomponenttext);
-        }, new GenericFutureListener[0]);
+        });
         this.a(chatcomponenttext); // CraftBukkit - fire quit instantly
         this.networkManager.k();
         // CraftBukkit - Don't wait
@@ -266,7 +266,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
                         // If the event is cancelled we move the player back to their old location.
                         if (event.isCancelled()) {
-                            this.player.playerConnection.sendPacket(new PacketPlayOutPosition(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), Collections.<PacketPlayOutPosition.EnumPlayerTeleportFlags>emptySet()));
+                            this.player.playerConnection.sendPacket(new PacketPlayOutPosition(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), Collections.emptySet()));
                             return;
                         }
 
@@ -394,7 +394,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     }
 
                     float f4 = 0.0625F;
-                    boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
+                    boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(f4, f4, f4)).isEmpty();
 
                     if (this.player.onGround && !packetplayinflying.f() && d12 > 0.0D) {
                         this.player.bF();
@@ -423,7 +423,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     this.player.setLocation(d7, d8, d9, f2, f3);
                     this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
                     if (!this.player.noclip) {
-                        boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
+                        boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(f4, f4, f4)).isEmpty();
 
                         if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
                             this.a(this.o, this.p, this.q, f2, f3);
@@ -431,7 +431,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         }
                     }
 
-                    AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
+                    AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow(f4, f4, f4).a(0.0D, -0.55D, 0.0D);
 
                     if (!this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
                         if (d16 >= -0.03125D) {
@@ -710,7 +710,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             Vec3D vec3d1 = vec3d.add((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
             MovingObjectPosition movingobjectposition = this.player.world.rayTrace(vec3d, vec3d1, false);
 
-            boolean cancelled = false;
+            boolean cancelled;
             if (movingobjectposition == null || movingobjectposition.type != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                 org.bukkit.event.player.PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(this.player, Action.RIGHT_CLICK_AIR, itemstack);
                 cancelled = event.useItemInHand() == Event.Result.DENY;
@@ -736,7 +736,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             always = (itemstack.count != itemstackAmount) || itemstack.getItem() == Item.getItemOf(Blocks.WATERLILY);
             // CraftBukkit end
         } else if (blockposition.getY() >= this.minecraftServer.getMaxBuildHeight() - 1 && (enumdirection == EnumDirection.UP || blockposition.getY() >= this.minecraftServer.getMaxBuildHeight())) {
-            ChatMessage chatmessage = new ChatMessage("build.tooHigh", new Object[] { Integer.valueOf(this.minecraftServer.getMaxBuildHeight())});
+            ChatMessage chatmessage = new ChatMessage("build.tooHigh", this.minecraftServer.getMaxBuildHeight());
 
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             this.player.playerConnection.sendPacket(new PacketPlayOutChat(chatmessage));
@@ -1012,7 +1012,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 } );
                 // Spigot end
             } else if (this.player.getChatFlags() == EntityHuman.EnumChatVisibility.SYSTEM) { // Re-add "Command Only" flag check
-                ChatMessage chatmessage = new ChatMessage("chat.cannotSend", new Object[0]);
+                ChatMessage chatmessage = new ChatMessage("chat.cannotSend");
 
                 chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
                 this.sendPacket(new PacketPlayOutChat(chatmessage));
@@ -1020,7 +1020,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 this.chat(s, true);
                 // CraftBukkit end - the below is for reference. :)
             } else {
-                ChatMessage chatmessage1 = new ChatMessage("chat.type.text", new Object[] { this.player.getScoreboardDisplayName(), s});
+                ChatMessage chatmessage1 = new ChatMessage("chat.type.text", this.player.getScoreboardDisplayName(), s);
 
                 this.minecraftServer.getPlayerList().sendMessage(chatmessage1, false);
             }
@@ -1077,7 +1077,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             if (!org.bukkit.Bukkit.isPrimaryThread()) {
                 final String fCommandLine = s;
                 MinecraftServer.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Command Dispatched Async: " + fCommandLine);
-                MinecraftServer.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Please notify author of plugin causing this execution to fix this bug! see: http://bit.ly/1oSiM6C", new Throwable());
+                MinecraftServer.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Please notify author of plugin causing this execution to fix this bug!", new Throwable());
                 Waitable wait = new Waitable() {
                     @Override
                     protected Object evaluate() {
@@ -1300,7 +1300,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         if (this.player.dead) return; // CraftBukkit
         PlayerConnectionUtils.ensureMainThread(packetplayinuseentity, this, this.player.u());
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
-        Entity entity = packetplayinuseentity.a((World) worldserver);
+        Entity entity = packetplayinuseentity.a(worldserver);
         // Spigot Start
         if ( entity == player && !player.isSpectator() )
         {
@@ -1328,10 +1328,10 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     Item origItem = this.player.inventory.getItemInHand() == null ? null : this.player.inventory.getItemInHand().getItem();
                     PlayerInteractEntityEvent event;
                     if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) {
-                        event = new PlayerInteractEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity());
+                        event = new PlayerInteractEntityEvent(this.getPlayer(), entity.getBukkitEntity());
                     } else {
                         Vec3D target = packetplayinuseentity.b();
-                        event = new PlayerInteractAtEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity(), new org.bukkit.util.Vector(target.a, target.b, target.c));
+                        event = new PlayerInteractAtEntityEvent(this.getPlayer(), entity.getBukkitEntity(), new org.bukkit.util.Vector(target.a, target.b, target.c));
                     }
                     this.server.getPluginManager().callEvent(event);
 
@@ -1359,7 +1359,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     }
                     // CraftBukkit end
                 } else if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) {
-                    entity.a((EntityHuman) this.player, packetplayinuseentity.b());
+                    entity.a(this.player, packetplayinuseentity.b());
 
                     // CraftBukkit start
                     if (itemInHand != null && itemInHand.count <= -1) {
@@ -1401,7 +1401,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     this.player.playerConnection.disconnect("You have died. Game over, man, it\'s game over!");
                     this.minecraftServer.aa();
                 } else {
-                    GameProfileBanEntry gameprofilebanentry = new GameProfileBanEntry(this.player.getProfile(), (Date) null, "(You just lost the game)", (Date) null, "Death in Hardcore");
+                    GameProfileBanEntry gameprofilebanentry = new GameProfileBanEntry(this.player.getProfile(), null, "(You just lost the game)", null, "Death in Hardcore");
 
                     this.minecraftServer.getPlayerList().getProfileBans().add(gameprofilebanentry);
                     this.player.playerConnection.disconnect("You have died. Game over, man, it\'s game over!");
@@ -1420,7 +1420,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             break;
 
         case 3:
-            this.player.b((Statistic) AchievementList.f);
+            this.player.b(AchievementList.f);
         }
 
     }
@@ -1734,7 +1734,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     this.player.broadcastCarriedItem();
                     this.player.g = false;
                 } else {
-                    this.n.a(this.player.activeContainer.windowId, Short.valueOf(packetplayinwindowclick.d()));
+                    this.n.a(this.player.activeContainer.windowId, packetplayinwindowclick.d());
                     this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.a(), packetplayinwindowclick.d(), false));
                     this.player.activeContainer.a(this.player, false);
                     ArrayList arraylist1 = Lists.newArrayList();
@@ -1854,7 +1854,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         PlayerConnectionUtils.ensureMainThread(packetplayintransaction, this, this.player.u());
         Short oshort = this.n.get(this.player.activeContainer.windowId);
 
-        if (oshort != null && packetplayintransaction.b() == oshort.shortValue() && this.player.activeContainer.windowId == packetplayintransaction.a() && !this.player.activeContainer.c(this.player) && !this.player.isSpectator()) {
+        if (oshort != null && packetplayintransaction.b() == oshort && this.player.activeContainer.windowId == packetplayintransaction.a() && !this.player.activeContainer.c(this.player) && !this.player.isSpectator()) {
             this.player.activeContainer.a(this.player, true);
         }
 
@@ -1946,11 +1946,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         }
         // CraftBukkit end
         ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = this.minecraftServer.tabCompleteCommand(this.player, packetplayintabcomplete.a(), packetplayintabcomplete.b()).iterator();
 
-        while (iterator.hasNext()) {
-            String s = (String) iterator.next();
-
+        for (String s : this.minecraftServer.tabCompleteCommand(this.player, packetplayintabcomplete.a(), packetplayintabcomplete.b())) {
             arraylist.add(s);
         }
 
@@ -2052,7 +2049,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             }
         } else if ("MC|AdvCdm".equals(packetplayincustompayload.a())) {
             if (!this.minecraftServer.getEnableCommandBlock()) {
-                this.player.sendMessage(new ChatMessage("advMode.notEnabled", new Object[0]));
+                this.player.sendMessage(new ChatMessage("advMode.notEnabled"));
             } else if (this.player.getBukkitEntity().isOp() && this.player.abilities.canInstantlyBuild) { // CraftBukkit - Change to Bukkit OP versus Vanilla OP
                 packetdataserializer = packetplayincustompayload.b();
 
