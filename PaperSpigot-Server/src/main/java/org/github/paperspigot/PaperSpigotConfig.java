@@ -21,6 +21,7 @@ import java.util.logging.Level;
 public class PaperSpigotConfig {
 
     public static boolean usePacketLimiter;
+    public static int timeOutTime;
     public static boolean verifyChannelBeforeDecode;
     public static boolean logPlayerConnectionSocket;
     public static String paperSpigotLicense;
@@ -158,6 +159,7 @@ public class PaperSpigotConfig {
         verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
         maxBytesPerConnection = getInt("settings.shieldspigot.max-bytes-per-connection", 35000);
         logPlayerConnectionSocket = getBoolean("settings.shieldspigot.log-player-connection-socket", true);
+        timeOutTime = getInt("settings.shieldspigot.timeout-time", 600);
         nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
         disconnectPrefixOnException = getString("settings.shieldspigot.disconnect-prefix", "Disconnected by ->");
         nameLoginHandler = getString("settings.shieldspigot.allowed-name-characters", "[a-zA-Z0-9_]*");

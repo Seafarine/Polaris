@@ -6,7 +6,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,7 +87,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
             }
         }
 
-        if (this.h++ == 600) { //Todo: Configurable
+        if (this.h++ == PaperSpigotConfig.timeOutTime) {
             this.disconnect("Took too long to log in");
         }
 
@@ -178,7 +177,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
 
     public String d() {
         String ip = PaperSpigotConfig.logPlayerConnectionSocket ? this.networkManager.getSocketAddress().toString() : "<ip address withheld>";
-        return this.i != null ? this.i.toString() + " (" + ip + ")" : ip;
+        return this.i != null ? this.i + " (" + ip + ")" : ip;
     }
 
     public void a(PacketLoginInStart packetlogininstart) {
@@ -221,7 +220,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                     try {
                         String s = (new BigInteger(MinecraftEncryption.a(LoginListener.this.j, LoginListener.this.server.Q().getPublic(), LoginListener.this.loginKey))).toString(16);
 
-                        LoginListener.this.i = LoginListener.this.server.aD().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s);
+                        LoginListener.this.i = LoginListener.this.server.aD().hasJoinedServer(new GameProfile(null, gameprofile.getName()), s);
                         if (LoginListener.this.i != null) {
                             // CraftBukkit start - fire PlayerPreLoginEvent
                             if (!networkManager.g()) {
@@ -322,11 +321,11 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
         return new GameProfile(uuid, gameprofile.getName());
     }
 
-    static enum EnumProtocolState {
+    enum EnumProtocolState {
 
         HELLO, KEY, AUTHENTICATING, READY_TO_ACCEPT, e, ACCEPTED;
 
-        private EnumProtocolState() {
+        EnumProtocolState() {
         }
     }
 }
