@@ -29,9 +29,9 @@ public class PacketDataSerializer extends ByteBuf {
 
     private final ByteBuf a;
 
-    public static final boolean DEBUG = Boolean.getBoolean("pabzito-esta-bug");
+    public static final boolean DEBUG = Boolean.getBoolean("shieldspigot-advanced-traces");
     private static final FastDecoderException DECODE_FAILED =
-            new FastDecoderException("A packet did not decode successfully (invalid packet), use -Dpabzito-esta-bug=true " +
+            new FastDecoderException("A packet did not decode successfully (invalid packet), use -Dshieldspigot-advanced-traces=true " +
                     "for more usefully information");
 
     public PacketDataSerializer(ByteBuf bytebuf) {
@@ -102,7 +102,9 @@ public class PacketDataSerializer extends ByteBuf {
             b0 = this.readByte();
             i |= (b0 & 127) << j++ * 7;
             if (j > 5) {
-                throw DECODE_FAILED; //Use cached exception instead generate other
+                if(DEBUG) {
+                    throw DECODE_FAILED; //Use cached exception instead generate other
+                }
             }
         } while ((b0 & 128) == 128);
 
@@ -119,7 +121,9 @@ public class PacketDataSerializer extends ByteBuf {
             b0 = this.readByte();
             i |= (long) (b0 & 127) << j++ * 7;
             if (j > 10) {
-                throw DECODE_FAILED;
+                if(DEBUG) {
+                    throw DECODE_FAILED;
+                }
             }
         } while ((b0 & 128) == 128);
 
