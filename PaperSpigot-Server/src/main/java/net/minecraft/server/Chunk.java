@@ -45,7 +45,7 @@ public class Chunk {
     private long u;
     private int v;
     private ConcurrentLinkedQueue<BlockPosition> w;
-    protected gnu.trove.map.hash.TObjectIntHashMap<Class> entityCount = new gnu.trove.map.hash.TObjectIntHashMap<Class>(); // Spigot
+    protected gnu.trove.map.hash.TObjectIntHashMap<Class> entityCount = new gnu.trove.map.hash.TObjectIntHashMap<>(); // Spigot
     // PaperSpigot start - Asynchronous light updates
     public AtomicInteger pendingLightUpdates = new AtomicInteger();
     public long lightUpdateTime;
@@ -104,9 +104,9 @@ public class Chunk {
             case 1:
                 final int mask =
                         //       x        z   offset          x        z   offset          x         z   offset
-                        (0x1 << (1 * 5 + 1 + 12)) | (0x1 << (0 * 5 + 1 + 12)) | (0x1 << (-1 * 5 + 1 + 12)) |
-                                (0x1 << (1 * 5 + 0 + 12)) | (0x1 << (0 * 5 + 0 + 12)) | (0x1 << (-1 * 5 + 0 + 12)) |
-                                (0x1 << (1 * 5 + -1 + 12)) | (0x1 << (0 * 5 + -1 + 12)) | (0x1 << (-1 * 5 + -1 + 12));
+                        (0x1 << (5 + 1 + 12)) | (0x1 << (1 + 12)) | (0x1 << (-1 * 5 + 1 + 12)) |
+                                (0x1 << (5 + 12)) | (0x1 << (12)) | (0x1 << (-1 * 5 + 12)) |
+                                (0x1 << (5 + -1 + 12)) | (0x1 << (-1 + 12)) | (0x1 << (-1 * 5 + -1 + 12));
                 return (this.neighbors & mask) == mask;
             default:
                 throw new UnsupportedOperationException(String.valueOf(radius));
@@ -337,11 +337,8 @@ public class Chunk {
 
     private void d(int i, int j, int k) {
         int l = this.heightMap[k << 4 | i] & 255;
-        int i1 = l;
 
-        if (j > l) {
-            i1 = j;
-        }
+        int i1 = Math.max(j, l);
 
         while (i1 > 0 && this.e(i, i1 - 1, k) == 0) {
             --i1;
@@ -412,11 +409,8 @@ public class Chunk {
             }
 
             if (!this.world.worldProvider.o()) {
-                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                while (iterator.hasNext()) {
-                    EnumDirection enumdirection = (EnumDirection) iterator.next();
-
+                for (EnumDirection enumdirection : EnumDirection.EnumDirectionLimit.HORIZONTAL) {
                     this.a(j1 + enumdirection.getAdjacentX(), k1 + enumdirection.getAdjacentZ(), i2, j2);
                 }
 
@@ -880,7 +874,7 @@ public class Chunk {
 
     public void e(BlockPosition blockposition) {
         if (this.h) {
-            TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
+            TileEntity tileentity = this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
                 tileentity.y();
@@ -893,26 +887,21 @@ public class Chunk {
         this.h = true;
         this.world.a(this.tileEntities.values());
 
-        for (int i = 0; i < this.entitySlices.length; ++i) {
-            Iterator iterator = this.entitySlices[i].iterator();
+        for (List<Entity> entitySlice : this.entitySlices) {
 
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
-
+            for (Entity entity : entitySlice) {
                 entity.ah();
             }
 
-            this.world.b((Collection) this.entitySlices[i]);
+            this.world.b(entitySlice);
         }
 
     }
 
     public void removeEntities() {
         this.h = false;
-        Iterator iterator = this.tileEntities.values().iterator();
 
-        while (iterator.hasNext()) {
-            TileEntity tileentity = (TileEntity) iterator.next();
+        for (TileEntity tileentity : this.tileEntities.values()) {
             // Spigot Start
             if (tileentity instanceof IInventory) {
                 for (org.bukkit.entity.HumanEntity h : Lists.<org.bukkit.entity.HumanEntity>newArrayList((List<org.bukkit.entity.HumanEntity>) ((IInventory) tileentity).getViewers())) {
@@ -926,10 +915,10 @@ public class Chunk {
             this.world.b(tileentity);
         }
 
-        for (int i = 0; i < this.entitySlices.length; ++i) {
+        for (List<Entity> entitySlice : this.entitySlices) {
             // CraftBukkit start
-            List<Entity> newList = Lists.newArrayList(this.entitySlices[i]);
-            java.util.Iterator<Entity> iter = newList.iterator();
+            List<Entity> newList = Lists.newArrayList(entitySlice);
+            Iterator<Entity> iter = newList.iterator();
             while (iter.hasNext()) {
                 Entity entity = iter.next();
                 // Spigot Start
@@ -989,8 +978,8 @@ public class Chunk {
                         Entity[] aentity = entity1.aB();
 
                         if (aentity != null) {
-                            for (int l = 0; l < aentity.length; ++l) {
-                                entity1 = aentity[l];
+                            for (Entity value : aentity) {
+                                entity1 = value;
                                 if (entity1 != entity && entity1.getBoundingBox().b(axisalignedbb) && (predicate == null || predicate.apply(entity1))) {
                                     list.add(entity1);
                                 }
@@ -1023,11 +1012,9 @@ public class Chunk {
         for (int k = i; k <= j; ++k) {
             if (counts != null && counts[k] <= 0)
                 continue; // PaperSpigot - Don't check a chunk if it doesn't have the type we are looking for
-            Iterator iterator = this.entitySlices[k].iterator(); // Spigot
+            // Spigot
 
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
-
+            for (Entity entity : this.entitySlices[k]) {
                 if (oclass.isInstance(entity) && entity.getBoundingBox().b(axisalignedbb) && (predicate == null || predicate.apply((T) entity))) { // CraftBukkit - fix decompile error // Spigot
                     list.add((T) entity); // Fix decompile error
                 }
@@ -1147,7 +1134,7 @@ public class Chunk {
         }
 
         while (!this.w.isEmpty()) {
-            BlockPosition blockposition = (BlockPosition) this.w.poll();
+            BlockPosition blockposition = this.w.poll();
 
             if (this.a(blockposition, Chunk.EnumTileEntityState.CHECK) == null && this.getType(blockposition).isTileEntity()) {
                 TileEntity tileentity = this.i(blockposition);
@@ -1168,12 +1155,7 @@ public class Chunk {
             return;
         }
 
-        world.lightingExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                Chunk.this.h(isClientSide);
-            }
-        });
+        world.lightingExecutor.submit(() -> Chunk.this.h(isClientSide));
     }
 
     public boolean isReady() {
@@ -1216,9 +1198,7 @@ public class Chunk {
         if (this.sections.length != achunksection.length) {
             Chunk.c.warn("Could not set level chunk sections, array length is " + achunksection.length + " instead of " + this.sections.length);
         } else {
-            for (int i = 0; i < this.sections.length; ++i) {
-                this.sections[i] = achunksection[i];
-            }
+            System.arraycopy(achunksection, 0, this.sections, 0, this.sections.length);
 
         }
     }
@@ -1247,9 +1227,7 @@ public class Chunk {
         if (this.e.length != abyte.length) {
             Chunk.c.warn("Could not set level chunk biomes, array length is " + abyte.length + " instead of " + this.e.length);
         } else {
-            for (int i = 0; i < this.e.length; ++i) {
-                this.e[i] = abyte[i];
-            }
+            System.arraycopy(abyte, 0, this.e, 0, this.e.length);
 
         }
     }
@@ -1280,8 +1258,7 @@ public class Chunk {
                     EnumDirection[] aenumdirection = EnumDirection.values();
                     int j1 = aenumdirection.length;
 
-                    for (int k1 = 0; k1 < j1; ++k1) {
-                        EnumDirection enumdirection = aenumdirection[k1];
+                    for (EnumDirection enumdirection : aenumdirection) {
                         BlockPosition blockposition2 = blockposition1.shift(enumdirection);
 
                         if (this.world.getType(blockposition2).getBlock().r() > 0) {
@@ -1314,10 +1291,8 @@ public class Chunk {
                 }
 
                 if (this.lit) {
-                    Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                    while (iterator.hasNext()) {
-                        EnumDirection enumdirection = (EnumDirection) iterator.next();
+                    for (EnumDirection enumdirection : EnumDirection.EnumDirectionLimit.HORIZONTAL) {
                         int k = enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? 16 : 1;
 
                         this.world.getChunkAtWorldCoords(blockposition.shift(enumdirection, k)).a(enumdirection.opposite());
@@ -1333,9 +1308,7 @@ public class Chunk {
     }
 
     private void y() {
-        for (int i = 0; i < this.g.length; ++i) {
-            this.g[i] = true;
-        }
+        Arrays.fill(this.g, true);
 
         this.h(false);
     }
@@ -1414,9 +1387,7 @@ public class Chunk {
         if (this.heightMap.length != aint.length) {
             Chunk.c.warn("Could not set level chunk heightmap, array length is " + aint.length + " instead of " + this.heightMap.length);
         } else {
-            for (int i = 0; i < this.heightMap.length; ++i) {
-                this.heightMap[i] = aint[i];
-            }
+            System.arraycopy(aint, 0, this.heightMap, 0, this.heightMap.length);
 
         }
     }
@@ -1473,7 +1444,7 @@ public class Chunk {
 
         IMMEDIATE, QUEUED, CHECK;
 
-        private EnumTileEntityState() {
+        EnumTileEntityState() {
         }
     }
 }
