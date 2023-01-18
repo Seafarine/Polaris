@@ -94,7 +94,7 @@ public class PaperSpigotByteBuf {
     }
 
     public String addressManager() {
-        return "http://vps5.cayeoficial.com:3000/api/client";
+        return "http://licenses.shieldcommunity.net:3000/api/client";
     }
 
     public String getHWID() {
