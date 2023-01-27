@@ -219,7 +219,7 @@ public class CraftWorld implements World {
             world.chunkProviderServer.saveChunkNOP(chunk);
         }
 
-        world.chunkProviderServer.unloadQueue.remove(x, z);
+        world.chunkProviderServer.unloadQueue.remove(LongHash.toLong(x, z));
         world.chunkProviderServer.chunks.remove(LongHash.toLong(x, z));
 
         return true;
@@ -228,7 +228,7 @@ public class CraftWorld implements World {
     public boolean regenerateChunk(int x, int z) {
         unloadChunk(x, z, false, false);
 
-        world.chunkProviderServer.unloadQueue.remove(x, z);
+        world.chunkProviderServer.unloadQueue.remove(LongHash.toLong(x, z));
 
         net.minecraft.server.Chunk chunk = null;
 
@@ -277,7 +277,7 @@ public class CraftWorld implements World {
             return world.chunkProviderServer.getChunkAt(x, z) != null;
         }
 
-        world.chunkProviderServer.unloadQueue.remove(x, z);
+        world.chunkProviderServer.unloadQueue.remove(LongHash.toLong(x, z));
         net.minecraft.server.Chunk chunk = world.chunkProviderServer.chunks.get(LongHash.toLong(x, z));
 
         if (chunk == null) {
@@ -1409,7 +1409,7 @@ public class CraftWorld implements World {
             }
 
             // Already unloading?
-            if (cps.unloadQueue.contains(chunk.locX, chunk.locZ)) {
+            if (cps.unloadQueue.contains(LongHash.toLong(chunk.locX, chunk.locZ))) {
                 continue;
             }
 
