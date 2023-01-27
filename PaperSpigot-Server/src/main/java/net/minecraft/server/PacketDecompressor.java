@@ -7,6 +7,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
+import org.github.paperspigot.PaperSpigotConfig;
 
 import java.util.List;
 import java.util.zip.Inflater;
@@ -41,9 +42,10 @@ public class PacketDecompressor extends ByteToMessageDecoder {
                 }
 
 
-                if (var5 > 2097152) {
+                if (var5 > PaperSpigotConfig.maxUncompressedBytes) {
                     throw new DecoderException("Badly compressed packet - size of " + var5 + " is larger than protocol maximum of " + 2097152);
                 }
+
                 // Paper start
                 if (this.inflater != null) {
                     byte[] var6 = new byte[var4.readableBytes()];

@@ -27,6 +27,8 @@ public class PaperSpigotConfig {
     public static int bookPageLength;
     public static int bookTitleLength;
     public static int bookMaxPages;
+
+    public static int maxUncompressedBytes;
     public static int timeOutTime;
     public static boolean verifyChannelBeforeDecode;
     public static boolean logPlayerConnectionSocket;
@@ -155,6 +157,7 @@ public class PaperSpigotConfig {
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
+        maxUncompressedBytes = getInt("settings.shieldspigot.anticrash.max-uncompressed-bytes", 2097152);
         verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
         bookPageLength = getInt("settings.shieldspigot.book-page-length", 256);
         bookMaxPages = getInt("settings.shieldspigot.book-max-pages", 50);
