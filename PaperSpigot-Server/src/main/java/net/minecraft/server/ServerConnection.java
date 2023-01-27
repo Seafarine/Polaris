@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.velocitypowered.natives.util.Natives;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
@@ -88,6 +89,11 @@ public class ServerConnection {
                 lazyinitvar = ServerConnection.a;
                 ServerConnection.e.info("Using default channel type");
             }
+
+            // Paper start - indicate Velocity natives in use
+            e.info("ShieldSpigot is using " + Natives.compress.getLoadedVariant() + " compression compiled by NullCordX.");
+            e.info("ShieldSpigot is using  " + Natives.cipher.getLoadedVariant() + " ciphers compiled by Velocity.");
+            // Paper end
 
             this.g.add((new ServerBootstrap()).channel(oclass).childHandler(new ChannelInitializer() {
                 protected void initChannel(Channel channel) throws Exception {

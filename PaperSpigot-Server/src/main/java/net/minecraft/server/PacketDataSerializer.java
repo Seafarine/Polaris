@@ -139,7 +139,7 @@ public class PacketDataSerializer extends ByteBuf {
         return new UUID(this.readLong(), this.readLong());
     }
 
-    public void b(int i) {
+    public void writeVarInt(int i) { // Nacho - deobfuscate
         while ((i & -128) != 0) {
             this.writeByte(i & 127 | 128);
             i >>>= 7;
