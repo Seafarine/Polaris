@@ -14,7 +14,7 @@ import io.netty.handler.timeout.TimeoutException;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.shieldcommunity.spigot.encryption.CryptException;
+import net.shieldcommunity.spigot.encryption.DecryptionHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +23,6 @@ import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.github.paperspigot.PaperSpigotConfig;
 
-import javax.crypto.SecretKey;
 import java.net.SocketAddress;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -268,7 +267,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     // }
 
 
-    public void setupEncryption(javax.crypto.SecretKey key) throws CryptException {
+    public void setupEncryption(javax.crypto.SecretKey key) throws DecryptionHandler {
         if (!this.o) {
             try {
                 com.velocitypowered.natives.encryption.VelocityCipher decryption = com.velocitypowered.natives.util.Natives.cipher.get().forDecryption(key);
@@ -278,7 +277,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
                 this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(decryption));
                 this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(encryption));
             } catch (java.security.GeneralSecurityException e) {
-                throw new CryptException(e);
+                throw new DecryptionHandler(e);
             }
         }
     }
