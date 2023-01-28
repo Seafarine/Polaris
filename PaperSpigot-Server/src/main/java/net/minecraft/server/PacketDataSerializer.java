@@ -103,7 +103,7 @@ public class PacketDataSerializer extends ByteBuf {
             i |= (b0 & 127) << j++ * 7;
             if (j > 5) {
                 if(DEBUG) {
-                    throw DECODE_FAILED; //Use cached exception instead generate other
+                    throw DECODE_FAILED; //ShieldSpigot - Use cached exception instead generate other
                 }
             }
         } while ((b0 & 128) == 128);

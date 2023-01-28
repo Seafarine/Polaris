@@ -1997,7 +1997,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     return;
                 }
             } catch (Exception exception) {
-                PlayerConnection.c.error("Couldn\'t handle book info", exception);
+                if(PaperSpigotConfig.logPlayerConnectionExceptions) {
+                    PlayerConnection.c.error("Couldn\'t handle book info", exception);
+                }
                 this.disconnect("Invalid book data!"); // CraftBukkit
                 return;
             } finally {
@@ -2099,7 +2101,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         this.player.sendMessage(new ChatMessage("advMode.setCommand.success", s));
                     }
                 } catch (Exception exception3) {
-                    PlayerConnection.c.error("Couldn\'t set command block", exception3);
+                    if(PaperSpigotConfig.logPlayerConnectionExceptions) {
+                        PlayerConnection.c.error("Couldn\'t set command block", exception3);
+                    }
                     this.disconnect("Invalid CommandBlock data!"); // CraftBukkit
                 } finally {
                     packetdataserializer.release();
@@ -2125,7 +2129,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         iinventory.update();
                     }
                 } catch (Exception exception4) {
-                    PlayerConnection.c.error("Couldn\'t set beacon", exception4);
+                    if(PaperSpigotConfig.logPlayerConnectionExceptions) {
+                        PlayerConnection.c.error("Couldn\'t set beacon", exception4);
+                    }
                     this.disconnect("Invalid beacon data!"); // CraftBukkit
                 }
             }
@@ -2150,7 +2156,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     getPlayer().addChannel(channel);
                 }
             } catch (Exception ex) {
-                PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                if(PaperSpigotConfig.logPlayerConnectionExceptions) {
+                    PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                }
                 this.disconnect("Invalid payload REGISTER!");
             }
         } else if (packetplayincustompayload.a().equals("UNREGISTER")) {
@@ -2160,7 +2168,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     getPlayer().removeChannel(channel);
                 }
             } catch (Exception ex) {
-                PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                if(PaperSpigotConfig.logPlayerConnectionExceptions) {
+                    PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                }
                 this.disconnect("Invalid payload UNREGISTER!");
             }
         } else {
@@ -2169,7 +2179,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 packetplayincustompayload.b().readBytes(data);
                 server.getMessenger().dispatchIncomingMessage(player.getBukkitEntity(), packetplayincustompayload.a(), data);
             } catch (Exception ex) {
-                PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                if(PaperSpigotConfig.logPlayerConnectionExceptions) {
+                    PlayerConnection.c.error("Couldn\'t register custom payload", ex);
+                }
                 this.disconnect("Invalid custom payload!");
             }
         }

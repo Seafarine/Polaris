@@ -27,11 +27,12 @@ public class PaperSpigotConfig {
     public static int bookPageLength;
     public static int bookTitleLength;
     public static int bookMaxPages;
-
     public static int maxUncompressedBytes;
     public static int timeOutTime;
     public static boolean verifyChannelBeforeDecode;
+    public static boolean optimizeChunksForChests;
     public static boolean logPlayerConnectionSocket;
+    public static boolean logPlayerConnectionExceptions;
     public static String paperSpigotLicense;
     public static boolean enableTcpFastOpen;
     public static int TcpFastOpenMode;
@@ -147,24 +148,24 @@ public class PaperSpigotConfig {
         return config.getString(path, config.getString(path));
     }
 
-    public static double babyZombieMovementSpeed;
-
     private static void shieldSpigotConfiguration() {
         paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
         useCustomEncoder = getBoolean("settings.shieldspigot.optimizations.use-custom-encoder", false);
         enableTcpFastOpen = getBoolean("settings.shieldspigot.optimizations.tcp-use-fast-open", false);
+        optimizeChunksForChests = getBoolean("settings.shieldspigot.optimizations.optimize-chunks-for-chests", false);
         TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
         maxUncompressedBytes = getInt("settings.shieldspigot.anticrash.max-uncompressed-bytes", 2097152);
         verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
+        maxBytesPerConnection = getInt("settings.shieldspigot.anticrash.max-bytes-per-connection", 35000);
         bookPageLength = getInt("settings.shieldspigot.book-page-length", 256);
         bookMaxPages = getInt("settings.shieldspigot.book-max-pages", 50);
         bookTick = getInt("settings.shieldspigot.book-last-tick", 20);
         bookTitleLength = getInt("settings.shieldspigot.book-title-length", 32);
-        maxBytesPerConnection = getInt("settings.shieldspigot.max-bytes-per-connection", 35000);
-        logPlayerConnectionSocket = getBoolean("settings.shieldspigot.log-player-connection-socket", true);
+        logPlayerConnectionExceptions = getBoolean("settings.shieldspigot.log-player-connection-exceptions", true);
+        logPlayerConnectionSocket = getBoolean("settings.shieldspigot.logs.player-connection-socket", true);
         timeOutTime = getInt("settings.shieldspigot.timeout-time", 600);
         nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
         disconnectPrefixOnException = getString("settings.shieldspigot.prefix.on-disconnect", "Disconnected by ->");
@@ -178,6 +179,8 @@ public class PaperSpigotConfig {
         knockbackExtraHorizontal = getDouble("settings.shieldspigot.knockback.extra-horizontal", 0.5D);
         knockbackExtraVertical = getDouble("settings.shieldspigot.knockback.extra-vertical", 0.1D);
     }
+
+    public static double babyZombieMovementSpeed;
 
     private static void babyZombieMovementSpeed() {
         babyZombieMovementSpeed = getDouble("settings.baby-zombie-movement-speed", 0.5D); // Player moves at 0.1F, for reference
