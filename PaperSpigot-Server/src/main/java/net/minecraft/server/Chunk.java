@@ -1447,4 +1447,13 @@ public class Chunk {
         EnumTileEntityState() {
         }
     }
+
+    public int getItemCount(BlockPosition blockPosition) {
+        int k = MathHelper.floor(blockPosition.getY() / 16.0D);
+
+        k = Math.max(0, k);
+        k = Math.min(this.entitySlices.length - 1, k);
+
+        return itemCounts[k];
+    }
 }

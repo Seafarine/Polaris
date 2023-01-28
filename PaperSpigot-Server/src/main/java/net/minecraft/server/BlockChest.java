@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import org.github.paperspigot.PaperSpigotConfig;
+
 import java.util.Iterator;
 
 public class BlockChest extends BlockContainer {
@@ -45,12 +47,14 @@ public class BlockChest extends BlockContainer {
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
         this.e(world, blockposition, iblockdata);
-        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-        while (iterator.hasNext()) {
-            EnumDirection enumdirection = (EnumDirection) iterator.next();
+        for (EnumDirection enumdirection : EnumDirection.EnumDirectionLimit.HORIZONTAL) {
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
-            IBlockData iblockdata1 = world.getType(blockposition1);
+
+            final IBlockData iblockdata1 = world.isLoaded(blockposition1) ? world.getType(blockposition1) : null;
+            if (PaperSpigotConfig.optimizeChunksForChests && iblockdata1 ==  null) {
+                continue;
+            }
 
             if (iblockdata1.getBlock() == this) {
                 this.e(world, blockposition1, iblockdata1);
