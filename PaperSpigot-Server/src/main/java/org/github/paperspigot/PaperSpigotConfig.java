@@ -23,6 +23,7 @@ public class PaperSpigotConfig {
     public static boolean usePacketLimiter;
     public static int bookTick;
     public static boolean avoidDoubleCompressUncompressedPackets;
+    public static int maxEncodedStringLength;
     public static boolean useCustomEncoder;
     public static int bookPageLength;
     public static int bookTitleLength;
@@ -158,6 +159,7 @@ public class PaperSpigotConfig {
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
         maxUncompressedBytes = getInt("settings.shieldspigot.anticrash.max-uncompressed-bytes", 2097152);
+        maxEncodedStringLength = getInt("settings.shieldspigot.anticrash.max-encoded-string-length", 32767);
         verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.verify-channel-before-decode", true);
         maxBytesPerConnection = getInt("settings.shieldspigot.anticrash.max-bytes-per-connection", 35000);
         bookPageLength = getInt("settings.shieldspigot.book-page-length", 256);
