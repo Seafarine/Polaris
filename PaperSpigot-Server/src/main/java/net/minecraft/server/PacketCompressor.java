@@ -56,7 +56,7 @@ public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
                 return;
             }
 
-            var5.writeVarInt(var4);
+            var5.b(var4);
             ByteBuf compatibleIn = MoreByteBufUtils.ensureCompatible(var1.alloc(), this.compressor, var2);
             try {
                 this.compressor.deflate(compatibleIn, var3);
