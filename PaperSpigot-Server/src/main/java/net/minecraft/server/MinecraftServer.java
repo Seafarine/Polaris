@@ -352,7 +352,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                     }
 
                     ++i;
-                    worldserver.chunkProviderServer.getChunkAt(blockposition.getX() + k >> 4, blockposition.getZ() + l >> 4);
+                    worldserver.chunkProviderServer.getChunkAt(blockposition.getX() + k >> 4, blockposition.getZ() + l >> 4, () -> {}); //ShieldSpigot async chunk
                 }
             }
         }
