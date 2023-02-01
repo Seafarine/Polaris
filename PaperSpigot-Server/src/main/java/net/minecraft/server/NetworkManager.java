@@ -2,8 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.velocitypowered.natives.compression.VelocityCompressor;
-import com.velocitypowered.natives.util.Natives;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.local.LocalChannel;
@@ -14,15 +12,14 @@ import io.netty.handler.timeout.TimeoutException;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.shieldcommunity.spigot.encryption.DecryptionHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-import org.github.paperspigot.PaperSpigotConfig;
 
+import javax.crypto.SecretKey;
 import java.net.SocketAddress;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -73,7 +70,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     private PacketListener m;
     private IChatBaseComponent n;
     private boolean o;
-    private static boolean enableExplicitFlush = Boolean.getBoolean("paper.explicit-flush");
     private boolean p;
 
     public NetworkManager(EnumProtocolDirection enumprotocoldirection) {
@@ -109,7 +105,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     public void exceptionCaught(ChannelHandlerContext channelhandlercontext, Throwable throwable) throws Exception {
         ChatMessage chatmessage;
 
-        if (channelhandlercontext == null) {
+        if(channelhandlercontext == null) {
             new ChatMessage("disconnect.genericReason", "Internal Exception: " + throwable);
         } else {
             new ChatMessage("disconnect.genericReason", "Internal Exception: " + channelhandlercontext);
@@ -146,7 +142,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     public void handle(Packet packet) {
         if (this.g()) {
             this.m();
-            this.a(packet, null);
+            this.a(packet, (GenericFutureListener[]) null);
         } else {
             this.j.writeLock().lock();
 
@@ -237,7 +233,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             ((IUpdatePlayerListBox) this.m).c();
         }
 
-        if (enableExplicitFlush) this.channel.eventLoop().execute(() -> this.channel.flush());
+        this.channel.flush();
     }
 
     public SocketAddress getSocketAddress() {
@@ -260,26 +256,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         return this.channel instanceof LocalChannel || this.channel instanceof LocalServerChannel;
     }
 
-  //  public void a(SecretKey secretkey) {
-    //    this.o = true;
-    //     this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(MinecraftEncryption.a(2, secretkey)));
-    //    this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.a(1, secretkey)));
-    // }
-
-
-    public void setupEncryption(javax.crypto.SecretKey key) throws DecryptionHandler {
-        if (!this.o) {
-            try {
-                com.velocitypowered.natives.encryption.VelocityCipher decryption = com.velocitypowered.natives.util.Natives.cipher.get().forDecryption(key);
-                com.velocitypowered.natives.encryption.VelocityCipher encryption = com.velocitypowered.natives.util.Natives.cipher.get().forEncryption(key);
-
-                this.o = true;
-                this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(decryption));
-                this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(encryption));
-            } catch (java.security.GeneralSecurityException e) {
-                throw new DecryptionHandler(e);
-            }
-        }
+    public void a(SecretKey secretkey) {
+        this.o = true;
+        this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(MinecraftEncryption.a(2, secretkey)));
+        this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.a(1, secretkey)));
     }
 
     public boolean g() {
@@ -303,23 +283,17 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     }
 
     public void a(int i) {
-        this.setupCompression(i);
-    }
-
-    public void setupCompression(int compressionThreshold) {
-        // Nacho end
-        if (compressionThreshold >= 0) {
-            VelocityCompressor compressor = Natives.compress.get().create(-1); // Paper
+        if (i >= 0) {
             if (this.channel.pipeline().get("decompress") instanceof PacketDecompressor) {
-                ((PacketDecompressor) this.channel.pipeline().get("decompress")).a(compressionThreshold);
+                ((PacketDecompressor) this.channel.pipeline().get("decompress")).a(i);
             } else {
-                this.channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(compressor, compressionThreshold));
+                this.channel.pipeline().addBefore("decoder", "decompress", new PacketDecompressor(i));
             }
 
             if (this.channel.pipeline().get("compress") instanceof PacketCompressor) {
-                ((PacketCompressor) this.channel.pipeline().get("decompress")).a(compressionThreshold);
+                ((PacketCompressor) this.channel.pipeline().get("decompress")).a(i);
             } else {
-                this.channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(compressor, compressionThreshold)); // Paper
+                this.channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(i));
             }
         } else {
             if (this.channel.pipeline().get("decompress") instanceof PacketDecompressor) {
@@ -340,7 +314,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
                 if (this.j() != null) {
                     this.getPacketListener().a(this.j());
                 } else if (this.getPacketListener() != null) {
-                    this.getPacketListener().a(new ChatComponentText(PaperSpigotConfig.disconnectPrefixOnException));
+                    this.getPacketListener().a(new ChatComponentText("Disconnected"));
                 }
                 this.i.clear(); // Free up packet queue.
             } else {
@@ -351,10 +325,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     }
 
     protected void channelRead0(ChannelHandlerContext channelhandlercontext, Packet object) throws Exception { // CraftBukkit - fix decompile error
-
-        if(PaperSpigotConfig.verifyChannelBeforeDecode && this.channel != null && this.channel.isOpen()) {
-            this.a(channelhandlercontext, object);
-        }
+        this.a(channelhandlercontext, object);
     }
 
     static class QueuedPacket {

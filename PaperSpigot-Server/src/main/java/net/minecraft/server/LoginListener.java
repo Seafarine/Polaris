@@ -211,13 +211,10 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
             if (!Arrays.equals(this.e, packetlogininencryptionbegin.b(privatekey))) {
                 throw new IllegalStateException("Invalid nonce!");
             } else {
-                try {
-                    this.loginKey = packetlogininencryptionbegin.a(privatekey);
-                    this.g = LoginListener.EnumProtocolState.AUTHENTICATING;
-                    this.networkManager.setupEncryption(this.loginKey);
-                } catch (Exception ex) {
-                    throw new IllegalStateException("Protocol error", ex);
-                }
+                this.loginKey = packetlogininencryptionbegin.a(privatekey);
+                this.g = LoginListener.EnumProtocolState.AUTHENTICATING;
+                this.networkManager.a(this.loginKey);
+
                 authenticatorPool.execute(() -> {
                     GameProfile gameprofile = LoginListener.this.i;
 
