@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import net.shieldcommunity.spigot.cache.CachedPacketM;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.CraftServer;
@@ -24,6 +25,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.github.paperspigot.PaperSpigotConfig;
 import org.github.paperspigot.event.ServerExceptionEvent;
 import org.github.paperspigot.exception.ServerInternalException;
 // PaperSpigot end
@@ -62,6 +64,7 @@ public abstract class World implements IBlockAccess {
     };
     // Spigot end
     protected final Set<Entity> g = Sets.newHashSet(); // Paper
+    public final CachedPacketM movementCache = new CachedPacketM(); //ShieldSpigot
     //public final List<TileEntity> h = Lists.newArrayList(); // PaperSpigot - Remove unused list
     public final List<TileEntity> tileEntityList = Lists.newArrayList();
     private final List<TileEntity> b = Lists.newArrayList();
@@ -411,6 +414,10 @@ public abstract class World implements IBlockAccess {
                     this.methodProfiler.a("checkLight");
                     this.x(blockposition);
                     this.methodProfiler.b();
+                }
+
+                if(PaperSpigotConfig.cachedMovement) {
+                    movementCache.clear();
                 }
 
                 /*

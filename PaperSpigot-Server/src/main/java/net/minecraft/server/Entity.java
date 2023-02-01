@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 // CraftBukkit start
+import net.shieldcommunity.spigot.cache.CachedPacketM;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -34,6 +35,7 @@ import org.bukkit.plugin.PluginManager;
 // CraftBukkit end
 
 // PaperSpigot start
+import org.github.paperspigot.PaperSpigotConfig;
 import org.spigotmc.event.entity.EntityDismountEvent;
 // PaperSpigot end
 
@@ -77,11 +79,18 @@ public abstract class Entity implements ICommandListener {
     public double motX;
     public double motY;
     public double motZ;
+
+    //ShieldSpigot - cached
+    public double lastMotX;
+    public double lastMotY;
+    public double lastMotZ;
+    //ShieldSpigot - cached
+
     public float yaw;
     public float pitch;
     public float lastYaw;
     public float lastPitch;
-    private AxisAlignedBB boundingBox;
+    public AxisAlignedBB boundingBox;
     public boolean onGround;
     public boolean positionChanged;
     public boolean E;
@@ -449,6 +458,16 @@ public abstract class Entity implements ICommandListener {
             this.a(this.getBoundingBox().c(d0, d1, d2));
             this.recalcPosition();
         } else {
+            // ShieldSpigot start - Movement Cache
+            this.lastMotX = this.motX;
+            this.lastMotY = this.motY;
+            this.lastMotZ = this.motZ;
+
+            if (PaperSpigotConfig.cachedMovement && world.movementCache.move(this)) {
+                return;
+            }
+
+            // ShieldSpigot end
             // CraftBukkit start - Don't do anything if we aren't moving
             // We need to do this regardless of whether or not we are moving thanks to portals
             try {
@@ -692,6 +711,10 @@ public abstract class Entity implements ICommandListener {
 
             if (d7 != d1) {
                 block.a(this.world, this);
+            }
+
+            if(PaperSpigotConfig.cachedMovement) {
+                world.movementCache.cache(this);
             }
 
             // CraftBukkit start

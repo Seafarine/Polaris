@@ -53,6 +53,7 @@ public class PaperSpigotConfig {
     public static double knockbackExtraHorizontal;
     public static double knockbackExtraVertical;
     public static boolean warnForExcessiveVelocity;
+    public static boolean cachedMovement;
 
     private static File CONFIG_FILE;
     private static final String HEADER = "This is the main configuration file for PaperSpigot.\n"
@@ -156,6 +157,7 @@ public class PaperSpigotConfig {
         useCustomEncoder = getBoolean("settings.shieldspigot.optimizations.use-custom-encoder", false);
         enableTcpFastOpen = getBoolean("settings.shieldspigot.optimizations.tcp-use-fast-open", false);
         optimizeChunksForChests = getBoolean("settings.shieldspigot.optimizations.optimize-chunks-for-chests", false);
+        cachedMovement = getBoolean("settings.shieldspigot.optimizations.cached-entity-move", false);
         TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
         fasterPotionsHandling = getBoolean("settings.shieldspigot.optimizations.faster-potions-handling", false);
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
