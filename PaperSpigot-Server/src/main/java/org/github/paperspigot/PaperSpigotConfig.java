@@ -48,6 +48,8 @@ public class PaperSpigotConfig {
     public static double knockbackHorizontal;
     public static double knockbackVertical;
     public static double knockbackVerticalLimit;
+
+    public static boolean fasterPotionsHandling;
     public static double knockbackExtraHorizontal;
     public static double knockbackExtraVertical;
     public static boolean warnForExcessiveVelocity;
@@ -155,6 +157,7 @@ public class PaperSpigotConfig {
         enableTcpFastOpen = getBoolean("settings.shieldspigot.optimizations.tcp-use-fast-open", false);
         optimizeChunksForChests = getBoolean("settings.shieldspigot.optimizations.optimize-chunks-for-chests", false);
         TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
+        fasterPotionsHandling = getBoolean("settings.shieldspigot.optimizations.faster-potions-handling", false);
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
@@ -168,12 +171,12 @@ public class PaperSpigotConfig {
         bookTitleLength = getInt("settings.shieldspigot.book-title-length", 32);
         logPlayerConnectionExceptions = getBoolean("settings.shieldspigot.logs.player-connection-exceptions", true);
         logPlayerConnectionSocket = getBoolean("settings.shieldspigot.logs.connection-socket", true);
-        timeOutTime = getInt("settings.shieldspigot.timeout-time", 600);
+        nameLoginHandler = getString("settings.shieldspigot.misc.allowed-name-characters", "[a-zA-Z0-9_]*");
+        minNameLength = getInt("settings.shieldspigot.misc.min-name-length", 3);
+        maxNameLength = getInt("settings.shieldspigot.misc.max-name-length", 16);
+        timeOutTime = getInt("settings.shieldspigot.misc.timeout-time", 600);
         nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
         disconnectPrefixOnException = getString("settings.shieldspigot.prefix.on-disconnect", "Disconnected o_O");
-        nameLoginHandler = getString("settings.shieldspigot.allowed-name-characters", "[a-zA-Z0-9_]*");
-        minNameLength = getInt("settings.shieldspigot.min-name-length", 3);
-        maxNameLength = getInt("settings.shieldspigot.max-name-length", 16);
         knockbackFriction = getDouble("settings.shieldspigot.knockback.friction", 2.0D);
         knockbackHorizontal = getDouble("settings.shieldspigot.knockback.horizontal", 0.4D);
         knockbackVertical = getDouble("settings.shieldspigot.knockback.vertical", 0.4D);
