@@ -193,12 +193,33 @@ public class Main {
                 }
                 if (Float.parseFloat(System.getProperty("java.class.version")) < 52 && maxPermGen < (128 << 10)) // 128mb
                 {
-                    System.out.println("Warning, your max perm gen size is not set or less than 128mb. It is recommended you restart Java with the following argument: -XX:MaxPermSize=128M");
-                    System.out.println("Please see http://www.spigotmc.org/wiki/changing-permgen-size/ for more details and more in-depth instructions.");
+                    System.out.println("You have really low ram allocated, try to put more?");
                 }
                 // Spigot End
-                System.out.println("Loading libraries, please wait...");
-                MinecraftServer.main(options);
+                System.out.println("ShieldSpigot is loading libraries faster. Please wait...");
+                net.minecraft.server.DispenserRegistry.c();
+                OptionSet finalOptions = options;
+
+                net.minecraft.server.DedicatedServer server = MinecraftServer.spin(thread -> {
+                    net.minecraft.server.DedicatedServer dedicatedserver = new net.minecraft.server.DedicatedServer(finalOptions, thread);
+
+                    if (finalOptions.has("port")) {
+                        int port = (Integer) finalOptions.valueOf("port");
+                        if (port > 0) {
+                            dedicatedserver.setPort(port);
+                        }
+                    }
+
+                    if (finalOptions.has("universe")) {
+                        dedicatedserver.universe = (File) finalOptions.valueOf("universe");
+                    }
+
+                    if (finalOptions.has("world")) {
+                        dedicatedserver.setWorld((String) finalOptions.valueOf("world"));
+                    }
+                    return dedicatedserver;
+                });
+                
             } catch (Throwable t) {
                 t.printStackTrace();
             }

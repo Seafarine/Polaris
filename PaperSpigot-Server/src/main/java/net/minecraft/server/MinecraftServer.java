@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 // CraftBukkit end
 
-public abstract class MinecraftServer implements Runnable, ICommandListener, IAsyncTaskHandler, IMojangStatistics {
+public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.SecondaryTickHandler<net.shieldcommunity.spigot.ticks.task.TaskPerTick> implements ICommandListener, IAsyncTaskHandler, IMojangStatistics {
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static final File a = new File("usercache.json");
@@ -108,7 +108,34 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     public int autosavePeriod;
     // CraftBukkit end
 
-    public MinecraftServer(OptionSet options, Proxy proxy, File file1) {
+    private long nextTickTime;
+    private long delayedTasksMaxNextTickTime;
+    private boolean mayHaveDelayedTasks;
+    private boolean forceTicks;
+    private volatile boolean isReady;
+    private long lastOverloadWarning;
+    public long serverStartTime;
+    public volatile Thread shutdownThread;
+    private long lastTick = 0;
+    private long catchupTime = 0;
+    public static <S extends MinecraftServer> S spin(java.util.function.Function<Thread, S> serverFactory) {
+        java.util.concurrent.atomic.AtomicReference<S> reference = new java.util.concurrent.atomic.AtomicReference<>();
+        Thread thread = new Thread(() -> reference.get().run(), "Server thread");
+
+        thread.setUncaughtExceptionHandler((thread1, throwable) -> MinecraftServer.LOGGER.error(throwable));
+        S server = serverFactory.apply(thread);
+
+        reference.set(server);
+        thread.setPriority(Thread.NORM_PRIORITY + 2);
+        thread.start();
+        return server;
+    }
+
+    public MinecraftServer(OptionSet options, Proxy proxy, File file1, Thread thread) {
+        super("Server");
+        this.nextTickTime = getMillis();
+        this.primaryThread = thread;
+        this.serverThread = thread;
         io.netty.util.ResourceLeakDetector.setEnabled(false); // Spigot - disable
         this.e = proxy;
         MinecraftServer.l = this;
@@ -145,7 +172,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         }
         Runtime.getRuntime().addShutdownHook(new org.bukkit.craftbukkit.util.ServerShutdownThread(this));
 
-        this.serverThread = primaryThread = new Thread(this, "Server thread"); // Moved from main
+        //this.serverThread = primaryThread = new Thread(this, "Server thread");
     }
 
     public abstract PropertyManager getPropertyManager();
@@ -552,11 +579,22 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
     // PaperSpigot End
 
+    //ShieldSpigot
+    public static long getMillis() {
+        return getNanos() / 1000000L;
+    }
+
+    public static long getNanos() {
+        return System.nanoTime();
+    }
+    //ShieldSpigot
+
     public void run() {
         try {
+            this.serverStartTime = getNanos(); //ShieldSpigot
             if (this.init()) {
                 this.ab = az();
-                long i = 0L;
+                //long i = 0L; // ShieldSpigot - comment out; not used
 
                 this.r.setMOTD(new ChatComponentText(this.motd));
                 this.r.setServerInfo(new ServerPing.ServerData("1.8.8", 47));
@@ -566,33 +604,24 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 // PaperSpigot start - Further improve tick loop
                 Arrays.fill(recentTps, 20);
                 //long lastTick = System.nanoTime(), catchupTime = 0, curTime, wait, tickSection = lastTick;
-                long start = System.nanoTime(), lastTick = start - TICK_TIME, catchupTime = 0, curTime, wait, tickSection = start;
+                //ShieldSpigot start
+                long start = System.nanoTime(), curTime, tickSection = start;
+                //ShieldSpigot end
+                lastTick = start - TICK_TIME;
                 // PaperSpigot end
                 while (this.isRunning) {
-                    curTime = System.nanoTime();
-                    // PaperSpigot start - Further improve tick loop
-                    wait = TICK_TIME - (curTime - lastTick);
-                    if (wait > 0) {
-                        if (catchupTime < 2E6) {
-                            wait += Math.abs(catchupTime);
-
-                        } else if (wait < catchupTime) {
-                            catchupTime -= wait;
-                            wait = 0;
-                        } else {
-                            wait -= catchupTime;
-                            catchupTime = 0;
-                        }
-                    }
-                    if (wait > 0) {
-                        Thread.sleep(wait / 1000000);
-                        curTime = System.nanoTime();
-                        wait = TICK_TIME - (curTime - lastTick);
+                    //ShieldSpigot
+                    long i = ((curTime = System.nanoTime()) / (1000L * 1000L)) - this.nextTickTime; // Paper
+                    if (i > 5000L && this.nextTickTime - this.lastOverloadWarning >= 30000L) { // CraftBukkit
+                        long j = i / 50L;
+                        if (this.server.getWarnOnOverload()) // CraftBukkit
+                            MinecraftServer.LOGGER.warn("Can't keep up! Is the server overloaded? Running {}ms or {} ticks behind", i, j);
+                        this.nextTickTime += j * 50L;
+                        this.lastOverloadWarning = this.nextTickTime;
+                        //ShieldSpigot
                     }
 
-                    catchupTime = Math.min(MAX_CATCHUP_BUFFER, catchupTime - wait);
-
-                    if (++MinecraftServer.currentTick % SAMPLE_INTERVAL == 0) {
+                    if (++MinecraftServer.currentTick % MinecraftServer.SAMPLE_INTERVAL == 0) {
                         final long diff = curTime - tickSection;
                         double currentTps = 1E9 / diff * SAMPLE_INTERVAL;
                         tps1.add(currentTps, diff);
@@ -607,8 +636,15 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                     }
                     lastTick = curTime;
 
-                    this.A();
-                    this.Q = true;
+                    this.nextTickTime += 50L;
+                    this.methodProfiler.a("tick");
+                    this.A(this::haveTime);
+                    this.methodProfiler.c("nextTickWait");
+                    this.mayHaveDelayedTasks = true;
+                    this.delayedTasksMaxNextTickTime = Math.max(getMillis() + 50L, this.nextTickTime);
+                    this.waitUntilNextTick();
+                    this.methodProfiler.b();
+                    this.isReady = true;
                 }
                 // Spigot end
             } else {
@@ -659,6 +695,62 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
     }
 
+    private boolean haveTime() {
+        if (isOversleep) return canOversleep();
+        return this.forceTicks || this.runningTask() || getMillis() < (this.mayHaveDelayedTasks ? this.delayedTasksMaxNextTickTime : this.nextTickTime);
+    }
+
+    boolean isOversleep = false;
+    private boolean canOversleep() {
+        return this.mayHaveDelayedTasks && getMillis() < this.delayedTasksMaxNextTickTime;
+    }
+
+    private boolean canSleepForTickNoOversleep() {
+        return this.forceTicks || this.runningTask() || getMillis() < this.nextTickTime;
+    }
+
+    private void executeModerately() {
+        this.runAllRunnable();
+        java.util.concurrent.locks.LockSupport.parkNanos("executing tasks", 1000L);
+    }
+
+    protected void waitUntilNextTick() {
+        this.controlTerminate(() -> !this.canSleepForTickNoOversleep());
+    }
+
+    @Override
+    protected net.shieldcommunity.spigot.ticks.task.TaskPerTick packUpRunnable(Runnable runnable) {
+        // anything that does try to post to main during watchdog crash, run on watchdog
+        if (this.hasStopped && Thread.currentThread().equals(shutdownThread)) {
+            runnable.run();
+            runnable = () -> {};
+        }
+        return new net.shieldcommunity.spigot.ticks.task.TaskPerTick(this.ticks, runnable);
+    }
+
+    @Override
+    protected boolean shouldRun(net.shieldcommunity.spigot.ticks.task.TaskPerTick task) {
+        return task.getTick() + 3 < this.ticks || this.haveTime();
+    }
+
+    @Override
+    public boolean drawRunnable() {
+        boolean flag = this.pollTaskInternal();
+
+        this.mayHaveDelayedTasks = flag;
+        return flag;
+    }
+
+    private boolean pollTaskInternal() {
+        return super.drawRunnable();
+    }
+
+    @Override
+    public Thread getMainThread() {
+        return serverThread;
+    }
+    // PandaSpigot end
+
     private void a(ServerPing serverping) {
         File file = this.d(PaperSpigotConfig.serverIconName);
 
@@ -696,9 +788,13 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     protected void z() {
     }
 
-    protected void A() throws ExceptionWorldConflict { // CraftBukkit - added throws
+    protected void A(java.util.function.BooleanSupplier shouldKeepTicking) throws ExceptionWorldConflict { // CraftBukkit - added throws //ShieldSpigot
         co.aikar.timings.TimingsManager.FULL_SERVER_TICK.startTiming(); // Spigot
         long i = System.nanoTime();
+        isOversleep = true;
+        this.controlTerminate(() -> !this.canOversleep());
+        isOversleep = false;
+        this.server.getPluginManager().callEvent(new com.destroyko.paper.event.server.ServerTickStartEvent(this.ticks + 1));
 
         ++this.ticks;
         if (this.T) {
@@ -742,6 +838,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             SpigotTimings.worldSaveTimer.stopTiming(); // Spigot
         }
 
+        long endTime = System.nanoTime();
+        long remaining = (TICK_TIME - (endTime - lastTick)) - catchupTime;
+        this.server.getPluginManager().callEvent(new com.destroyko.paper.event.server.ServerTickEndEvent(this.ticks, ((double) (endTime - lastTick) / 1000000D), remaining));
         this.methodProfiler.a("tallying");
         this.h[this.ticks % 100] = System.nanoTime() - i;
         this.methodProfiler.b();
@@ -989,6 +1088,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             });
             */
 
+            /*
             DedicatedServer dedicatedserver = new DedicatedServer(options);
 
             if (options.has("port")) {
@@ -1008,6 +1108,8 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
             dedicatedserver.primaryThread.start();
             // CraftBukkit end
+
+             */
         } catch (Exception exception) {
             MinecraftServer.LOGGER.fatal("Failed to start the minecraft server", exception);
         }
