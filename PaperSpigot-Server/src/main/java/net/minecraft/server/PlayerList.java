@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +52,7 @@ public abstract class PlayerList {
     private static final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
     private final MinecraftServer server;
     public final List<EntityPlayer> players = new java.util.concurrent.CopyOnWriteArrayList(); // CraftBukkit - ArrayList -> CopyOnWriteArrayList: Iterator safety
-    private final Map<UUID, EntityPlayer> j = Maps.newHashMap();
+    private final Map<UUID, EntityPlayer> j = new Object2ObjectOpenHashMap<>(); //ShieldSpigot
     private final GameProfileBanList k;
     private final IpBanList l;
     private final OpList operators;
