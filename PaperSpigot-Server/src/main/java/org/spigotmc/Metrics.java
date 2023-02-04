@@ -50,6 +50,8 @@ import java.util.logging.Level;
  * void start(); <br/>
  * </code>
  */
+
+@SuppressWarnings("unused")
 public class Metrics {
 
     /**
@@ -76,7 +78,7 @@ public class Metrics {
     /**
      * All of the custom graphs to submit to metrics
      */
-    private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<Graph>());
+    private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<>());
     /**
      * The default graph, used for addCustomData when you don't want a specific graph
      */
@@ -331,7 +333,6 @@ public class Metrics {
         // Server software specific section
         String pluginName = "ShieldSpigot"; // PaperSpigot - We need some usage data
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
-        String pluginVersion = (Metrics.class.getPackage().getImplementationVersion() != null) ? Metrics.class.getPackage().getImplementationVersion() : "unknown";
         String serverVersion = Bukkit.getVersion();
         int playersOnline = Bukkit.getServer().getOnlinePlayers().size();
 
@@ -342,7 +343,6 @@ public class Metrics {
 
         // The plugin's description file containg all of the plugin data such as name, version, author, etc
         data.append(encode("guid")).append('=').append(encode(guid));
-        encodeDataPair(data, "version", pluginVersion);
         encodeDataPair(data, "server", serverVersion);
         encodeDataPair(data, "players", Integer.toString(playersOnline));
         encodeDataPair(data, "revision", String.valueOf(REVISION));
@@ -374,11 +374,8 @@ public class Metrics {
         // Acquire a lock on the graphs, which lets us make the assumption we also lock everything
         // inside of the graph (e.g plotters)
         synchronized (graphs) {
-            final Iterator<Graph> iter = graphs.iterator();
 
-            while (iter.hasNext()) {
-                final Graph graph = iter.next();
-
+            for (Graph graph : graphs) {
                 for (Plotter plotter : graph.getPlotters()) {
                     // The key name to send to the metrics server
                     // The format is C-GRAPHNAME-PLOTTERNAME where separator - is defined at the top
@@ -430,11 +427,8 @@ public class Metrics {
             // Is this the first update this hour?
             if (response.contains("OK This is your first update this hour")) {
                 synchronized (graphs) {
-                    final Iterator<Graph> iter = graphs.iterator();
 
-                    while (iter.hasNext()) {
-                        final Graph graph = iter.next();
-
+                    for (Graph graph : graphs) {
                         for (Plotter plotter : graph.getPlotters()) {
                             plotter.reset();
                         }
@@ -498,7 +492,7 @@ public class Metrics {
         /**
          * The set of plotters that are contained within this graph
          */
-        private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
+        private final Set<Plotter> plotters = new LinkedHashSet<>();
 
         private Graph(final String name) {
             this.name = name;

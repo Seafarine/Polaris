@@ -31,8 +31,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import co.aikar.timings.Timings;
 import co.aikar.timings.TimingsManager;
 
-public class SpigotConfig
-{
+public class SpigotConfig {
 
     private static File CONFIG_FILE;
     private static final String HEADER = "This is the main configuration file for Spigot.\n"
@@ -51,40 +50,36 @@ public class SpigotConfig
     static int version;
     static Map<String, Command> commands;
     /*========================================================================*/
-    private static Metrics metrics;
+    //private static Metrics metrics;
 
-    public static void init(File configFile)
-    {
+    public static void init(File configFile) {
         CONFIG_FILE = configFile;
         config = new YamlConfiguration();
-        try
-        {
-            config.load( CONFIG_FILE );
-        } catch ( IOException ex )
-        {
-        } catch ( InvalidConfigurationException ex )
-        {
-            Bukkit.getLogger().log( Level.SEVERE, "Could not load spigot.yml, please correct your syntax errors", ex );
-            throw Throwables.propagate( ex );
+        try {
+            config.load(CONFIG_FILE);
+        } catch (IOException ex) {
+        } catch (InvalidConfigurationException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "Could not load spigot.yml, please correct your syntax errors", ex);
+            throw Throwables.propagate(ex);
         }
 
-        config.options().header( HEADER );
-        config.options().copyDefaults( true );
+        config.options().header(HEADER);
+        config.options().copyDefaults(true);
 
         commands = new HashMap<String, Command>();
 
-        version = getInt( "config-version", 8 );
-        set( "config-version", 8 );
-        readConfig( SpigotConfig.class, null );
+        version = getInt("config-version", 8);
+        set("config-version", 8);
+        readConfig(SpigotConfig.class, null);
     }
 
-    public static void registerCommands()
-    {
-        for ( Map.Entry<String, Command> entry : commands.entrySet() )
-        {
-            MinecraftServer.getServer().server.getCommandMap().register( entry.getKey(), "Spigot", entry.getValue() );
+    public static void registerCommands() {
+        for (Map.Entry<String, Command> entry : commands.entrySet()) {
+            MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Spigot", entry.getValue());
         }
 
+        //ShieldSpigot - remove spigot metrics
+        /*
         if ( metrics == null )
         {
             try
@@ -95,7 +90,9 @@ public class SpigotConfig
             {
                 Bukkit.getServer().getLogger().log( Level.SEVERE, "Could not start metrics service", ex );
             }
-        }
+
+         */
+        //ShieldSpigot - end
     }
 
     static void readConfig(Class<?> clazz, Object instance)
