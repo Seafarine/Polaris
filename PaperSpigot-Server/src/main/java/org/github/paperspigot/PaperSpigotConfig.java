@@ -25,6 +25,8 @@ public class PaperSpigotConfig {
     public static boolean avoidDoubleCompressUncompressedPackets;
     public static int maxEncodedStringLength;
     public static boolean useCustomEncoder;
+    public static int baseThreadsForChunks;
+    public static int playersPerThreadForChunks;
     public static int bookPageLength;
     public static int bookTitleLength;
     public static int bookMaxPages;
@@ -48,7 +50,6 @@ public class PaperSpigotConfig {
     public static double knockbackHorizontal;
     public static double knockbackVertical;
     public static double knockbackVerticalLimit;
-
     public static boolean fasterPotionsHandling;
     public static double knockbackExtraHorizontal;
     public static double knockbackExtraVertical;
@@ -156,6 +157,8 @@ public class PaperSpigotConfig {
         paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
         useCustomEncoder = getBoolean("settings.shieldspigot.optimizations.use-custom-encoder", false);
         enableTcpFastOpen = getBoolean("settings.shieldspigot.optimizations.tcp-use-fast-open", false);
+        baseThreadsForChunks = getInt("settings.shieldspigot.optimizations.base-threads-for-chunks", 2);
+        playersPerThreadForChunks = getInt("settings.shieldspigot.optimizations.players-per-thread-for-chunks", 50);
         optimizeChunksForChests = getBoolean("settings.shieldspigot.optimizations.optimize-chunks-for-chests", false);
         cachedMovement = getBoolean("settings.shieldspigot.optimizations.cached-entity-move", false);
         TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
