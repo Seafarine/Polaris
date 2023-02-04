@@ -1333,8 +1333,10 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
+    private final int interval = PaperSpigotConfig.playerTimeStatisticsInterval; //ShieldSpigot
+
     public void b(Statistic statistic) {
-        this.a(statistic, 1);
+        this.a(statistic, interval);
     }
 
     public void a(Statistic statistic, int i) {}
