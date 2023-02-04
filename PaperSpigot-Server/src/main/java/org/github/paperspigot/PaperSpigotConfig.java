@@ -47,6 +47,7 @@ public class PaperSpigotConfig {
     public static String disconnectPrefixOnException;
     public static int minNameLength;
     public static int maxNameLength;
+    public static String serverIconName;
     public static double knockbackFriction;
     public static double knockbackHorizontal;
     public static double knockbackVertical;
@@ -181,6 +182,7 @@ public class PaperSpigotConfig {
         nameLoginHandler = getString("settings.shieldspigot.misc.allowed-name-characters", "[a-zA-Z0-9_]*");
         minNameLength = getInt("settings.shieldspigot.misc.min-name-length", 3);
         maxNameLength = getInt("settings.shieldspigot.misc.max-name-length", 16);
+        serverIconName = getString("settings.shieldspigot.misc.server-icon-name", "server-icon.png");
         timeOutTime = getInt("settings.shieldspigot.misc.timeout-time", 600);
         nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
         disconnectPrefixOnException = getString("settings.shieldspigot.prefix.on-disconnect", "Disconnected o_O");

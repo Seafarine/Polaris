@@ -21,6 +21,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.craftbukkit.Main;
+import org.github.paperspigot.PaperSpigotConfig;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -659,7 +660,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     private void a(ServerPing serverping) {
-        File file = this.d("server-icon.png");
+        File file = this.d(PaperSpigotConfig.serverIconName);
 
         if (file.isFile()) {
             ByteBuf bytebuf = Unpooled.buffer();
@@ -668,8 +669,8 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             try {
                 BufferedImage bufferedimage = ImageIO.read(file);
 
-                Validate.validState(bufferedimage.getWidth() == 64, "Must be 64 pixels wide", new Object[0]);
-                Validate.validState(bufferedimage.getHeight() == 64, "Must be 64 pixels high", new Object[0]);
+                Validate.validState(bufferedimage.getWidth() == 64, "Must be 64 pixels wide");
+                Validate.validState(bufferedimage.getHeight() == 64, "Must be 64 pixels high");
                 ImageIO.write(bufferedimage, "PNG", new ByteBufOutputStream(bytebuf));
                 /*ByteBuf */cachedByteBuf = Base64.encode(bytebuf);
 
