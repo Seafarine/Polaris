@@ -23,7 +23,7 @@ public class PaperSpigotConfig {
     public static boolean usePacketLimiter;
     public static int bookTick;
     public static boolean avoidDoubleCompressUncompressedPackets;
-    public static int playerTimeStatisticsInterval = 20;
+    public static int playerTimeStatisticsInterval;
     public static int maxEncodedStringLength;
     public static boolean useCustomEncoder;
     public static int baseThreadsForChunks;
@@ -197,13 +197,13 @@ public class PaperSpigotConfig {
     public static double babyZombieMovementSpeed;
 
     private static void babyZombieMovementSpeed() {
-        babyZombieMovementSpeed = getDouble("settings.baby-zombie-movement-speed", 0.5D); // Player moves at 0.1F, for reference
+        babyZombieMovementSpeed = getDouble("baby-zombie-movement-speed", 0.5D); // Player moves at 0.1F, for reference
     }
 
     public static boolean interactLimitEnabled;
 
     private static void interactLimitEnabled() {
-        interactLimitEnabled = getBoolean("settings.limit-player-interactions", true);
+        interactLimitEnabled = getBoolean("limit-player-interactions", true);
         if (!interactLimitEnabled) {
             Bukkit.getLogger().log(Level.INFO, "Disabling player interaction limiter, your server may be more vulnerable to malicious users");
         }
