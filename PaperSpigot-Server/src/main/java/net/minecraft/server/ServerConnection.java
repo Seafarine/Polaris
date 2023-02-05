@@ -150,7 +150,7 @@ public class ServerConnection {
         List list = this.h;
 
         synchronized (this.h) {
-            this.addPending(); // PandaSpigot
+            this.addPending();
             // Spigot Start
             // This prevents players from 'gaming' the server, and strategically relogging to increase their position in the tick order
             if ( org.spigotmc.SpigotConfig.playerShuffle > 0 && MinecraftServer.currentTick % org.spigotmc.SpigotConfig.playerShuffle == 0 )
@@ -191,7 +191,7 @@ public class ServerConnection {
                                 throw new ReportedException(crashreport);
                             }
 
-                            ServerConnection.e.warn("Failed to handle packet for " + networkmanager.getSocketAddress() + "<ip address withheld>"); // PandaSpigot
+                            ServerConnection.e.warn("Failed to handle packet for " + networkmanager.getSocketAddress() + "<ip address withheld>");
                             final ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
 
                             networkmanager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), (GenericFutureListener) future -> networkmanager.close(chatcomponenttext), new GenericFutureListener[0]);

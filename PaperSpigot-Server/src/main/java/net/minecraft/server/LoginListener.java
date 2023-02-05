@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import io.netty.util.concurrent.GenericFutureListener;
 import net.shieldcommunity.spigot.utils.UtilHandler;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
@@ -152,10 +153,11 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                         LoginListener.this.networkManager.a(LoginListener.this.server.aK());
                     }
 
+
                     public void operationComplete(ChannelFuture future) throws Exception { // CraftBukkit - fix decompile error
                         this.a(future);
                     }
-                });
+                }, new GenericFutureListener[0]);
             }
 
             this.networkManager.handle(new PacketLoginOutSuccess(this.i));

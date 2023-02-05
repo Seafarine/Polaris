@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
 import io.netty.buffer.Unpooled;
+import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -177,9 +178,12 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         // CraftBukkit end
         final ChatComponentText chatcomponenttext = new ChatComponentText(s);
 
-        this.networkManager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), (GenericFutureListener) future -> { // CraftBukkit - fix decompile error
-            PlayerConnection.this.networkManager.close(chatcomponenttext);
-        });
+        this.networkManager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener() {
+            public void operationComplete(Future future) throws Exception { // CraftBukkit - fix decompile error
+                PlayerConnection.this.networkManager.close(chatcomponenttext);
+            }
+        }, new GenericFutureListener[0]);
+
         this.a(chatcomponenttext); // CraftBukkit - fire quit instantly
         this.networkManager.k();
         // CraftBukkit - Don't wait
