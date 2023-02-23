@@ -13,6 +13,13 @@ public class PacketSplitter extends ByteToMessageDecoder {
 
     public PacketSplitter() {}
 
+    //NullCordX - Start cached decoder exceptions
+    public static final boolean DEBUG = Boolean.getBoolean("shieldspigot-advanced-traces");
+    private static final CorruptedFrameException DECODE_FAILED =
+            new CorruptedFrameException("A packet did not decode successfully (invalid packet), enable print-full-stacktraces for more usefully information");
+
+    //NullCordX - end
+
     protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
         if (!channelhandlercontext.channel().isActive()) {
             bytebuf.clear();
@@ -40,7 +47,9 @@ public class PacketSplitter extends ByteToMessageDecoder {
             int bytesRead = reader.getBytesRead();
             if (readVarint < 0) {
                 bytebuf.clear();
-                throw new CorruptedFrameException("Bad packet length");
+                if(DEBUG) {
+                    throw DECODE_FAILED;
+                }
             } else if (readVarint == 0) {
                 // skip over the empty packet(s) and ignore it
                 bytebuf.readerIndex(varIntEnd + 1);
@@ -53,7 +62,9 @@ public class PacketSplitter extends ByteToMessageDecoder {
             }
         } else if (reader.getResult() == LegacyVarIntByteDecoder.DecodeResult.TOO_BIG) {
             bytebuf.clear();
-            throw new CorruptedFrameException("VarInt too big");
+            if(DEBUG) {
+                throw DECODE_FAILED;
+            }
         }
         // PandaSpigot end
     }
