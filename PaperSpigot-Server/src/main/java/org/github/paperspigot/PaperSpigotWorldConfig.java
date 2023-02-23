@@ -267,7 +267,10 @@ public class PaperSpigotWorldConfig
     public boolean optimizeTntMovement;
     public boolean optimizeLiquidExplosions;
 
+    public static boolean disableEntityAi;
+
     private void shieldSpigotWorldConfig() {
+        disableEntityAi = getBoolean("disable-almost-all-mobs-ai", false);
         optimizeTntMovement = getBoolean("settings.shieldspigot.optimizations.tnt-movements", false);
         optimizeLiquidExplosions = getBoolean("settings.shieldspigot.optimizations.liquid-explosions", false);
     }
