@@ -919,6 +919,8 @@ public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.S
             // if (i == 0 || this.getAllowNether()) {
             WorldServer worldserver = this.worlds.get(i);
 
+            worldserver.hasPhysicsEvent = org.bukkit.event.block.BlockPhysicsEvent.getHandlerList().getRegisteredListeners().length > 0; //ShieldSpigot
+
             this.methodProfiler.a(worldserver.getWorldData().getName());
                 /* Drop global time updates
                 if (this.ticks % 20 == 0) {

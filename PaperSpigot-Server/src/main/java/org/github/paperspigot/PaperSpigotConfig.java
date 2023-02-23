@@ -39,6 +39,8 @@ public class PaperSpigotConfig {
     public static boolean logPlayerConnectionExceptions;
     public static String paperSpigotLicense;
     public static boolean enableTcpFastOpen;
+
+    public static boolean hasPhysicsEvent;
     public static int TcpFastOpenMode;
     public static int maxPacketsPerSecond;
     public static int maxBytesPerConnection;
@@ -166,6 +168,7 @@ public class PaperSpigotConfig {
         cachedMovement = getBoolean("settings.shieldspigot.optimizations.cached-entity-move", false);
         TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
         fasterPotionsHandling = getBoolean("settings.shieldspigot.optimizations.faster-potions-handling", false);
+        hasPhysicsEvent = getBoolean("settings.shieldspigot.optimizations.load-physics-when-plugin-triggers", false);
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);

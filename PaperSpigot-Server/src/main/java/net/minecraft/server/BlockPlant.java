@@ -43,7 +43,7 @@ public class BlockPlant extends Block {
     }
 
     protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.f(world, blockposition, iblockdata)) {
+        if (!this.f(world, blockposition, iblockdata) && ((WorldServer) world).hasPhysicsEvent) {
             // CraftBukkit Start
             org.bukkit.block.Block block = world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ());
             BlockPhysicsEvent event = new BlockPhysicsEvent(block, block.getTypeId());
