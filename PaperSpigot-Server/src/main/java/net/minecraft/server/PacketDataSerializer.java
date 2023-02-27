@@ -93,7 +93,23 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public int e() {
-        return net.shieldcommunity.spigot.velocity.VarIntHandler.readVarInt(this.a);
+        //return net.shieldcommunity.spigot.velocity.VarIntHandler.readVarInt(this.a);
+        int i = 0;
+        int j = 0;
+
+        byte b0;
+
+        do {
+            b0 = this.readByte();
+            i |= (b0 & 127) << j++ * 7;
+            if (j > 5) {
+                if(DEBUG) {
+                    throw DECODE_FAILED; //ShieldSpigot - Use cached exception instead generate other
+                }
+            }
+        } while ((b0 & 128) == 128);
+
+        return i;
     }
 
     public long f() {
@@ -125,7 +141,13 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public void b(int i) {
-        net.shieldcommunity.spigot.velocity.VarIntHandler.writeVarInt(this.a, i);
+       // net.shieldcommunity.spigot.velocity.VarIntHandler.writeVarInt(this.a, i);
+        while ((i & -128) != 0) {
+            this.writeByte(i & 127 | 128);
+            i >>>= 7;
+        }
+
+        this.writeByte(i);
     }
 
     public void b(long i) {
@@ -225,13 +247,13 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public PacketDataSerializer a(String s) {
-        int utf8Bytes = io.netty.buffer.ByteBufUtil.utf8Bytes(s);
+        byte[] abyte = s.getBytes(Charsets.UTF_8);
 
-        if (utf8Bytes > PaperSpigotConfig.maxEncodedStringLength) { //ShieldSpigot - Make configurable encoded length
+        if (abyte.length > PaperSpigotConfig.maxEncodedStringLength) { //ShieldSpigot - Make configurable encoded length
             throw new EncoderException("String too big (was " + s.length() + " bytes encoded, max " + PaperSpigotConfig.maxEncodedStringLength + ")");
         } else {
-            this.b(utf8Bytes);
-            this.writeCharSequence(s, Charsets.UTF_8);
+            this.b(abyte.length);
+            this.writeBytes(abyte);
             return this;
         }
     }
