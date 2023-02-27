@@ -120,8 +120,18 @@ public class ServerConnection {
                     try {
                           channel.config().setOption(ChannelOption.IP_TOS, 0x18);
                             } catch (ChannelException ex) {}
-                    if (!disableFlushConsolidation) channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler());
-                    channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).addLast("legacy_query", new LegacyPingHandler(ServerConnection.this)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
+                    if (!disableFlushConsolidation) channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler()); //ShieldSpigot - flush handler
+
+                    //ShieldSpigot - Faster prepender
+                    channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30))
+                            .addLast("legacy_query", new LegacyPingHandler(ServerConnection.this))
+                            .addLast("splitter", new PacketSplitter())
+                            .addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND))
+                            .addLast("prepender", PacketPrepender.INSTANCE) // share packet instance
+                            .addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
+
+                    //ShieldSpigot - Faster prepender
+
                     NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 
                      ServerConnection.this.pending.add(networkmanager);
