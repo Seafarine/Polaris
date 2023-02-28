@@ -15,15 +15,9 @@ import java.util.UUID;
 import net.minecraft.server.*;
 
 import org.apache.commons.lang.Validate;
-import org.bukkit.BlockChangeDelegate;
-import org.bukkit.Bukkit;
+import org.bukkit.*;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
-import org.bukkit.Difficulty;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.block.Biome;
@@ -45,8 +39,6 @@ import org.bukkit.entity.minecart.PoweredMinecart;
 import org.bukkit.entity.minecart.SpawnerMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.weather.ThunderChangeEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.SpawnChangeEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
@@ -219,7 +211,7 @@ public class CraftWorld implements World {
             world.chunkProviderServer.saveChunkNOP(chunk);
         }
 
-        world.chunkProviderServer.unloadQueue.remove(LongHash.toLong(x, z));
+        world.chunkProviderServer.unloadQueue.remove(x, z);
         world.chunkProviderServer.chunks.remove(LongHash.toLong(x, z));
 
         return true;
@@ -228,7 +220,7 @@ public class CraftWorld implements World {
     public boolean regenerateChunk(int x, int z) {
         unloadChunk(x, z, false, false);
 
-        world.chunkProviderServer.unloadQueue.remove(LongHash.toLong(x, z));
+        world.chunkProviderServer.unloadQueue.remove(x, z);
 
         net.minecraft.server.Chunk chunk = null;
 
@@ -277,7 +269,7 @@ public class CraftWorld implements World {
             return world.chunkProviderServer.getChunkAt(x, z) != null;
         }
 
-        world.chunkProviderServer.unloadQueue.remove(LongHash.toLong(x, z));
+        world.chunkProviderServer.unloadQueue.remove(x, z);
         net.minecraft.server.Chunk chunk = world.chunkProviderServer.chunks.get(LongHash.toLong(x, z));
 
         if (chunk == null) {
@@ -417,63 +409,63 @@ public class CraftWorld implements World {
     public boolean generateTree(Location loc, TreeType type) {
         net.minecraft.server.WorldGenerator gen;
         switch (type) {
-        case BIG_TREE:
-            gen = new WorldGenBigTree(true);
-            break;
-        case BIRCH:
-            gen = new WorldGenForest(true, false);
-            break;
-        case REDWOOD:
-            gen = new WorldGenTaiga2(true);
-            break;
-        case TALL_REDWOOD:
-            gen = new WorldGenTaiga1();
-            break;
-        case JUNGLE:
-            IBlockData iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
-            IBlockData iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-            gen = new WorldGenJungleTree(true, 10, 20, iblockdata1, iblockdata2); // Magic values as in BlockSapling
-            break;
-        case SMALL_JUNGLE:
-            iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
-            iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-            gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, false);
-            break;
-        case COCOA_TREE:
-            iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
-            iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-            gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, true);
-            break;
-        case JUNGLE_BUSH:
-            iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
-            iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-            gen = new WorldGenGroundBush(iblockdata1, iblockdata2);
-            break;
-        case RED_MUSHROOM:
-            gen = new WorldGenHugeMushroom(Blocks.RED_MUSHROOM_BLOCK);
-            break;
-        case BROWN_MUSHROOM:
-            gen = new WorldGenHugeMushroom(Blocks.BROWN_MUSHROOM_BLOCK);
-            break;
-        case SWAMP:
-            gen = new WorldGenSwampTree();
-            break;
-        case ACACIA:
-            gen = new WorldGenAcaciaTree(true);
-            break;
-        case DARK_OAK:
-            gen = new WorldGenForestTree(true);
-            break;
-        case MEGA_REDWOOD:
-            gen = new WorldGenMegaTree(false, rand.nextBoolean());
-            break;
-        case TALL_BIRCH:
-            gen = new WorldGenForest(true, true);
-            break;
-        case TREE:
-        default:
-            gen = new WorldGenTrees(true);
-            break;
+            case BIG_TREE:
+                gen = new WorldGenBigTree(true);
+                break;
+            case BIRCH:
+                gen = new WorldGenForest(true, false);
+                break;
+            case REDWOOD:
+                gen = new WorldGenTaiga2(true);
+                break;
+            case TALL_REDWOOD:
+                gen = new WorldGenTaiga1();
+                break;
+            case JUNGLE:
+                IBlockData iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
+                IBlockData iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+                gen = new WorldGenJungleTree(true, 10, 20, iblockdata1, iblockdata2); // Magic values as in BlockSapling
+                break;
+            case SMALL_JUNGLE:
+                iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
+                iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+                gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, false);
+                break;
+            case COCOA_TREE:
+                iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
+                iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+                gen = new WorldGenTrees(true, 4 + rand.nextInt(7), iblockdata1, iblockdata2, true);
+                break;
+            case JUNGLE_BUSH:
+                iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
+                iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+                gen = new WorldGenGroundBush(iblockdata1, iblockdata2);
+                break;
+            case RED_MUSHROOM:
+                gen = new WorldGenHugeMushroom(Blocks.RED_MUSHROOM_BLOCK);
+                break;
+            case BROWN_MUSHROOM:
+                gen = new WorldGenHugeMushroom(Blocks.BROWN_MUSHROOM_BLOCK);
+                break;
+            case SWAMP:
+                gen = new WorldGenSwampTree();
+                break;
+            case ACACIA:
+                gen = new WorldGenAcaciaTree(true);
+                break;
+            case DARK_OAK:
+                gen = new WorldGenForestTree(true);
+                break;
+            case MEGA_REDWOOD:
+                gen = new WorldGenMegaTree(false, rand.nextBoolean());
+                break;
+            case TALL_BIRCH:
+                gen = new WorldGenForest(true, true);
+                break;
+            case TREE:
+            default:
+                gen = new WorldGenTrees(true);
+                break;
         }
 
         return gen.generate(world, rand, new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
@@ -764,11 +756,11 @@ public class CraftWorld implements World {
     }
 
     public void save() {
-    // Spigot start
+        // Spigot start
         save(true);
     }
     public void save(boolean forceSave) {
-    // Spigot end
+        // Spigot end
         this.server.checkSaveState();
         try {
             boolean oldSave = world.savingDisabled;
@@ -1108,7 +1100,7 @@ public class CraftWorld implements World {
             }
 
             EnumDirection dir = CraftBlock.blockFaceToNotch(face).opposite();
-            
+
             if (Painting.class.isAssignableFrom(clazz)) {
                 entity = new EntityPainting(world, new BlockPosition((int) x, (int) y, (int) z), dir);
             } else if (ItemFrame.class.isAssignableFrom(clazz)) {
@@ -1390,6 +1382,82 @@ public class CraftWorld implements World {
         return this.worldBorder;
     }
 
+    // ComuGamers start - backport 1.9 Particle API
+    @Override
+    public void spawnParticle(Particle particle, Location location, int count) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double x, double y, double z, int count) {
+        spawnParticle(particle, x, y, z, count, null);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int count, T data) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, data);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, T data) {
+        spawnParticle(particle, x, y, z, count, 0, 0, 0, data);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ) {
+        spawnParticle(particle, x, y, z, count, offsetX, offsetY, offsetZ, null);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, T data) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ, data);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, T data) {
+        spawnParticle(particle, x, y, z, count, offsetX, offsetY, offsetZ, 1, data);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ, extra);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+        spawnParticle(particle, x, y, z, count, offsetX, offsetY, offsetZ, extra, null);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra, T data) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ, extra, data);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra, T data) {
+        if (data != null && !particle.getDataType().isInstance(data)) {
+            throw new IllegalArgumentException("data should be " + particle.getDataType() + " got " + data.getClass());
+        }
+        getHandle().sendParticles(
+                null, // Sender
+                CraftParticle.toNMS(particle), // Particle
+                true, // Extended range
+                x, y, z, // Position
+                count,  // Count
+                offsetX, offsetY, offsetZ, // Random offset
+                extra, // Speed?
+                CraftParticle.toData(particle, data)
+
+        );
+
+    }
+    // ComuGamers end
+
     public void processChunkGC() {
         chunkGCTickCount++;
 
@@ -1409,7 +1477,7 @@ public class CraftWorld implements World {
             }
 
             // Already unloading?
-            if (cps.unloadQueue.contains(LongHash.toLong(chunk.locX, chunk.locZ))) {
+            if (cps.unloadQueue.contains(chunk.locX, chunk.locZ)) {
                 continue;
             }
 
@@ -1440,12 +1508,12 @@ public class CraftWorld implements World {
                     if ( effect.getName().startsWith( p.b().replace("_", "") ) )
                     {
                         particle = p;
-                        if ( effect.getData() != null ) 
+                        if ( effect.getData() != null )
                         {
                             if ( effect.getData().equals( org.bukkit.Material.class ) )
                             {
                                 extra = new int[]{ id };
-                            } else 
+                            } else
                             {
                                 extra = new int[]{ (data << 12) | (id & 0xFFF) };
                             }

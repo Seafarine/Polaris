@@ -27,6 +27,7 @@ import net.minecraft.server.PacketPlayOutTitle.EnumTitleAction;
 
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.NotImplementedException;
+import org.bukkit.craftbukkit.*;
 import org.bukkit.*;
 import org.bukkit.Achievement;
 import org.bukkit.BanList;
@@ -1599,6 +1600,71 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             return getHandle().ping;
         }
     };
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int count) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double x, double y, double z, int count) {
+        spawnParticle(particle, x, y, z, count, null);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int count, T data) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, data);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, T data) {
+        spawnParticle(particle, x, y, z, count, 0, 0, 0, data);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ) {
+        spawnParticle(particle, x, y, z, count, offsetX, offsetY, offsetZ, null);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, T data) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ, data);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, T data) {
+        spawnParticle(particle, x, y, z, count, offsetX, offsetY, offsetZ, 1, data);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ, extra);
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+        spawnParticle(particle, x, y, z, count, offsetX, offsetY, offsetZ, extra, null);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra, T data) {
+        spawnParticle(particle, location.getX(), location.getY(), location.getZ(), count, offsetX, offsetY, offsetZ, extra, data);
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra, T data) {
+        if (data != null && !particle.getDataType().isInstance(data)) {
+            throw new IllegalArgumentException("data should be " + particle.getDataType() + " got " + data.getClass());
+        }
+        PacketPlayOutWorldParticles packetplayoutworldparticles = new PacketPlayOutWorldParticles(CraftParticle.toNMS(particle), true, (float) x, (float) y, (float) z, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count, CraftParticle.toData(particle, data));
+        getHandle().playerConnection.sendPacket(packetplayoutworldparticles);
+
+    }
 
     public Player.Spigot spigot()
     {
