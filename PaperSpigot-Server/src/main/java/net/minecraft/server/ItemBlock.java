@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import org.github.paperspigot.PaperSpigotConfig;
+
 public class ItemBlock extends Item {
 
     protected final Block a;
@@ -25,7 +27,10 @@ public class ItemBlock extends Item {
             return false;
         } else if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
             return false;
-        } else if (world.a(this.a, blockposition, false, enumdirection, entityhuman, itemstack)) { // PaperSpigot - Pass entityhuman instead of null
+        } else if (
+                PaperSpigotConfig.disablePaperInvisibilityPatch && world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack) // ComuSpigot - Disable passing entityhuman instead of null
+                        || !PaperSpigotConfig.disablePaperInvisibilityPatch && world.a(this.a, blockposition, false, enumdirection, entityhuman, itemstack) // PaperSpigot - Pass entityhuman instead of null (Paper Method)
+        ) {
             int i = this.filterData(itemstack.getData());
             IBlockData iblockdata1 = this.a.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityhuman);
 
