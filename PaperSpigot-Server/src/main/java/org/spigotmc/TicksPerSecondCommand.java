@@ -21,7 +21,8 @@ public class TicksPerSecondCommand extends Command
     }
 
 
-    public final String PREFIX = " §e§lShield§6§lSpigot §7->";
+    private final String PREFIX = " §e§lShield§6§lSpigot §7-> ";
+    private final String VERSION = "§a[0.0.4-a]";
 
     @Override
     public boolean execute(CommandSender sender, String currentAlias, String[] args)
@@ -42,7 +43,7 @@ public class TicksPerSecondCommand extends Command
         sender.sendMessage(ChatColor.GRAY+"§n------------------------------------");
          sender.sendMessage("");
 
-        sender.sendMessage(PREFIX);
+        sender.sendMessage(PREFIX+VERSION);
         sender.sendMessage("");
         java.lang.management.RuntimeMXBean runtimeMX = java.lang.management.ManagementFactory.getRuntimeMXBean();
         java.lang.management.OperatingSystemMXBean osMX = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
