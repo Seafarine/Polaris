@@ -43,7 +43,7 @@ public class TicksPerSecondCommand extends Command
         sender.sendMessage(ChatColor.GRAY+"§n------------------------------------");
          sender.sendMessage("");
 
-        sender.sendMessage(PREFIX+VERSION);
+        sender.sendMessage(PREFIX+VERSION +ChatColor.YELLOW+" powered by shieldcommunity.net");
         sender.sendMessage("");
         java.lang.management.RuntimeMXBean runtimeMX = java.lang.management.ManagementFactory.getRuntimeMXBean();
         java.lang.management.OperatingSystemMXBean osMX = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
