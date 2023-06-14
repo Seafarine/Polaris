@@ -323,6 +323,7 @@ public class SpigotConfig {
         playerShuffle = getInt( "settings.player-shuffle", 0 );
     }
 
+    /*
     public static List<String> spamExclusions;
     private static void spamExclusions()
     {
@@ -331,6 +332,7 @@ public class SpigotConfig {
                 "/skill"
         } ) );
     }
+     */
 
     public static boolean silentCommandBlocks;
     private static void silentCommandBlocks()

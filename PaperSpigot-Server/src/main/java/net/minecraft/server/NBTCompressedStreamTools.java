@@ -55,7 +55,7 @@ public class NBTCompressedStreamTools {
         if (nbtbase instanceof NBTTagCompound) {
             return (NBTTagCompound) nbtbase;
         } else {
-            throw new IOException("Root tag must be a named compound tag");
+            throw new net.shieldcommunity.spigot.FastDecoderException("Invalid data?");
         }
     }
 
