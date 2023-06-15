@@ -64,7 +64,7 @@ public class SystemCommand extends Command {
         sender.sendMessage("");
 
         try {
-            sender.sendMessage(ChatColor.YELLOW+" CPU Model: " + ChatColor.GREEN+ CPUBufferReader.getModelName());
+            sender.sendMessage(ChatColor.YELLOW+"CPU Model: " + ChatColor.GREEN+ CPUBufferReader.getModelName());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
