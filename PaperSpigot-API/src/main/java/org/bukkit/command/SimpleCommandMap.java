@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -21,7 +22,7 @@ import org.github.paperspigot.event.ServerExceptionEvent;
 import org.github.paperspigot.exception.ServerCommandException;
 import org.github.paperspigot.exception.ServerTabCompleteException;
 
-public class SimpleCommandMap implements CommandMap {
+public class    SimpleCommandMap implements CommandMap {
     private static final Pattern PATTERN_ON_SPACE = Pattern.compile(" ", Pattern.LITERAL);
     protected final Map<String, Command> knownCommands = new HashMap<String, Command>();
     private final Server server;
@@ -33,7 +34,7 @@ public class SimpleCommandMap implements CommandMap {
 
     private void setDefaultCommands() {
         register("bukkit", new VersionCommand("version"));
-        register("bukkit", new ReloadCommand("reload"));
+        //register("bukkit", new ReloadCommand("reload"));
         register("bukkit", new PluginsCommand("plugins"));
         register("bukkit", new co.aikar.timings.TimingsCommand("timings")); // Spigot
     }
