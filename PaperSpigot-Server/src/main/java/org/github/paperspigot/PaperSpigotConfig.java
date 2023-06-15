@@ -3,6 +3,7 @@ package org.github.paperspigot;
 import com.google.common.base.Throwables;
 import net.minecraft.server.Items;
 import net.minecraft.server.MinecraftServer;
+import net.shieldcommunity.spigot.commands.SystemCommand;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -158,6 +159,7 @@ public class PaperSpigotConfig {
     }
 
     private static void shieldSpigotConfiguration() {
+        commands.put("shieldspigot", new SystemCommand("shieldspigot"));
         paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
         useCustomEncoder = getBoolean("settings.shieldspigot.optimizations.use-custom-encoder", false);
         playerTimeStatisticsInterval = getInt("settings.shieldspigot.statistics.player-time-interval", 20);
