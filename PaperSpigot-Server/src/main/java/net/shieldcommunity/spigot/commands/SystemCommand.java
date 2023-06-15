@@ -28,7 +28,7 @@ public class SystemCommand extends Command {
     }
 
     public final String PREFIX = " §e§lShield§6§lSpigot §7-> ";
-    public final String VERSION = "§a[0.0.4-a]";
+    public final String VERSION = "§a[0.0.4-b]";
 
     @Override
     public boolean execute(CommandSender sender, String currentAlias, String[] args) {
