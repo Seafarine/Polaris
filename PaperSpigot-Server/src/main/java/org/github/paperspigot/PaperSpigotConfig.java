@@ -27,6 +27,7 @@ public class PaperSpigotConfig {
     public static int playerTimeStatisticsInterval;
     public static int maxEncodedStringLength;
     public static boolean disablePaperInvisibilityPatch;
+    public static boolean disableTrackerUnsued;
     public static boolean useCustomEncoder;
     public static int baseThreadsForChunks;
     public static int playersPerThreadForChunks;
@@ -172,7 +173,8 @@ public class PaperSpigotConfig {
         TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
         fasterPotionsHandling = getBoolean("settings.shieldspigot.optimizations.faster-potions-handling", false);
         hasPhysicsEvent = getBoolean("settings.shieldspigot.optimizations.load-physics-when-plugin-triggers", false);
-        avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.avoid-double-compress-uncompressed-packets", false);
+        disableTrackerUnsued = getBoolean("settings.shieldspigot.optimizations.disable-tracker-when-unneeded", false);
+        avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.disable-unused-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
         maxUncompressedBytes = getInt("settings.shieldspigot.anticrash.max-uncompressed-bytes", 2097152);

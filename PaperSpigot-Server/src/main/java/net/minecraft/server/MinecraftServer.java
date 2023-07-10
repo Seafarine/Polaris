@@ -969,6 +969,14 @@ public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.S
             this.methodProfiler.b();
             this.methodProfiler.a("tracker");
             worldserver.timings.tracker.startTiming(); // Spigot
+
+
+            if (PaperSpigotConfig.disableTrackerUnsued) {
+                if (this.getPlayerList().getPlayerCount() > 0) {
+                    worldserver.getTracker().updatePlayers();
+                }
+            }
+
             List<NetworkManager> disabledFlushes = new ArrayList<>(worldserver.players.size());
             for (EntityHuman player : worldserver.players) {
                 if (!(player instanceof EntityPlayer)) continue; // skip non-player entities
