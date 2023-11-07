@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.PrintStream;
 import org.apache.logging.log4j.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.LoggerOutputStream;
 import co.aikar.timings.SpigotTimings; // Spigot
@@ -29,7 +30,9 @@ import org.github.paperspigot.PaperSpigotByteBuf;
 
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(); //ShieldSpigot
+    @Getter
+    private static final PaperSpigotByteBuf BUF_UTIL = new PaperSpigotByteBuf(); //ShieldSpigot
     private final List<ServerCommand> l = Collections.synchronizedList(Lists.<ServerCommand>newArrayList()); // CraftBukkit - fix decompile error
     private RemoteStatusListener m;
     private RemoteControlListener n;
@@ -186,15 +189,22 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             this.a(MinecraftEncryption.b());
             DedicatedServer.LOGGER.info("Starting Minecraft server on " + (this.getServerIp().length() == 0 ? "*" : this.getServerIp()) + ":" + this.R());
 
-            PaperSpigotByteBuf bufUtil = new PaperSpigotByteBuf();
+            PaperSpigotByteBuf.ResultData resultData = BUF_UTIL.check();
+            PaperSpigotByteBuf.Result result = resultData.getResult();
+            if (result != PaperSpigotByteBuf.Result.ALREADY_CHECKED) {
+                if (!result.isValid()) {
+                    sendLogger(result.getReason(), resultData.getException());
+                    //Wait for loggers
+                    try {
+                        Thread.sleep(250L);
+                    } catch (InterruptedException ignored) {
+                    }
+                    System.exit(0);
+                    return true;
+                }
 
-            if(!bufUtil.check()) {
-                Bukkit.getLogger().info(ChatColor.RED + "Your ShieldSpigot license is unvalid, please put the correct one.");
-                System.exit(0);
+                otherLogger();
             }
-            Bukkit.getLogger().info(ChatColor.GREEN+
-                    " Your ShieldSpigot license is valid. Developed by xIsm4#9127"
-            );
 
         if (!org.spigotmc.SpigotConfig.lateBind) {
             try {
@@ -679,5 +689,29 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public PlayerList getPlayerList() {
         return this.aP();
+    }
+
+
+    private static void sendLogger(String reason, Exception exception) {
+        LOGGER.info(ChatColor.RED + "############## WARNING ##############");
+        LOGGER.info(" ");
+        LOGGER.info(ChatColor.RED + "Failed to validate license:");
+        LOGGER.info(ChatColor.RED + reason);
+        if (exception != null) {
+            LOGGER.info(ChatColor.RED + "Error message: " + exception.getClass().getSimpleName() + ": " + exception.getMessage());
+        }
+        LOGGER.info(" ");
+        LOGGER.info(ChatColor.RED + "-> Our discord:");
+        LOGGER.info(ChatColor.RED + "https://discord.shieldcommunity.net");
+        LOGGER.info(" ");
+        LOGGER.info(ChatColor.RED + "The backend won't start until you fix it.");
+        LOGGER.info(" ");
+        LOGGER.info(ChatColor.RED + "############## WARNING ##############");
+        LOGGER.info(" ");
+    }
+
+    private static void otherLogger() {
+        LOGGER.info(ChatColor.GREEN + "Your license is valid. Fully enabling backend now...");
+        LOGGER.info(" ");
     }
 }
