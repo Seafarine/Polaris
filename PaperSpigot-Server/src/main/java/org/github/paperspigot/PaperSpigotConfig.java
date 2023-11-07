@@ -192,7 +192,7 @@ public class PaperSpigotConfig {
         maxNameLength = getInt("settings.shieldspigot.misc.max-name-length", 16);
         serverIconName = getString("settings.shieldspigot.misc.server-icon-name", "server-icon.png");
         timeOutTime = getInt("settings.shieldspigot.misc.timeout-time", 600);
-        nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
+            nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
         disconnectPrefixOnException = getString("settings.shieldspigot.prefix.on-disconnect", "Disconnected o_O");
         knockbackFriction = getDouble("settings.shieldspigot.knockback.friction", 2.0D);
         knockbackHorizontal = getDouble("settings.shieldspigot.knockback.horizontal", 0.4D);

@@ -36,6 +36,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>net.elytrium</groupId>
+            <artifactId>serializer</artifactId>
+            <version>1.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>net.jafama</groupId>
             <artifactId>jafama</artifactId>
             <version>2.3.2</version>
@@ -69,7 +75,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20220924</version>
+            <version>20230227</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -132,6 +138,10 @@
     </dependencies>
 
     <repositories>
+        <repository>
+            <id>maven-central</id>
+            <url>https://maven.apache.org/repository/</url>
+        </repository>
         <repository>
             <id>velocity-repo</id>
             <url>https://repo.velocitypowered.com/snapshots/</url>
