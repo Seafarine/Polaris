@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.shieldcommunity.spigot.cache.CachedPacketM;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.CraftServer;
@@ -416,7 +417,7 @@ public abstract class World implements IBlockAccess {
                     this.methodProfiler.b();
                 }
 
-                if(PaperSpigotConfig.cachedMovement) {
+                if(ShieldSpigotConfigImpl.IMP.CACHE_PLAYERS_MOVEMENT) {
                     movementCache.clear();
                 }
 

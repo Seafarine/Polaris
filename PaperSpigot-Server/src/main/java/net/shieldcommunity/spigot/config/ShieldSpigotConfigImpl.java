@@ -92,4 +92,11 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             )
     })
     public boolean OPTIMIZE_CHUNK_CHEST = true;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot cache some player movements and animations? This may increase ram but deflate CPU usage"
+            )
+    })
+    public boolean CACHE_PLAYERS_MOVEMENT = true;
 }

@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 
 // CraftBukkit start
 import net.shieldcommunity.spigot.cache.CachedPacketM;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -463,7 +464,7 @@ public abstract class Entity implements ICommandListener {
             this.lastMotY = this.motY;
             this.lastMotZ = this.motZ;
 
-            if (PaperSpigotConfig.cachedMovement && world.movementCache.move(this)) {
+            if (ShieldSpigotConfigImpl.IMP.CACHE_PLAYERS_MOVEMENT && world.movementCache.move(this)) {
                 return;
             }
 
@@ -713,7 +714,7 @@ public abstract class Entity implements ICommandListener {
                 block.a(this.world, this);
             }
 
-            if(PaperSpigotConfig.cachedMovement) {
+            if(ShieldSpigotConfigImpl.IMP.CACHE_PLAYERS_MOVEMENT) {
                 world.movementCache.cache(this);
             }
 
