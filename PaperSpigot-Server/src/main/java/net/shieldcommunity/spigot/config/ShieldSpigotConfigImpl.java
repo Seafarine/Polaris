@@ -49,4 +49,19 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             )
     })
     public boolean USE_CUSTOM_ENCODER = false;
+
+    @Comment(value = {
+            @CommentValue(
+                    "What should be the player static interval? (in ticks)"
+            )
+    })
+    public int PLAYER_STATIC_INTERVAL = 20;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot use TFO? (TCP Fast Open) This only works with NullCordX due proxy impl!"
+            )
+    })
+    public boolean USE_TCP_FAST_OPEN = true;
+    public int TCP_FAST_OPEN_MODE = 3;
 }

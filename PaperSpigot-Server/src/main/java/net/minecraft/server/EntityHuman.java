@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 // CraftBukkit start
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.entity.CraftItem;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -1333,7 +1334,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
-    private final int interval = PaperSpigotConfig.playerTimeStatisticsInterval; //ShieldSpigot
+    private final int interval = ShieldSpigotConfigImpl.IMP.PLAYER_STATIC_INTERVAL; //ShieldSpigot
 
     public void b(Statistic statistic) {
         this.a(statistic, interval);

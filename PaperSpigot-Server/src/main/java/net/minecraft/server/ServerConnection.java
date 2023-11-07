@@ -12,6 +12,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.github.paperspigot.PaperSpigotConfig;
@@ -109,8 +110,8 @@ public class ServerConnection {
                     try {
                         io.netty.channel.ChannelConfig config = channel.config();
                         config.setOption(ChannelOption.TCP_NODELAY, true);
-                        config.setOption(ChannelOption.TCP_FASTOPEN, PaperSpigotConfig.TcpFastOpenMode); //ShieldSpigot
-                        config.setOption(ChannelOption.TCP_FASTOPEN_CONNECT, PaperSpigotConfig.enableTcpFastOpen); //ShieldSpigot
+                        config.setOption(ChannelOption.TCP_FASTOPEN, ShieldSpigotConfigImpl.IMP.TCP_FAST_OPEN_MODE); //ShieldSpigot
+                        config.setOption(ChannelOption.TCP_FASTOPEN_CONNECT, ShieldSpigotConfigImpl.IMP.USE_TCP_FAST_OPEN); //ShieldSpigot
                         config.setOption(ChannelOption.IP_TOS, 0x18);
                         config.setAllocator(io.netty.buffer.ByteBufAllocator.DEFAULT);
                     } catch (ChannelException channelexception) {

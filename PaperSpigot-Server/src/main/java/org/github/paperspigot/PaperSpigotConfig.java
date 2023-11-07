@@ -161,14 +161,11 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        playerTimeStatisticsInterval = getInt("settings.shieldspigot.statistics.player-time-interval", 20);
-        enableTcpFastOpen = getBoolean("settings.shieldspigot.optimizations.tcp-use-fast-open", false);
         baseThreadsForChunks = getInt("settings.shieldspigot.optimizations.base-threads-for-chunks", 2);
         disablePaperInvisibilityPatch = getBoolean("settings.shieldspigot.optimizations.disable-paper-invisibility-patch", false);
         playersPerThreadForChunks = getInt("settings.shieldspigot.optimizations.players-per-thread-for-chunks", 50);
         optimizeChunksForChests = getBoolean("settings.shieldspigot.optimizations.optimize-chunks-for-chests", false);
         cachedMovement = getBoolean("settings.shieldspigot.optimizations.cached-entity-move", false);
-        TcpFastOpenMode = getInt("settings.shieldspigot.optimizations.tcp-fast-open-mode", 0);
         fasterPotionsHandling = getBoolean("settings.shieldspigot.optimizations.faster-potions-handling", false);
         hasPhysicsEvent = getBoolean("settings.shieldspigot.optimizations.load-physics-when-plugin-triggers", false);
         disableTrackerUnsued = getBoolean("settings.shieldspigot.optimizations.disable-tracker-when-unneeded", false);
