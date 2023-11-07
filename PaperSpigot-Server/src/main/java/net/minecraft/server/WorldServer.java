@@ -13,7 +13,6 @@ import org.bukkit.craftbukkit.util.HashTreeSet;
 import org.bukkit.craftbukkit.util.LongHash;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
-import org.github.paperspigot.PaperSpigotConfig;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -45,7 +44,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     // Add env and gen to constructor
 
-    public boolean hasPhysicsEvent = ShieldSpigotConfigImpl.IMP.USE_BLOCPHISIC_EVENT;
+    public boolean hasPhysicsEvent = ShieldSpigotConfigImpl.IMP.USE_BLOCKPHISIC_EVENT;
     public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, MethodProfiler methodprofiler, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen) {
         super(idatamanager, worlddata, WorldProvider.byDimension(env.getId()), methodprofiler, false, gen, env);
         this.dimension = i;

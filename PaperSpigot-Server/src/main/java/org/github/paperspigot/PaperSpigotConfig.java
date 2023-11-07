@@ -23,7 +23,6 @@ public class PaperSpigotConfig {
 
     public static boolean usePacketLimiter;
     public static int bookTick;
-    public static boolean avoidDoubleCompressUncompressedPackets;
     public static int maxEncodedStringLength;
     public static int bookPageLength;
     public static int bookTitleLength;
@@ -149,7 +148,6 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.disable-unused-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
         maxUncompressedBytes = getInt("settings.shieldspigot.anticrash.max-uncompressed-bytes", 2097152);

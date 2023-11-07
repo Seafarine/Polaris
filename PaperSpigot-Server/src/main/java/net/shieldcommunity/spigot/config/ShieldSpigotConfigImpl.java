@@ -112,7 +112,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
                     "Should the spigot load BlockPhysicsEvent this may help on some servers"
             )
     })
-    public boolean USE_BLOCPHISIC_EVENT = false;
+    public boolean USE_BLOCKPHISIC_EVENT = false;
 
     @Comment(value = {
             @CommentValue(
