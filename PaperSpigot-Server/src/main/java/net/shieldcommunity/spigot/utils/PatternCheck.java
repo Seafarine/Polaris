@@ -2,7 +2,7 @@ package net.shieldcommunity.spigot.utils;
 
 import java.util.regex.Pattern;
 
-public class UtilHandler {
+public class PatternCheck {
 
     public static Pattern safePatternCompile(String pattern) {
         try {

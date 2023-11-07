@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import io.netty.util.concurrent.GenericFutureListener;
-import net.shieldcommunity.spigot.utils.UtilHandler;
+import net.shieldcommunity.spigot.utils.PatternCheck;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
@@ -45,7 +45,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     private final Pattern nickNameHandler;
 
     public LoginListener(MinecraftServer minecraftserver, NetworkManager networkmanager) {
-        this.nickNameHandler = UtilHandler.safePatternCompile(PaperSpigotConfig.nameLoginHandler);
+        this.nickNameHandler = PatternCheck.safePatternCompile(PaperSpigotConfig.nameLoginHandler);
         this.g = LoginListener.EnumProtocolState.HELLO;
         this.j = "";
         this.server = minecraftserver;
