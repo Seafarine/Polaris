@@ -25,11 +25,7 @@ public class PaperSpigotConfig {
     public static int bookTick;
     public static boolean avoidDoubleCompressUncompressedPackets;
     public static int maxEncodedStringLength;
-    public static boolean disablePaperInvisibilityPatch;
     public static boolean disableTrackerUnsued;
-    public static boolean useCustomEncoder;
-    public static int baseThreadsForChunks;
-    public static int playersPerThreadForChunks;
     public static int bookPageLength;
     public static int bookTitleLength;
     public static int bookMaxPages;
@@ -38,10 +34,7 @@ public class PaperSpigotConfig {
     public static boolean verifyChannelBeforeDecode;
     public static boolean logPlayerConnectionSocket;
     public static boolean logPlayerConnectionExceptions;
-    public static String paperSpigotLicense;
-    public static boolean enableTcpFastOpen;
     public static boolean hasPhysicsEvent;
-    public static int TcpFastOpenMode;
     public static int maxPacketsPerSecond;
     public static int maxBytesPerConnection;
     public static String nameLoginHandler;

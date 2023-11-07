@@ -52,6 +52,13 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
 
     @Comment(value = {
             @CommentValue(
+                    "Should the backend slice packets instead copying whole buffer? Only works with NullCordX!"
+            )
+    })
+    public boolean SLICE_INSTEAD_BUF = false;
+
+    @Comment(value = {
+            @CommentValue(
                     "What should be the player static interval? (in ticks)"
             )
     })
