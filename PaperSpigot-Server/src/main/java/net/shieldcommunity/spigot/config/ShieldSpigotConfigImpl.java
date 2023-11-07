@@ -113,4 +113,14 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             )
     })
     public boolean USE_BLOCPHISIC_EVENT = false;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot disable Spigot player tracker thread? This may increase performance"
+            ),
+            @CommentValue(
+                    "Some plugins use this to track players, so if you have some issues with some plugins, try to disable this"
+            )
+    })
+    public boolean DISABLE_SPIGOT_TRACKER = false;
 }

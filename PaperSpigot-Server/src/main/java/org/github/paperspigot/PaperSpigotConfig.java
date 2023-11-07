@@ -25,7 +25,6 @@ public class PaperSpigotConfig {
     public static int bookTick;
     public static boolean avoidDoubleCompressUncompressedPackets;
     public static int maxEncodedStringLength;
-    public static boolean disableTrackerUnsued;
     public static int bookPageLength;
     public static int bookTitleLength;
     public static int bookMaxPages;
@@ -34,7 +33,6 @@ public class PaperSpigotConfig {
     public static boolean verifyChannelBeforeDecode;
     public static boolean logPlayerConnectionSocket;
     public static boolean logPlayerConnectionExceptions;
-    public static boolean hasPhysicsEvent;
     public static int maxPacketsPerSecond;
     public static int maxBytesPerConnection;
     public static String nameLoginHandler;
@@ -151,8 +149,6 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        hasPhysicsEvent = getBoolean("settings.shieldspigot.optimizations.load-physics-when-plugin-triggers", false);
-        disableTrackerUnsued = getBoolean("settings.shieldspigot.optimizations.disable-tracker-when-unneeded", false);
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.disable-unused-packets", false);
         usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
         maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);

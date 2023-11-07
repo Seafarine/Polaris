@@ -17,6 +17,7 @@ import io.netty.handler.codec.base64.Base64;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 import net.shieldcommunity.spigot.cache.CachedConcurrentLinkedQueue;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -971,7 +972,7 @@ public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.S
             worldserver.timings.tracker.startTiming(); // Spigot
 
 
-            if (PaperSpigotConfig.disableTrackerUnsued) {
+            if (ShieldSpigotConfigImpl.IMP.DISABLE_SPIGOT_TRACKER) { //ShieldSpigot
                 if (this.getPlayerList().getPlayerCount() > 0) {
                     worldserver.getTracker().updatePlayers();
                 }
