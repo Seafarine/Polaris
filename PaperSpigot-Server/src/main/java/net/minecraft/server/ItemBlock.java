@@ -28,8 +28,8 @@ public class ItemBlock extends Item {
         } else if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
             return false;
         } else if (
-                PaperSpigotConfig.disablePaperInvisibilityPatch && world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack) // ComuSpigot - Disable passing entityhuman instead of null
-                        || !PaperSpigotConfig.disablePaperInvisibilityPatch && world.a(this.a, blockposition, false, enumdirection, entityhuman, itemstack) // PaperSpigot - Pass entityhuman instead of null (Paper Method)
+               world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack) // ComuSpigot - Disable passing entityhuman instead of null
+                        || world.a(this.a, blockposition, false, enumdirection, entityhuman, itemstack) // PaperSpigot - Pass entityhuman instead of null (Paper Method)
         ) {
             int i = this.filterData(itemstack.getData());
             IBlockData iblockdata1 = this.a.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityhuman);

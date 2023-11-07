@@ -24,7 +24,6 @@ public class PaperSpigotConfig {
     public static boolean usePacketLimiter;
     public static int bookTick;
     public static boolean avoidDoubleCompressUncompressedPackets;
-    public static int playerTimeStatisticsInterval;
     public static int maxEncodedStringLength;
     public static boolean disablePaperInvisibilityPatch;
     public static boolean disableTrackerUnsued;
@@ -37,7 +36,6 @@ public class PaperSpigotConfig {
     public static int maxUncompressedBytes;
     public static int timeOutTime;
     public static boolean verifyChannelBeforeDecode;
-    public static boolean optimizeChunksForChests;
     public static boolean logPlayerConnectionSocket;
     public static boolean logPlayerConnectionExceptions;
     public static String paperSpigotLicense;
@@ -161,10 +159,6 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        baseThreadsForChunks = getInt("settings.shieldspigot.optimizations.base-threads-for-chunks", 2);
-        disablePaperInvisibilityPatch = getBoolean("settings.shieldspigot.optimizations.disable-paper-invisibility-patch", false);
-        playersPerThreadForChunks = getInt("settings.shieldspigot.optimizations.players-per-thread-for-chunks", 50);
-        optimizeChunksForChests = getBoolean("settings.shieldspigot.optimizations.optimize-chunks-for-chests", false);
         cachedMovement = getBoolean("settings.shieldspigot.optimizations.cached-entity-move", false);
         fasterPotionsHandling = getBoolean("settings.shieldspigot.optimizations.faster-potions-handling", false);
         hasPhysicsEvent = getBoolean("settings.shieldspigot.optimizations.load-physics-when-plugin-triggers", false);

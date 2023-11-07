@@ -64,4 +64,25 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean USE_TCP_FAST_OPEN = true;
     public int TCP_FAST_OPEN_MODE = 3;
+
+   @Comment(value = {
+           @CommentValue(
+                   "What should be the amount of threads per chunk? This can be influenced by the number of players you have"
+           )
+   })
+    public int CHUNK_THREADS = 2;
+
+    @Comment(value = {
+              @CommentValue(
+                     "What should be the amount of threads per player? This can be influenced by the number of players you have"
+              )
+    })
+    public int PLAYER_PER_CHUNK_THREAD = 50;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot try to optimize chunk chest handling?"
+            )
+    })
+    public boolean OPTIMIZE_CHUNK_CHEST = true;
 }

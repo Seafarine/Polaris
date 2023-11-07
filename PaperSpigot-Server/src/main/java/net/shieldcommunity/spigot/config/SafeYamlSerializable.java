@@ -5,7 +5,6 @@ import net.elytrium.serializer.language.object.YamlSerializable;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.UncheckedIOException;
 import java.nio.file.Path;
 
 public class SafeYamlSerializable extends YamlSerializable {
