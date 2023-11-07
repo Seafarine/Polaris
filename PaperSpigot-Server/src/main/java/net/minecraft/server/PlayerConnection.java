@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import net.shieldcommunity.spigot.FastDecoderException;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1978,8 +1979,10 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         try { // CraftBukkit
         if ("MC|BEdit".equals(packetplayincustompayload.a())) {
             // PandaSpigot start - Cooldown on book edit
-            if (this.lastBookTick + PaperSpigotConfig.bookTick > MinecraftServer.currentTick) {
-                this.disconnect(PaperSpigotConfig.nettyIoPrefix+" Book edited too quickly!");
+            if (this.lastBookTick + ShieldSpigotConfigImpl.IMP.MAX_BOOK_TICKS > MinecraftServer.currentTick) {
+                this.disconnect(
+                        ShieldSpigotConfigImpl.IMP.NETTY_HANDLER_PREFIX+" Book edited too quickly!"
+                );
                 return;
             }
             this.lastBookTick = MinecraftServer.currentTick;
@@ -2018,8 +2021,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             return;
         } else if ("MC|BSign".equals(packetplayincustompayload.a())) {
             // PandaSpigot start - Cooldown on book sign
-            if (this.lastBookTick + PaperSpigotConfig.bookTick > MinecraftServer.currentTick) {
-                this.disconnect(PaperSpigotConfig.nettyIoPrefix+" Book edited too quickly!");
+            if (this.lastBookTick + ShieldSpigotConfigImpl.IMP.MAX_BOOK_TICKS > MinecraftServer.currentTick) {
+                this.disconnect(ShieldSpigotConfigImpl.IMP.NETTY_HANDLER_PREFIX +" Book edited too quickly!");
                 return;
             }
             this.lastBookTick = MinecraftServer.currentTick;

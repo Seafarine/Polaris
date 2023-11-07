@@ -21,24 +21,11 @@ import java.util.logging.Level;
 
 public class PaperSpigotConfig {
 
-    public static boolean usePacketLimiter;
-    public static int bookTick;
-    public static int maxEncodedStringLength;
-    public static int bookPageLength;
-    public static int bookTitleLength;
-    public static int bookMaxPages;
-    public static int maxUncompressedBytes;
     public static int timeOutTime;
-    public static boolean verifyChannelBeforeDecode;
     public static boolean logPlayerConnectionSocket;
     public static boolean logPlayerConnectionExceptions;
-    public static int maxPacketsPerSecond;
-    public static int maxBytesPerConnection;
     public static String nameLoginHandler;
-    public static String nettyIoPrefix;
     public static String disconnectPrefixOnException;
-    public static int minNameLength;
-    public static int maxNameLength;
     public static String serverIconName;
     public static double knockbackFriction;
     public static double knockbackHorizontal;
@@ -148,24 +135,11 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        usePacketLimiter = getBoolean("settings.shieldspigot.anticrash.enable-packet-limiter", true);
-        maxPacketsPerSecond = getInt("settings.shieldspigot.anticrash.max-packets-per-second", 750);
-        maxUncompressedBytes = getInt("settings.shieldspigot.anticrash.max-uncompressed-bytes", 2097152);
-        maxEncodedStringLength = getInt("settings.shieldspigot.anticrash.max-encoded-string-length", 32767);
-        verifyChannelBeforeDecode = getBoolean("settings.shieldspigot.anticrash.verify-channel-before-decode", true);
-        maxBytesPerConnection = getInt("settings.shieldspigot.anticrash.max-bytes-per-connection", 35000);
-        bookPageLength = getInt("settings.shieldspigot.book-page-length", 256);
-        bookMaxPages = getInt("settings.shieldspigot.book-max-pages", 50);
-        bookTick = getInt("settings.shieldspigot.book-last-tick", 20);
-        bookTitleLength = getInt("settings.shieldspigot.book-title-length", 32);
         logPlayerConnectionExceptions = getBoolean("settings.shieldspigot.logs.player-connection-exceptions", true);
         logPlayerConnectionSocket = getBoolean("settings.shieldspigot.logs.connection-socket", true);
         nameLoginHandler = getString("settings.shieldspigot.misc.allowed-name-characters", "[a-zA-Z0-9_]*");
-        minNameLength = getInt("settings.shieldspigot.misc.min-name-length", 3);
-        maxNameLength = getInt("settings.shieldspigot.misc.max-name-length", 16);
         serverIconName = getString("settings.shieldspigot.misc.server-icon-name", "server-icon.png");
         timeOutTime = getInt("settings.shieldspigot.misc.timeout-time", 600);
-            nettyIoPrefix = getString("settings.shieldspigot.prefix", "ShieldSpigot");
         disconnectPrefixOnException = getString("settings.shieldspigot.prefix.on-disconnect", "Disconnected o_O");
         knockbackFriction = getDouble("settings.shieldspigot.knockback.friction", 2.0D);
         knockbackHorizontal = getDouble("settings.shieldspigot.knockback.horizontal", 0.4D);

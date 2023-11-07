@@ -45,6 +45,25 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
 
     @Comment(value = {
             @CommentValue(
+                    "What should be the byte limit in the player instance? Increase this if your server has many books"
+            )
+    })
+    public int MAX_BYTES_PER_CONNECTION = 50000;
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot use a custom packet decoder? This may help but cause some issues with plugins"
+            )
+    })
+    public boolean USE_PACKET_FILTER = false;
+
+    @Comment(value = {
+            @CommentValue(
+                    "What should be the max packets-per-second for the spigot"
+            )
+    })
+    public int MAX_PACKETS_PER_SECOND = 700;
+    @Comment(value = {
+            @CommentValue(
                     "Should the spigot use a custom packet encoder? This may help but cause some issues with plugins"
             )
     })
@@ -123,4 +142,21 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             )
     })
     public boolean DISABLE_SPIGOT_TRACKER = false;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Name for Netty operations (may not appear on client disconnection)"
+            )
+    })
+    public String NETTY_HANDLER_PREFIX = "ShieldSpigot";
+
+    @Comment(value = {
+            @CommentValue(
+                    "This is the configuration for book limitation, if you need more information, pages you must edit here"
+            )
+    })
+    public int MAX_PAGES = 50;
+    public int MAX_BOOK_PAGE_LENGTH = 256;
+    public int MAX_TITLE_LENGTH = 32;
+    public int MAX_BOOK_TICKS = 20;
 }

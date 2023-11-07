@@ -42,7 +42,7 @@ public class PacketDecompressor extends ByteToMessageDecoder {
                 }
 
 
-                if (var5 > PaperSpigotConfig.maxUncompressedBytes) {
+                if (var5 > 2097152) {
                     throw new DecoderException("Badly compressed packet - size of " + var5 + " is larger than protocol maximum of " + 2097152);
                 }
 

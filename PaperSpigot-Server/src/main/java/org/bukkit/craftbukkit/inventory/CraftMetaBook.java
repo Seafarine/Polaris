@@ -1,6 +1,5 @@
 package org.bukkit.craftbukkit.inventory;
 
-import java.awt.print.Paper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +7,7 @@ import java.util.Map;
 import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.NBTTagList;
 
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.DelegateDeserialization;
@@ -36,9 +36,9 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
     static final ItemMetaKey RESOLVED = new ItemMetaKey("resolved");
     static final ItemMetaKey GENERATION = new ItemMetaKey("generation");
 
-    static final int MAX_PAGES = PaperSpigotConfig.bookMaxPages;
-    static final int MAX_PAGE_LENGTH = PaperSpigotConfig.bookPageLength;
-    static final int MAX_TITLE_LENGTH = PaperSpigotConfig.bookTitleLength;
+    static final int MAX_PAGES = ShieldSpigotConfigImpl.IMP.MAX_PAGES;
+    static final int MAX_PAGE_LENGTH = ShieldSpigotConfigImpl.IMP.MAX_BOOK_PAGE_LENGTH;
+    static final int MAX_TITLE_LENGTH = ShieldSpigotConfigImpl.IMP.MAX_TITLE_LENGTH;
 
     protected String title;
     protected String author;

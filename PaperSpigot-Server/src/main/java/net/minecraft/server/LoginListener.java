@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import io.netty.util.concurrent.GenericFutureListener;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import net.shieldcommunity.spigot.utils.PatternCheck;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
@@ -56,14 +57,14 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     }
 
     private boolean checkPacketLimit() {
-        if (PaperSpigotConfig.usePacketLimiter) {
+        if (ShieldSpigotConfigImpl.IMP.USE_PACKET_FILTER) {
             if (this.packetsPerSecondTime < System.currentTimeMillis()) {
                 this.packetsPerSecondTime = System.currentTimeMillis() + 1000L;
                 this.packetsPerSecond = 0;
             }
 
-            if (++this.packetsPerSecond > PaperSpigotConfig.maxPacketsPerSecond) {
-                this.disconnect("%prefix% Too many packets!".replace("%prefix%", PaperSpigotConfig.nettyIoPrefix));
+            if (++this.packetsPerSecond > ShieldSpigotConfigImpl.IMP.MAX_PACKETS_PER_SECOND) {
+                this.disconnect("%prefix% Too many packets!".replace("%prefix%", "ShieldSpigot"));
                 return true;
             }
         }
@@ -300,17 +301,9 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                     return;
                 }
 
-                String name = asyncEvent.getName();
-                if (name.length() > PaperSpigotConfig.maxNameLength || name.length() < PaperSpigotConfig.minNameLength) {
-                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ShieldSpigot] Invalid Name Length");
-                    return;
-                }
-
-                if (!LoginListener.this.nickNameHandler.matcher(name).matches()) {
-                    asyncEvent.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "[ShieldSpigot] Invalid Name Characters");
-                    return;
-                }
             }
+
+            checkPacketLimit();
             // CraftBukkit end
             LoginListener.c.info("UUID of player " + LoginListener.this.i.getName() + " is " + LoginListener.this.i.getId());
             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;

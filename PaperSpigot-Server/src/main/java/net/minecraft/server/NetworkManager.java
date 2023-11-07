@@ -12,6 +12,7 @@ import io.netty.handler.timeout.TimeoutException;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,6 @@ import org.apache.logging.log4j.MarkerManager;
 import javax.crypto.SecretKey;
 import java.net.SocketAddress;
 import java.util.Queue;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
@@ -265,6 +265,23 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
         this.writePacket(packet, agenericfuturelistener, Boolean.TRUE);
     }
+
+    public int packetsPerSecond;
+    private long packetsPerSecondTime;
+
+    private void checkPacketLimit() {
+        if (ShieldSpigotConfigImpl.IMP.USE_PACKET_FILTER) {
+            if (this.packetsPerSecondTime < System.currentTimeMillis()) {
+                this.packetsPerSecondTime = System.currentTimeMillis() + 1000L;
+                this.packetsPerSecond = 0;
+            }
+
+            if (++this.packetsPerSecond > ShieldSpigotConfigImpl.IMP.MAX_PACKETS_PER_SECOND) {
+                this.channel.close();
+            }
+        }
+
+    }
     private void writePacket(Packet packet, final GenericFutureListener<? extends Future<? super Void>>[] agenericfuturelistener, Boolean flushConditional) {
         this.packetWrites.getAndIncrement(); // must be before using canFlush
         boolean effectiveFlush = flushConditional == null ? this.canFlush : flushConditional;
@@ -302,7 +319,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
                 }
 
             channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
-
+            checkPacketLimit(); //shieldspigot
             } catch (Exception e) {
                 g.error("NetworkException: " + player, e);
                 close(new ChatMessage("disconnect.genericReason", "Internal Exception: " + e.getMessage()));
@@ -311,32 +328,30 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             }
 
         } else {
-            Runnable command = new Runnable() {
-                public void run() {
-                    if (enumprotocol != enumprotocol1) {
-                        NetworkManager.this.a(enumprotocol);
+            Runnable command = () -> {
+                if (enumprotocol != enumprotocol1) {
+                    NetworkManager.this.a(enumprotocol);
+                }
+
+                if (!isConnected()) {
+                    packet.onPacketDispatchFinish(player, null);
+                    return;
+                }
+                try {
+                    ChannelFuture channelfuture = (flush) ? NetworkManager.this.channel.writeAndFlush(packet) : NetworkManager.this.channel.write(packet); // PandaSpigot - add flush parameter
+
+                    if (agenericfuturelistener != null) {
+                        channelfuture.addListeners(agenericfuturelistener);
+                    }
+                    if (packet.hasFinishListener()) {
+                        channelfuture.addListener((ChannelFutureListener) channelFuture -> packet.onPacketDispatchFinish(player, channelFuture));
                     }
 
-                    if (!isConnected()) {
-                        packet.onPacketDispatchFinish(player, null);
-                        return;
-                    }
-                    try {
-                        ChannelFuture channelfuture = (flush) ? NetworkManager.this.channel.writeAndFlush(packet) : NetworkManager.this.channel.write(packet); // PandaSpigot - add flush parameter
-
-                        if (agenericfuturelistener != null) {
-                            channelfuture.addListeners(agenericfuturelistener);
-                        }
-                        if (packet.hasFinishListener()) {
-                            channelfuture.addListener((ChannelFutureListener) channelFuture -> packet.onPacketDispatchFinish(player, channelFuture));
-                        }
-
-                        channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
-                    } catch (Exception e) {
-                        g.error("NetworkException: " + player, e);
-                        close(new ChatMessage("disconnect.genericReason", "Internal Exception: " + e.getMessage()));;
-                        packet.onPacketDispatchFinish(player, null);
-                    }
+                    channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+                } catch (Exception e) {
+                    g.error("NetworkException: " + player, e);
+                    close(new ChatMessage("disconnect.genericReason", "Internal Exception: " + e.getMessage()));;
+                    packet.onPacketDispatchFinish(player, null);
                 }
             };
             if (!flush) {

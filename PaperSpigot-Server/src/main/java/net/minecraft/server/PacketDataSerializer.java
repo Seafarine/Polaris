@@ -22,6 +22,7 @@ import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.craftbukkit.inventory.CraftItemStack; // CraftBukkit
 import org.github.paperspigot.PaperSpigotConfig;
 
@@ -180,7 +181,10 @@ public class PacketDataSerializer extends ByteBuf {
             return null;
         } else {
             this.readerIndex(i);
-            return NBTCompressedStreamTools.a(new ByteBufInputStream(this), new NBTReadLimiter(PaperSpigotConfig.maxBytesPerConnection)); //Make configurable the max bytes
+            return NBTCompressedStreamTools.a(
+                    new ByteBufInputStream(this),
+                    new NBTReadLimiter(ShieldSpigotConfigImpl.IMP.MAX_BYTES_PER_CONNECTION)
+            ); //ShieldSpigot - Make configurable the max bytes
         }
     }
 
@@ -249,8 +253,8 @@ public class PacketDataSerializer extends ByteBuf {
     public PacketDataSerializer a(String s) {
         byte[] abyte = s.getBytes(Charsets.UTF_8);
 
-        if (abyte.length > PaperSpigotConfig.maxEncodedStringLength) { //ShieldSpigot - Make configurable encoded length
-            throw new EncoderException("String too big (was " + s.length() + " bytes encoded, max " + PaperSpigotConfig.maxEncodedStringLength + ")");
+        if (abyte.length > 32767) {
+            throw new EncoderException("String too big (was " + s.length() + " bytes encoded, max " + 32767 + ")");
         } else {
             this.b(abyte.length);
             this.writeBytes(abyte);
