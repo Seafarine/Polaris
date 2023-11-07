@@ -42,4 +42,11 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             )
     })
     public String YOUR_LICENSE = "YOUR-LICENSE";
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot use a custom packet encoder? This may help but cause some issues with plugins"
+            )
+    })
+    public boolean USE_CUSTOM_ENCODER = false;
 }

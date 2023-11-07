@@ -161,8 +161,6 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        paperSpigotLicense = getString("settings.shieldspigot.license", "your-license-goes-here");
-        useCustomEncoder = getBoolean("settings.shieldspigot.optimizations.use-custom-encoder", false);
         playerTimeStatisticsInterval = getInt("settings.shieldspigot.statistics.player-time-interval", 20);
         enableTcpFastOpen = getBoolean("settings.shieldspigot.optimizations.tcp-use-fast-open", false);
         baseThreadsForChunks = getInt("settings.shieldspigot.optimizations.base-threads-for-chunks", 2);
