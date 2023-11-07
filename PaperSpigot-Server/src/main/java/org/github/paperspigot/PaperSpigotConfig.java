@@ -1,9 +1,9 @@
 package org.github.paperspigot;
 
 import com.google.common.base.Throwables;
-import es.xism4.shieldspigot.commands.ShieldSpigotCommand;
 import net.minecraft.server.Items;
 import net.minecraft.server.MinecraftServer;
+import net.shieldcommunity.spigot.commands.ShieldSpigotCommand;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

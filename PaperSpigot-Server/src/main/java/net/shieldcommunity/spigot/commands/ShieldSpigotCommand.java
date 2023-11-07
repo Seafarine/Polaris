@@ -1,4 +1,4 @@
-package es.xism4.shieldspigot.commands;
+package net.shieldcommunity.spigot.commands;
 
 import net.shieldcommunity.api.CPUBufferReader;
 import net.shieldcommunity.spigot.utils.TextUtil;
