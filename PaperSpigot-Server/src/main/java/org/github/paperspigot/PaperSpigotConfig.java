@@ -47,7 +47,6 @@ public class PaperSpigotConfig {
     public static double knockbackHorizontal;
     public static double knockbackVertical;
     public static double knockbackVerticalLimit;
-    public static boolean fasterPotionsHandling;
     public static double knockbackExtraHorizontal;
     public static double knockbackExtraVertical;
     public static boolean warnForExcessiveVelocity;
@@ -152,7 +151,6 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        fasterPotionsHandling = getBoolean("settings.shieldspigot.optimizations.faster-potions-handling", false);
         hasPhysicsEvent = getBoolean("settings.shieldspigot.optimizations.load-physics-when-plugin-triggers", false);
         disableTrackerUnsued = getBoolean("settings.shieldspigot.optimizations.disable-tracker-when-unneeded", false);
         avoidDoubleCompressUncompressedPackets = getBoolean("settings.shieldspigot.optimizations.disable-unused-packets", false);

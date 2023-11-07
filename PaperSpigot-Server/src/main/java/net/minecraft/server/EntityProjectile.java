@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.github.paperspigot.PaperSpigotConfig;
 
 import java.util.List;
@@ -134,7 +135,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
 
                     //ShieldSpigot
-                    if (this instanceof EntityPotion && PaperSpigotConfig.fasterPotionsHandling &&
+                    if (this instanceof EntityPotion && ShieldSpigotConfigImpl.IMP.FASTER_POTION_HANDLING &&
                             movingobjectposition1 == null && getBoundingBox().b(entity1.getBoundingBox())) {
                         movingobjectposition1 = new MovingObjectPosition(entity1);
                     }

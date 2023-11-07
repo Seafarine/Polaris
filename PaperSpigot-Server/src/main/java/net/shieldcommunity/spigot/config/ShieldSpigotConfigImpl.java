@@ -91,12 +91,26 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
                     "Should the spigot try to optimize chunk chest handling?"
             )
     })
-    public boolean OPTIMIZE_CHUNK_CHEST = true;
+    public boolean OPTIMIZE_CHUNK_CHEST = false;
 
     @Comment(value = {
             @CommentValue(
                     "Should the spigot cache some player movements and animations? This may increase ram but deflate CPU usage"
             )
     })
-    public boolean CACHE_PLAYERS_MOVEMENT = true;
+    public boolean CACHE_PLAYERS_MOVEMENT = false;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot handle faster potion handling? This may help on pot-pvp servers"
+            )
+    })
+    public boolean FASTER_POTION_HANDLING = false;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot load BlockPhysicsEvent this may help on some servers"
+            )
+    })
+    public boolean USE_BLOCPHISIC_EVENT = false;
 }
