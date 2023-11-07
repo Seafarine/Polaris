@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -123,7 +124,7 @@ public abstract class PlayerList {
         String s1 = "local";
 
         if (networkmanager.getSocketAddress() != null) {
-            s1 = PaperSpigotConfig.logPlayerConnectionSocket ? networkmanager.getSocketAddress().toString() : "<ip address withheld>";
+            s1 = ShieldSpigotConfigImpl.IMP.LOG_PLAYER_ADDRESS ? networkmanager.getSocketAddress().toString() : "<ip address withheld>";
         }
 
         // Spigot start - spawn location event

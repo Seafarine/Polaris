@@ -753,7 +753,7 @@ public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.S
     // PandaSpigot end
 
     private void a(ServerPing serverping) {
-        File file = this.d(PaperSpigotConfig.serverIconName);
+        File file = this.d("server-icon.png");
 
         if (file.isFile()) {
             ByteBuf bytebuf = Unpooled.buffer();

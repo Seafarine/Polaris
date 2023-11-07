@@ -20,21 +20,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 public class PaperSpigotConfig {
-
-    public static int timeOutTime;
-    public static boolean logPlayerConnectionSocket;
-    public static boolean logPlayerConnectionExceptions;
-    public static String nameLoginHandler;
-    public static String disconnectPrefixOnException;
-    public static String serverIconName;
-    public static double knockbackFriction;
-    public static double knockbackHorizontal;
-    public static double knockbackVertical;
-    public static double knockbackVerticalLimit;
-    public static double knockbackExtraHorizontal;
-    public static double knockbackExtraVertical;
     public static boolean warnForExcessiveVelocity;
-    public static boolean cachedMovement;
 
     private static File CONFIG_FILE;
     private static final String HEADER = "This is the main configuration file for PaperSpigot.\n"
@@ -135,18 +121,6 @@ public class PaperSpigotConfig {
 
     private static void shieldSpigotConfiguration() {
         commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
-        logPlayerConnectionExceptions = getBoolean("settings.shieldspigot.logs.player-connection-exceptions", true);
-        logPlayerConnectionSocket = getBoolean("settings.shieldspigot.logs.connection-socket", true);
-        nameLoginHandler = getString("settings.shieldspigot.misc.allowed-name-characters", "[a-zA-Z0-9_]*");
-        serverIconName = getString("settings.shieldspigot.misc.server-icon-name", "server-icon.png");
-        timeOutTime = getInt("settings.shieldspigot.misc.timeout-time", 600);
-        disconnectPrefixOnException = getString("settings.shieldspigot.prefix.on-disconnect", "Disconnected o_O");
-        knockbackFriction = getDouble("settings.shieldspigot.knockback.friction", 2.0D);
-        knockbackHorizontal = getDouble("settings.shieldspigot.knockback.horizontal", 0.4D);
-        knockbackVertical = getDouble("settings.shieldspigot.knockback.vertical", 0.4D);
-        knockbackVerticalLimit = getDouble("settings.shieldspigot.knockback.vertical-limit", 0.4D);
-        knockbackExtraHorizontal = getDouble("settings.shieldspigot.knockback.extra-horizontal", 0.5D);
-        knockbackExtraVertical = getDouble("settings.shieldspigot.knockback.extra-vertical", 0.1D);
     }
 
     public static double babyZombieMovementSpeed;

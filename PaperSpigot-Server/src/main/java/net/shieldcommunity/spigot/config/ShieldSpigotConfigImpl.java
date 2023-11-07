@@ -159,4 +159,42 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     public int MAX_BOOK_PAGE_LENGTH = 256;
     public int MAX_TITLE_LENGTH = 32;
     public int MAX_BOOK_TICKS = 20;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot log some player connection exceptions? This may be useful for debug"
+            )
+    })
+
+    public boolean LOG_PLAYER_CONNECTION_EXCEPTIONS = true;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot log player ip? This may be useful for connection privacity"
+            )
+    })
+
+    public boolean LOG_PLAYER_ADDRESS = false;
+
+    @Comment(value = {
+            @CommentValue(
+                    "Maximum amount of ms for a connection to send timeout handler"
+            )
+    })
+    public int TIMEOUT_HANDLER = 600;
+
+    @Comment(value = {
+            @CommentValue(
+                    "This is the knockback configuration, you can edit here the knockback values"
+            )
+    })
+
+    public double KNOCKBACK_FRICTION = 2D;
+    public double KNOCKBACK_HORIZONTAL = 0.4D;
+    public double KNOCKBACK_VERTICAL = 0.4D;
+    public double KNOCKBACK_HORIZONTAL_LIMIT = 0.4D;
+    public double KNOCKBACK_VERTICAL_LIMIT = 0.4D;
+    public double KNOCKBACK_EXTRA_HORIZONTAL = 0.5D;
+    public double KNOCKBACK_EXTRA_VERTICAL = 0.1D;
+
 }

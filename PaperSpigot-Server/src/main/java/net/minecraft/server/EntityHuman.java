@@ -1004,10 +1004,10 @@ public abstract class EntityHuman extends EntityLiving {
                     if (flag2) {
                         if (i > 0) {
                             entity.g(
-                                    (double) (-MathHelper.sin(this.yaw * 3.1415927F / 180.0F) * (float) i *
-                                            PaperSpigotConfig.knockbackExtraHorizontal), PaperSpigotConfig.knockbackExtraVertical,
-                                    (double) (MathHelper.cos(this.yaw * 3.1415927F / 180.0F) * (float) i *
-                                            PaperSpigotConfig.knockbackExtraHorizontal));
+                                    -MathHelper.sin(this.yaw * 3.1415927F / 180.0F) * (float) i *
+                                            ShieldSpigotConfigImpl.IMP.KNOCKBACK_EXTRA_HORIZONTAL, ShieldSpigotConfigImpl.IMP.KNOCKBACK_EXTRA_VERTICAL,
+                                    MathHelper.cos(this.yaw * 3.1415927F / 180.0F) * (float) i *
+                                            ShieldSpigotConfigImpl.IMP.KNOCKBACK_EXTRA_HORIZONTAL);
                             this.motX *= 0.6D;
                             this.motZ *= 0.6D;
                             this.setSprinting(false);

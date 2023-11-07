@@ -43,10 +43,10 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     public String hostname = ""; // CraftBukkit - add field
     public int packetsPerSecond;
     private long packetsPerSecondTime;
-    private final Pattern nickNameHandler;
+    //private final Pattern nickNameHandler;
 
     public LoginListener(MinecraftServer minecraftserver, NetworkManager networkmanager) {
-        this.nickNameHandler = PatternCheck.safePatternCompile(PaperSpigotConfig.nameLoginHandler);
+       // this.nickNameHandler = PatternCheck.safePatternCompile(PaperSpigotConfig.nameLoginHandler); fix bedrock thingy
         this.g = LoginListener.EnumProtocolState.HELLO;
         this.j = "";
         this.server = minecraftserver;
@@ -89,8 +89,8 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
             }
         }
 
-        if (this.h++ == PaperSpigotConfig.timeOutTime) {
-            this.disconnect("Took too long to log in");
+        if (this.h++ == ShieldSpigotConfigImpl.IMP.TIMEOUT_HANDLER) {
+            this.disconnect("Took too long to log in, say your server admin to increase the timeout handler!");
         }
 
     }
@@ -179,7 +179,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     }
 
     public String d() {
-        String ip = PaperSpigotConfig.logPlayerConnectionSocket ? this.networkManager.getSocketAddress().toString() : "<ip address withheld>";
+        String ip = ShieldSpigotConfigImpl.IMP.LOG_PLAYER_ADDRESS ? this.networkManager.getSocketAddress().toString() : "<ip address withheld>";
         return this.i != null ? this.i + " (" + ip + ")" : ip;
     }
 

@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.ArrayList;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Vehicle;
@@ -899,9 +900,9 @@ public abstract class EntityLiving extends Entity {
         if (this.random.nextDouble() >= this.getAttributeInstance(GenericAttributes.c).getValue()) {
             this.ai = true;
             double magnitude = MathHelper.sqrt(d0 * d0 + d1 * d1);
-            double friction = PaperSpigotConfig.knockbackFriction;
-            double horizontalKnockback = PaperSpigotConfig.knockbackHorizontal;
-            double verticalKnockback = PaperSpigotConfig.knockbackVertical;
+            double friction = ShieldSpigotConfigImpl.IMP.KNOCKBACK_FRICTION;
+            double horizontalKnockback = ShieldSpigotConfigImpl.IMP.KNOCKBACK_HORIZONTAL;
+            double verticalKnockback = ShieldSpigotConfigImpl.IMP.KNOCKBACK_VERTICAL;
 
             this.motX /= friction;
             this.motY /= friction;
@@ -910,8 +911,8 @@ public abstract class EntityLiving extends Entity {
             this.motY += verticalKnockback;
             this.motZ -= d1 / magnitude * horizontalKnockback;
 
-            if (this.motY > PaperSpigotConfig.knockbackVerticalLimit) {
-                this.motY = PaperSpigotConfig.knockbackVerticalLimit;
+            if (this.motY > ShieldSpigotConfigImpl.IMP.KNOCKBACK_HORIZONTAL_LIMIT) {
+                this.motY = ShieldSpigotConfigImpl.IMP.KNOCKBACK_VERTICAL_LIMIT;
             }
 
         }
