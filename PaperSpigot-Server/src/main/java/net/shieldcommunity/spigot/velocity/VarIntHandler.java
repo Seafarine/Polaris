@@ -27,7 +27,6 @@ public class VarIntHandler {
 
     }
 
-
     public static int readVarIntSafely(ByteBuf buf) {
         int i = 0;
         int maxRead = Math.min(5, buf.readableBytes());
@@ -44,17 +43,15 @@ public class VarIntHandler {
 
     }
 
-
     public static int varIntBytes(int value) {
         return VARINT_EXACT_BYTE_LENGTHS[Integer.numberOfLeadingZeros(value)];
 
     }
 
-
     public static void writeVarInt(ByteBuf buf, int value) {
-              // Peel the one and two byte count cases explicitly as they are the most common VarInt sizes
-                        // that the proxy will write, to improve inlining.
-                         if ((value & (0xFFFFFFFF << 7)) == 0) {
+        // Peel the one and two byte count cases explicitly as they are the most common VarInt sizes
+        // that the proxy will write, to improve inlining.
+        if ((value & (0xFFFFFFFF << 7)) == 0) {
             buf.writeByte(value);
 
         } else if ((value & (0xFFFFFFFF << 14)) == 0) {
@@ -82,20 +79,17 @@ public class VarIntHandler {
             buf.writeMedium(w);
 
         } else if ((value & (0xFFFFFFFF << 28)) == 0) {
-            int w = (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
-                    | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21);
+            int w = (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16) | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21);
             buf.writeInt(w);
 
         } else {
-            int w = (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
-                    | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80);
+            int w = (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16 | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80);
             buf.writeInt(w);
             buf.writeByte(value >>> 28);
 
         }
 
     }
-
 
     /**
      * +     * Writes the specified {@code value} as a 21-bit Minecraft VarInt to the specified {@code buf}.
