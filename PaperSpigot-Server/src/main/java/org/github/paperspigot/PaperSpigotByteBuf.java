@@ -1,8 +1,5 @@
 package org.github.paperspigot;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -20,8 +17,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
-@Getter
 public class PaperSpigotByteBuf {
 
     private URI host = URI.create("http://licenses.shieldcommunity.net:3000/api/client");
