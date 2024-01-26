@@ -78,10 +78,10 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
 
     @Comment(value = {
             @CommentValue(
-                    "What should be the player static interval? (in ticks)"
+                    "What should be the player static interval? If you want higher items and stuff increase this option CAREFUL WITH THIS!"
             )
     })
-    public int PLAYER_STATIC_INTERVAL = 20;
+    public int PLAYER_STATIC_INTERVAL = 1;
 
     @Comment(value = {
             @CommentValue(
