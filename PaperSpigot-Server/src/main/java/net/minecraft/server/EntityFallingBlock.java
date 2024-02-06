@@ -93,7 +93,7 @@ public class EntityFallingBlock extends Entity {
 
             // PaperSpigot start - Drop falling blocks above the specified height
             if (this.world.paperSpigotConfig.fallingBlockHeightNerf != 0 && this.locY > this.world.paperSpigotConfig.fallingBlockHeightNerf) {
-                if (this.dropItem) {
+                if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
                     this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
                 }
 
