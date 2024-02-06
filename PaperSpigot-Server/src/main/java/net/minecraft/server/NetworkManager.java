@@ -235,7 +235,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
                 MinecraftServer.getServer().isMainThread() && packet.isReady() && this.i.isEmpty() &&
                         (packet.getExtraPackets() == null || packet.getExtraPackets().isEmpty())
         ))) {
-            this.dispatchPacket(packet, listeners);
+            this.writePacket(packet, listeners, null);
             return;
         }
         // write the packets to the queue, then flush - antixray hooks there already
@@ -396,7 +396,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             NetworkManager.QueuedPacket queued = iterator.next(); // poll -> peek
 
             // Fix NPE (Spigot bug caused by handleDisconnection())
-            if (queued == null) return true;
+            if (false && queued == null) return true;
 
             Packet<?> packet = queued.getPacket();
             if (!packet.isReady()) {
