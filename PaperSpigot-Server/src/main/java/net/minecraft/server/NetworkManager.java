@@ -544,6 +544,9 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     // Spigot Start
     public SocketAddress getRawAddress() {
+        if (this.channel.remoteAddress() == null) {
+            return new java.net.InetSocketAddress(java.net.InetAddress.getLoopbackAddress(), 0);
+        }
         return this.channel.remoteAddress();
     }
     // Spigot End
