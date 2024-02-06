@@ -1856,6 +1856,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     entityitem.j();
                 }
             }
+        } else {
+            disconnect("[ShieldSpigot] Disable creative mode");
         }
 
     }
