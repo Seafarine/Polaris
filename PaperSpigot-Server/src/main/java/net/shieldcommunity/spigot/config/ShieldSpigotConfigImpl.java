@@ -84,6 +84,9 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             ),
             @CommentValue(
                     "In theory it should improve performance on processing operations with data"
+            ),
+            @CommentValue(
+                    "How ever if UDM (Unix domain socket) is enabled would not work as excepted since is not supported by netty's client"
             )
     })
     public boolean USE_IO_URING = false;

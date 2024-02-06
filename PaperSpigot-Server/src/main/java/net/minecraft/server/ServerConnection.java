@@ -132,33 +132,40 @@ public class ServerConnection {
                 ServerConnection.e.info("Using default channel type");
             }
 
+            // Paper start - indicate Velocity natives in use
+            e.info("ShieldSpigot is using " + Natives.compress.getLoadedVariant() + " compression compiled by NullCordX.");
+            e.info("ShieldSpigot is using  " + Natives.cipher.getLoadedVariant() + " ciphers compiled by Velocity.");
+            // Paper end
+
             this.g.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer() {
                 protected void initChannel(Channel channel) throws Exception {
                     try {
+                        io.netty.channel.ChannelConfig config = channel.config();
                         channel.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(true));
+                        config.setOption(ChannelOption.TCP_NODELAY, true);
+                        config.setOption(ChannelOption.TCP_FASTOPEN, ShieldSpigotConfigImpl.IMP.TCP_FAST_OPEN_MODE); //ShieldSpigot
+                        config.setOption(ChannelOption.TCP_FASTOPEN_CONNECT, ShieldSpigotConfigImpl.IMP.USE_TCP_FAST_OPEN); //ShieldSpigot
+                        config.setOption(ChannelOption.IP_TOS, 0x18);
+                        config.setAllocator(io.netty.buffer.ByteBufAllocator.DEFAULT);
                     } catch (ChannelException channelexception) {
                         ;
                     }
 
-                    if (!disableFlushConsolidation) channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler()); // PandaSpigot
-                    // PandaSpigot start - newlines
+                    if (!disableFlushConsolidation) channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler());
                     channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30))
                             .addLast("legacy_query", new LegacyPingHandler(ServerConnection.this))
                             .addLast("splitter", new PacketSplitter())
                             .addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND))
-                            .addLast("prepender", PacketPrepender.INSTANCE) // PandaSpigot - Share PacketPrepender instance
+                            .addLast("prepender", PacketPrepender.INSTANCE)
                             .addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
-                    // PandaSpigot end
                     NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 
-                    // PandaSpigot start - prevent blocking on adding a new network manager while the server is ticking
                     //ServerConnection.this.h.add(networkmanager);
                     ServerConnection.this.pending.add(networkmanager);
-                    // PandaSpigot end
                     channel.pipeline().addLast("packet_handler", networkmanager);
                     networkmanager.a((PacketListener) (new HandshakeListener(ServerConnection.this.f, networkmanager)));
                 }
-            }).group((EventLoopGroup) lazyinitvar.c()).localAddress(address)).bind().syncUninterruptibly()); // PandaSpigot - Unix domain socket support
+            }).group((EventLoopGroup) lazyinitvar.c()).localAddress(address)).bind().syncUninterruptibly());
         }
     }
     public void b() {

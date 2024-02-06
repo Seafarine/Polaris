@@ -168,6 +168,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             this.r = WorldSettings.a(i);
             DedicatedServer.LOGGER.info("Default game type: " + this.r);
 
+
             // Spigot start
             this.a(new DedicatedPlayerList(this));
             org.spigotmc.SpigotConfig.init((File) options.valueOf("spigot-settings"));
