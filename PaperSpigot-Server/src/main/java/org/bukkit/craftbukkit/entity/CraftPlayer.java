@@ -75,8 +75,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     private long lastPlayed = 0;
     private boolean hasPlayedBefore = false;
     private final ConversationTracker conversationTracker = new ConversationTracker();
-    private final Set<String> channels = new HashSet<String>();
-    private final Set<UUID> hiddenPlayers = new HashSet<UUID>();
+    private final Set<String> channels = new HashSet<>();
+    private final Set<UUID> hiddenPlayers = new HashSet<>();
     private int hash = 0;
     private double health = 20;
     private boolean scaledHealth = false;
