@@ -62,20 +62,15 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             )
     })
     public int MAX_PACKETS_PER_SECOND = 700;
+    /* //waiting for 0.0.6
     @Comment(value = {
             @CommentValue(
                     "Should the spigot use a custom packet encoder? This may help but cause some issues with plugins"
             )
     })
+
     public boolean USE_CUSTOM_ENCODER = false;
-
-    @Comment(value = {
-            @CommentValue(
-                    "Should the backend slice packets instead copying whole buffer? Only works with NullCordX!"
-            )
-    })
-    public boolean SLICE_INSTEAD_BUF = false;
-
+     */
     @Comment(value = {
             @CommentValue(
                     "What should be the player static interval? If you want higher items and stuff increase this option CAREFUL WITH THIS!"
