@@ -167,20 +167,38 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
             this.r = WorldSettings.a(i);
             DedicatedServer.LOGGER.info("Default game type: " + this.r);
-            InetAddress inetaddress = null;
 
-            if (this.getServerIp().length() > 0) {
-                inetaddress = InetAddress.getByName(this.getServerIp());
-            }
-
-            if (this.R() < 0) {
-                this.setPort(this.propertyManager.getInt("server-port", 25565));
-            }
             // Spigot start
-            this.a((PlayerList) (new DedicatedPlayerList(this)));
+            this.a(new DedicatedPlayerList(this));
             org.spigotmc.SpigotConfig.init((File) options.valueOf("spigot-settings"));
             org.spigotmc.SpigotConfig.registerCommands();
             // Spigot end
+            java.net.SocketAddress bindAddress;
+            if (this.getServerIp().startsWith("unix:")) {
+                if (!io.netty.channel.epoll.Epoll.isAvailable()) {
+                    DedicatedServer.LOGGER.fatal("**** INVALID CONFIGURATION!");
+                    DedicatedServer.LOGGER.fatal("You are trying to use a Unix domain socket but you're not on a supported OS.");
+                    return false;
+                } else if (!org.spigotmc.SpigotConfig.bungee) {
+                    DedicatedServer.LOGGER.fatal("**** INVALID CONFIGURATION!");
+                    DedicatedServer.LOGGER.fatal("Unix domain sockets require IPs to be forwarded from a proxy.");
+                    return false;
+                }
+
+                bindAddress = new io.netty.channel.unix.DomainSocketAddress(this.getServerIp().substring("unix:".length()));
+            } else {
+                InetAddress inetaddress = null;
+
+                if (this.getServerIp().length() > 0) {
+                    inetaddress = InetAddress.getByName(this.getServerIp());
+                }
+
+                if (this.R() < 0) {
+                    this.setPort(this.propertyManager.getInt("server-port", 25565));
+                }
+                // Spigot start
+                bindAddress = new java.net.InetSocketAddress(inetaddress, this.R());
+            }
             // PaperSpigot start
             org.github.paperspigot.PaperSpigotConfig.init((File) options.valueOf("paper-settings"));
             org.github.paperspigot.PaperSpigotConfig.registerCommands();
@@ -203,7 +221,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         if (!org.spigotmc.SpigotConfig.lateBind) {
             try {
-                this.aq().a(inetaddress, this.R());
+                this.aq().bind(bindAddress); //ss
             } catch (IOException ioexception) {
                 DedicatedServer.LOGGER.warn("**** FAILED TO BIND TO PORT!");
                 DedicatedServer.LOGGER.warn("The exception was: {}", new Object[] { ioexception.toString()});
@@ -309,7 +327,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         if (org.spigotmc.SpigotConfig.lateBind) {
             try {
-                this.aq().a(inetaddress, this.R());
+                this.aq().bind(bindAddress); //shieldspigot
             } catch (IOException ioexception) {
                 DedicatedServer.LOGGER.warn("**** FAILED TO BIND TO PORT!");
                 DedicatedServer.LOGGER.warn("The exception was: {}", new Object[] { ioexception.toString()});

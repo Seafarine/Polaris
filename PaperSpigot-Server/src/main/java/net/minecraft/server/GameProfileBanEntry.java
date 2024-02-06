@@ -8,7 +8,7 @@ import java.util.UUID;
 public class GameProfileBanEntry extends ExpirableListEntry<GameProfile> {
 
     public GameProfileBanEntry(GameProfile gameprofile) {
-        this(gameprofile, (Date) null, (String) null, (Date) null, (String) null);
+        this(gameprofile, null, null, null, null);
     }
 
     public GameProfileBanEntry(GameProfile gameprofile, Date date, String s, Date date1, String s1) {
@@ -21,8 +21,8 @@ public class GameProfileBanEntry extends ExpirableListEntry<GameProfile> {
 
     protected void a(JsonObject jsonobject) {
         if (this.getKey() != null) {
-            jsonobject.addProperty("uuid", ((GameProfile) this.getKey()).getId() == null ? "" : ((GameProfile) this.getKey()).getId().toString());
-            jsonobject.addProperty("name", ((GameProfile) this.getKey()).getName());
+            jsonobject.addProperty("uuid", this.getKey().getId() == null ? "" : this.getKey().getId().toString());
+            jsonobject.addProperty("name", this.getKey().getName());
             super.a(jsonobject);
         }
     }

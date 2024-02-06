@@ -80,6 +80,16 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
 
     @Comment(value = {
             @CommentValue(
+                    "Should the spigot use Netty's IO_URING?"
+            ),
+            @CommentValue(
+                    "In theory it should improve performance on processing operations with data"
+            )
+    })
+    public boolean USE_IO_URING = false;
+
+    @Comment(value = {
+            @CommentValue(
                     "Should the spigot use TFO? (TCP Fast Open) This only works with NullCordX due proxy impl!"
             )
     })

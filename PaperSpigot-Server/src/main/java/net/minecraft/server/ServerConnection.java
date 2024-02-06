@@ -15,7 +15,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.github.paperspigot.PaperSpigotConfig;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -23,7 +22,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.util.concurrent.Future;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Collections;
@@ -44,6 +42,18 @@ public class ServerConnection {
             return this.a();
         }
     };
+
+    //shieldspigot
+    public static final LazyInitVar<io.netty.incubator.channel.uring.IOUringEventLoopGroup> SERVER_IO_URING_EVENT_GROUP = new LazyInitVar<io.netty.incubator.channel.uring.IOUringEventLoopGroup>() {
+        private io.netty.incubator.channel.uring.IOUringEventLoopGroup a() {
+            return new io.netty.incubator.channel.uring.IOUringEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty io_uring Server IO #%d").setDaemon(true).build());
+        }
+
+        protected io.netty.incubator.channel.uring.IOUringEventLoopGroup init() {
+            return this.a();
+        }
+    };
+    //shieldspigot
     public static final LazyInitVar<EpollEventLoopGroup> b = new LazyInitVar() {
         private EpollEventLoopGroup a() {
             return new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Server IO #%d").setDaemon(true).build());
@@ -82,68 +92,75 @@ public class ServerConnection {
         this.d = true;
     }
 
-
+    // PandaSpigot start
     public void a(InetAddress inetaddress, int i) throws IOException {
+        bind(new java.net.InetSocketAddress(inetaddress, i));
+    }
+    public void bind(java.net.SocketAddress address) throws IOException {
+        // PandaSpigot end
         List list = this.g;
 
         synchronized (this.g) {
             Class oclass;
             LazyInitVar lazyinitvar;
 
-            if (Epoll.isAvailable() && this.f.ai()) {
-                oclass = EpollServerSocketChannel.class;
-                lazyinitvar = ServerConnection.b;
-                ServerConnection.e.info("Using epoll channel type");
+            // PandaSpigot start - Add support for io_uring
+            if ((io.netty.incubator.channel.uring.IOUring.isAvailable() || Epoll.isAvailable()) && this.f.ai()) {
+                if (ShieldSpigotConfigImpl.IMP.USE_IO_URING && io.netty.incubator.channel.uring.IOUring.isAvailable() && !(address instanceof io.netty.channel.unix.DomainSocketAddress) && this.f.aK() == -1) {
+                    oclass = io.netty.incubator.channel.uring.IOUringServerSocketChannel.class;
+                    lazyinitvar = ServerConnection.SERVER_IO_URING_EVENT_GROUP;
+                    ServerConnection.e.info("Using io_uring channel type");
+                } else if (Epoll.isAvailable()) {
+                    // PandaSpigot start - Unix domain socket support
+                    if (address instanceof io.netty.channel.unix.DomainSocketAddress) {
+                        oclass = io.netty.channel.epoll.EpollServerDomainSocketChannel.class;
+                    } else {
+                        oclass = EpollServerSocketChannel.class;
+                    }
+                    // PandaSpigot end
+                    lazyinitvar = ServerConnection.b;
+                    ServerConnection.e.info("Using epoll channel type");
+                } else {
+                    oclass = NioServerSocketChannel.class;
+                    lazyinitvar = ServerConnection.a;
+                    ServerConnection.e.info("Using default channel type");
+                }
+                // PandaSpigot end - Add support for io_uring
             } else {
                 oclass = NioServerSocketChannel.class;
                 lazyinitvar = ServerConnection.a;
                 ServerConnection.e.info("Using default channel type");
             }
 
-            // Paper start - indicate Velocity natives in use
-            e.info("ShieldSpigot is using " + Natives.compress.getLoadedVariant() + " compression compiled by NullCordX.");
-            e.info("ShieldSpigot is using  " + Natives.cipher.getLoadedVariant() + " ciphers compiled by Velocity.");
-            // Paper end
-
-            this.g.add((new ServerBootstrap()).channel(oclass).childHandler(new ChannelInitializer() {
+            this.g.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer() {
                 protected void initChannel(Channel channel) throws Exception {
                     try {
-                        io.netty.channel.ChannelConfig config = channel.config();
-                        config.setOption(ChannelOption.TCP_NODELAY, true);
-                        config.setOption(ChannelOption.TCP_FASTOPEN, ShieldSpigotConfigImpl.IMP.TCP_FAST_OPEN_MODE); //ShieldSpigot
-                        config.setOption(ChannelOption.TCP_FASTOPEN_CONNECT, ShieldSpigotConfigImpl.IMP.USE_TCP_FAST_OPEN); //ShieldSpigot
-                        config.setOption(ChannelOption.IP_TOS, 0x18);
-                        config.setAllocator(io.netty.buffer.ByteBufAllocator.DEFAULT);
+                        channel.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(true));
                     } catch (ChannelException channelexception) {
                         ;
                     }
 
-                    try {
-                          channel.config().setOption(ChannelOption.IP_TOS, 0x18);
-                            } catch (ChannelException ex) {}
-                    if (!disableFlushConsolidation) channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler()); //ShieldSpigot - flush handler
-
-                    //ShieldSpigot - Faster prepender
+                    if (!disableFlushConsolidation) channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler()); // PandaSpigot
+                    // PandaSpigot start - newlines
                     channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30))
                             .addLast("legacy_query", new LegacyPingHandler(ServerConnection.this))
                             .addLast("splitter", new PacketSplitter())
                             .addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND))
-                            .addLast("prepender", PacketPrepender.INSTANCE) // share packet instance
+                            .addLast("prepender", PacketPrepender.INSTANCE) // PandaSpigot - Share PacketPrepender instance
                             .addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
-
-                    //ShieldSpigot - Faster prepender
-
+                    // PandaSpigot end
                     NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
 
-                     ServerConnection.this.pending.add(networkmanager);
+                    // PandaSpigot start - prevent blocking on adding a new network manager while the server is ticking
+                    //ServerConnection.this.h.add(networkmanager);
+                    ServerConnection.this.pending.add(networkmanager);
+                    // PandaSpigot end
                     channel.pipeline().addLast("packet_handler", networkmanager);
-                    //networkmanager.isPending = false;
-                    networkmanager.a(new HandshakeListener(ServerConnection.this.f, networkmanager));
+                    networkmanager.a((PacketListener) (new HandshakeListener(ServerConnection.this.f, networkmanager)));
                 }
-            }).group((EventLoopGroup) lazyinitvar.c()).localAddress(inetaddress, i).bind().syncUninterruptibly());
+            }).group((EventLoopGroup) lazyinitvar.c()).localAddress(address)).bind().syncUninterruptibly()); // PandaSpigot - Unix domain socket support
         }
     }
-
     public void b() {
         this.d = false;
 
@@ -151,7 +168,7 @@ public class ServerConnection {
             try {
                 channelfuture.channel().close().sync();
             } catch (InterruptedException interruptedexception) {
-                ServerConnection.e.error("Interrupted whilst closing channel");
+                ServerConnection.e.error("Interrupted whilst closing channel, exception?");
             }
         }
 
