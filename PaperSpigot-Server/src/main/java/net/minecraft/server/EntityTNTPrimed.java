@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.event.entity.ExplosionPrimeEvent; // CraftBukkit
 
 public class EntityTNTPrimed extends Entity {
@@ -191,7 +192,7 @@ public class EntityTNTPrimed extends Entity {
         this.motY = oldMotY;
         this.motZ = oldMotZ;
 
-        if (this.inWater) {
+        if (ShieldSpigotConfigImpl.IMP.OPTIMIZE_EXPLOSIONS || this.inWater) {
             // Send position and velocity updates to nearby players on every tick while the TNT is in water.
             // This does pretty well at keeping their clients in sync with the server.
             EntityTrackerEntry ete = ((WorldServer) this.getWorld()).getTracker().trackedEntities.get(this.getId());

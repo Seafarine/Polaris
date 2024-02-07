@@ -130,6 +130,13 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     public int CHUNK_THREADS = 2;
 
     @Comment(value = {
+            @CommentValue(
+                    "This will skip useless explosions particles, making less-lag and better FPS while seeing them"
+            )
+    })
+    public boolean OPTIMIZE_EXPLOSIONS = false;
+
+    @Comment(value = {
               @CommentValue(
                      "What should be the amount of threads per player? This can be influenced by the number of players you have"
               )
