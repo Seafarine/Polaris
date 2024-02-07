@@ -192,9 +192,9 @@
                     <execution>
                         <id>ex-sport</id>
                         <configuration>
-                            <format>git-SportPaper-%s</format>
+                            <format>git-ShieldSpigot-%s</format>
                             <scmDirectory>../</scmDirectory>
-                            <descriptionProperty>sportpaper.desc</descriptionProperty>
+                            <descriptionProperty>ShieldSpigot.desc</descriptionProperty>
                         </configuration>
                         <phase>initialize</phase>
                         <goals>
