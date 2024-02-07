@@ -63,7 +63,8 @@ public abstract class Entity implements ICommandListener {
     };
 
     private static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
-    private static int entityCount;
+
+    public static int entityCount = ShieldSpigotConfigImpl.IMP.ARROW_DESYNC_FIX;
     private int id;
     public double j;
     public boolean k;
