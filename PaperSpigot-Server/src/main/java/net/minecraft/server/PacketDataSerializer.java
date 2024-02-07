@@ -23,12 +23,15 @@ import java.nio.charset.Charset;
 import java.util.UUID;
 
 import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import net.shieldcommunity.spigot.utils.ProtocolSupportCheck;
 import org.bukkit.craftbukkit.inventory.CraftItemStack; // CraftBukkit
 import org.github.paperspigot.PaperSpigotConfig;
 
 public class PacketDataSerializer extends ByteBuf {
 
     private final ByteBuf a;
+
+    private final boolean allowLargePackets; // ShieldSpigot - Allow large packets for 1.7x clients
 
     public static final boolean DEBUG = Boolean.getBoolean("shieldspigot-advanced-traces");
     private static final FastDecoderException DECODE_FAILED =
@@ -37,6 +40,7 @@ public class PacketDataSerializer extends ByteBuf {
 
     public PacketDataSerializer(ByteBuf bytebuf) {
         this.a = bytebuf;
+        this.allowLargePackets = ProtocolSupportCheck.hasProtocolSupport();
     }
 
     public static int a(int i) {
@@ -55,8 +59,11 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     // Paper start
+    private static final int DEFAULT_LIMIT = Short.MAX_VALUE; //ShieldSpigot
+    private static final int LARGE_PACKET_LIMIT = Short.MAX_VALUE * ShieldSpigotConfigImpl.IMP.MAX_PACKET_MULTIPLIER; //ShieldSpigot
     public byte[] a() {
-        return readByteArray(Short.MAX_VALUE);
+        int limit = allowLargePackets ? LARGE_PACKET_LIMIT : DEFAULT_LIMIT; //ShieldSpigot
+        return readByteArray(limit);
     }
 
     public byte[]readByteArray(int limit) {

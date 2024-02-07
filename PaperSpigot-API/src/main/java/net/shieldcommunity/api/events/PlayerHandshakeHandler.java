@@ -1,4 +1,4 @@
-package net.shieldcommunity.api;
+package net.shieldcommunity.api.events;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.event.Cancellable;

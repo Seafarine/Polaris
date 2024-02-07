@@ -62,6 +62,14 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             )
     })
     public int MAX_PACKETS_PER_SECOND = 700;
+
+    @Comment(value = {
+            @CommentValue(
+                    "1.7 clients send weirdo big amount of packets, the backend will make a exception for this"
+            )
+    })
+    public int MAX_PACKET_MULTIPLIER = 1024;
+
     /* //waiting for 0.0.6
     @Comment(value = {
             @CommentValue(
