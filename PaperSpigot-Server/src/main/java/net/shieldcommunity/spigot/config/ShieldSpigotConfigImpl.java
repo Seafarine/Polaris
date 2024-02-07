@@ -101,6 +101,14 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
 
     @Comment(value = {
             @CommentValue(
+                    "Should the ligthning be ignored on grass? This exists on modern paper versions"
+            )
+    })
+    public boolean IGNORE_LIGTH_ON_GRASS = false;
+
+
+    @Comment(value = {
+            @CommentValue(
                     "Should the spigot use TFO? (TCP Fast Open) This only works with NullCordX due proxy impl!"
             )
     })

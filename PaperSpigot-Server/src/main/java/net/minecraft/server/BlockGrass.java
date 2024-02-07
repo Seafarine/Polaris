@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.Random;
 
 // CraftBukkit start
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
@@ -44,7 +45,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
                 }
                 // CraftBukkit end
             } else {
-                if (world.getLightLevel(blockposition.up()) >= 9) {
+                if (ShieldSpigotConfigImpl.IMP.IGNORE_LIGTH_ON_GRASS ||world.getLightLevel(blockposition.up()) >= 9) {
                     for (int i = 0; i < Math.min(4, Math.max(20, (int) (4 * 100F / world.growthOdds))); ++i) { // Spigot
                         BlockPosition blockposition1 = blockposition.a(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
                         Block block = world.getType(blockposition1.up()).getBlock();
