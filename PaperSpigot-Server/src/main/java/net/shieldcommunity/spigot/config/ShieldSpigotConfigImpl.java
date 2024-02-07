@@ -27,7 +27,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     @Comment(value = {
             @CommentValue("ShieldSpigot - Performant & Anti-Exploit tunned for 1.8.8"),
             @CommentValue(""),
-            @CommentValue("Version: 0.0.5"),
+            @CommentValue("Version: 0.0.7"),
             @CommentValue("Author: xism4 (discord)"),
             @CommentValue(""),
             @CommentValue("Support discord: https://discord.shieldcommunity.net/"),
