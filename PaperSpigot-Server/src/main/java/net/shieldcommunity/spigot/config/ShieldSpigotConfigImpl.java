@@ -220,6 +220,15 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     @NewLine
     @Comment(value = {
             @CommentValue(
+                    "Some times the arrow desyncs since some packets are messing some information, move it to 1"
+            )
+    })
+
+    public int ARROW_DESYNC_FIX = 0;
+
+    @NewLine
+    @Comment(value = {
+            @CommentValue(
                     "Should the spigot log player ip? This may be useful for connection privacity"
             )
     })
