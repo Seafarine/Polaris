@@ -26,7 +26,7 @@ public class ShieldSpigotCommand extends Command {
     public final String PREFIX = " §e§lShield§6§lSpigot §7-> ";
 
     public static final String SEP = "§c§m--------------------------------------";
-    public final String VERSION = "§a[0.0.6]";
+    public final String VERSION = "§a[0.0.7]";
 
     @Override
     public boolean execute(CommandSender sender, String currentAlias, String[] args) {

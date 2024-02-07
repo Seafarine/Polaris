@@ -135,6 +135,15 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     @NewLine
     @Comment(value = {
             @CommentValue(
+                    "This will hide the player hearts, making illegal mods beeing useless"
+            )
+    })
+    public boolean HIDE_PLAYER_HEARTS = false;
+
+
+    @NewLine
+    @Comment(value = {
+            @CommentValue(
                     "This will skip useless explosions particles, making less-lag and better FPS while seeing them"
             )
     })
