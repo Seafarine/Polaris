@@ -4,10 +4,12 @@ import com.google.common.collect.Sets;
 
 import java.util.*;
 
+import net.shieldcommunity.api.events.PlayerTrackEntityEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 // CraftBukkit start
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerVelocityEvent;
 // CraftBukkit end
@@ -331,6 +333,11 @@ public class EntityTrackerEntry {
         if (entityplayer != this.tracker) {
             if (this.c(entityplayer)) {
                 if (!this.trackedPlayers.contains(entityplayer) && (this.e(entityplayer) || this.tracker.attachedToPlayer)) {
+                    //ShieldSpigot - backport paper
+                    PlayerTrackEntityEvent event = new PlayerTrackEntityEvent(entityplayer.getBukkitEntity(), tracker.bukkitEntity);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+                    //ShieldSpigot - backport paper
+                    if (event.isCancelled()) return;
                     // CraftBukkit start - respect vanish API
                     if (this.tracker instanceof EntityPlayer) {
                         Player player = ((EntityPlayer) this.tracker).getBukkitEntity();

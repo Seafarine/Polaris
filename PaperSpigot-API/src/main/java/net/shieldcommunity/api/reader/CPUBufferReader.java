@@ -1,4 +1,4 @@
-package net.shieldcommunity.api;
+package net.shieldcommunity.api.reader;
 
 import java.io.BufferedReader;
 import java.io.IOException;

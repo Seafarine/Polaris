@@ -1,6 +1,6 @@
 package net.shieldcommunity.spigot.commands;
 
-import net.shieldcommunity.api.CPUBufferReader;
+import net.shieldcommunity.api.reader.CPUBufferReader;
 import net.shieldcommunity.spigot.utils.TextUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

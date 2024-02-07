@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 // CraftBukkit start
 
-import net.shieldcommunity.api.PlayerHandshakeHandler;
+import net.shieldcommunity.api.events.PlayerHandshakeHandler;
 
 import java.net.InetAddress;
 import java.util.HashMap;
