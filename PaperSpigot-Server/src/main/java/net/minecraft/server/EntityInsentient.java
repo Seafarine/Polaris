@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -471,7 +472,12 @@ public abstract class EntityInsentient extends EntityLiving {
             return;
         }
         // Spigot End
-        this.world.methodProfiler.a("sensing");
+
+        if(ShieldSpigotConfigImpl.IMP.DISABLE_MOB_AI) { //ShieldSpigot
+            return;
+        }
+
+         this.world.methodProfiler.a("sensing");
         this.bk.a();
         this.world.methodProfiler.b();
         this.world.methodProfiler.a("targetSelector");

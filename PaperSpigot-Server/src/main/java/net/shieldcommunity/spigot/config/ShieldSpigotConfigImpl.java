@@ -106,6 +106,13 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean IGNORE_LIGTH_ON_GRASS = false;
 
+    @Comment(value = {
+            @CommentValue(
+                    "Should the backend return before MOB AI starts?"
+            )
+    })
+    public boolean DISABLE_MOB_AI = false;
+
 
     @Comment(value = {
             @CommentValue(
