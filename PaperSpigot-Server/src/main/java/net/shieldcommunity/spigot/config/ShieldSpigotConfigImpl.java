@@ -4,6 +4,7 @@ import net.elytrium.serializer.NameStyle;
 import net.elytrium.serializer.SerializerConfig;
 import net.elytrium.serializer.annotations.Comment;
 import net.elytrium.serializer.annotations.CommentValue;
+import net.elytrium.serializer.annotations.NewLine;
 import net.elytrium.serializer.annotations.Transient;
 
 import java.nio.file.Paths;
@@ -33,6 +34,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
             @CommentValue("Polymart: https://polymart.org/resource/shieldspigot-30-off.4906"),
     })
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "You must change the default field for your license"
@@ -43,12 +45,15 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public String YOUR_LICENSE = "YOUR-LICENSE";
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "What should be the byte limit in the player instance? Increase this if your server has many books"
             )
     })
     public int MAX_BYTES_PER_CONNECTION = 50000;
+
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot use a custom packet decoder? This may help but cause some issues with plugins"
@@ -56,6 +61,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean USE_PACKET_FILTER = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "What should be the max packets-per-second for the spigot"
@@ -63,6 +69,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public int MAX_PACKETS_PER_SECOND = 700;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "1.7 clients send weirdo big amount of packets, the backend will make a exception for this"
@@ -70,15 +77,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public int MAX_PACKET_MULTIPLIER = 1024;
 
-    /* //waiting for 0.0.6
-    @Comment(value = {
-            @CommentValue(
-                    "Should the spigot use a custom packet encoder? This may help but cause some issues with plugins"
-            )
-    })
-
-    public boolean USE_CUSTOM_ENCODER = false;
-     */
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "What should be the player static interval? If you want higher items and stuff increase this option CAREFUL WITH THIS!"
@@ -86,6 +85,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public int PLAYER_STATIC_INTERVAL = 1;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot use Netty's IO_URING?"
@@ -99,6 +99,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean USE_IO_URING = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the ligthning be ignored on grass? This exists on modern paper versions"
@@ -106,6 +107,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean IGNORE_LIGTH_ON_GRASS = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the backend return before MOB AI starts?"
@@ -113,7 +115,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean DISABLE_MOB_AI = false;
 
-
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot use TFO? (TCP Fast Open) This only works with NullCordX due proxy impl!"
@@ -122,6 +124,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     public boolean USE_TCP_FAST_OPEN = true;
     public int TCP_FAST_OPEN_MODE = 3;
 
+    @NewLine
    @Comment(value = {
            @CommentValue(
                    "What should be the amount of threads per chunk? This can be influenced by the number of players you have"
@@ -129,6 +132,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
    })
     public int CHUNK_THREADS = 2;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "This will skip useless explosions particles, making less-lag and better FPS while seeing them"
@@ -136,6 +140,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean OPTIMIZE_EXPLOSIONS = false;
 
+    @NewLine
     @Comment(value = {
               @CommentValue(
                      "What should be the amount of threads per player? This can be influenced by the number of players you have"
@@ -143,6 +148,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public int PLAYER_PER_CHUNK_THREAD = 50;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot try to optimize chunk chest handling?"
@@ -150,6 +156,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean OPTIMIZE_CHUNK_CHEST = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot cache some player movements and animations? This may increase ram but deflate CPU usage"
@@ -157,6 +164,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean CACHE_PLAYERS_MOVEMENT = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot handle faster potion handling? This may help on pot-pvp servers"
@@ -164,6 +172,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean FASTER_POTION_HANDLING = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot load BlockPhysicsEvent this may help on some servers"
@@ -171,6 +180,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean USE_BLOCKPHISIC_EVENT = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Should the spigot disable Spigot player tracker thread? This may increase performance"
@@ -181,6 +191,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public boolean DISABLE_SPIGOT_TRACKER = false;
 
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "Name for Netty operations (may not appear on client disconnection)"
@@ -188,6 +199,33 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     })
     public String NETTY_HANDLER_PREFIX = "ShieldSpigot";
 
+    @NewLine
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot log some player connection exceptions? This may be useful for debug"
+            )
+    })
+
+    public boolean LOG_PLAYER_CONNECTION_EXCEPTIONS = true;
+
+    @NewLine
+    @Comment(value = {
+            @CommentValue(
+                    "Should the spigot log player ip? This may be useful for connection privacity"
+            )
+    })
+
+    public boolean LOG_PLAYER_ADDRESS = false;
+
+    @NewLine
+    @Comment(value = {
+            @CommentValue(
+                    "Maximum amount of ms for a connection to send timeout handler"
+            )
+    })
+    public int TIMEOUT_HANDLER = 600;
+
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "This is the configuration for book limitation, if you need more information, pages you must edit here"
@@ -198,29 +236,7 @@ public class ShieldSpigotConfigImpl extends SafeYamlSerializable {
     public int MAX_TITLE_LENGTH = 32;
     public int MAX_BOOK_TICKS = 20;
 
-    @Comment(value = {
-            @CommentValue(
-                    "Should the spigot log some player connection exceptions? This may be useful for debug"
-            )
-    })
-
-    public boolean LOG_PLAYER_CONNECTION_EXCEPTIONS = true;
-
-    @Comment(value = {
-            @CommentValue(
-                    "Should the spigot log player ip? This may be useful for connection privacity"
-            )
-    })
-
-    public boolean LOG_PLAYER_ADDRESS = false;
-
-    @Comment(value = {
-            @CommentValue(
-                    "Maximum amount of ms for a connection to send timeout handler"
-            )
-    })
-    public int TIMEOUT_HANDLER = 600;
-
+    @NewLine
     @Comment(value = {
             @CommentValue(
                     "This is the knockback configuration, you can edit here the knockback values"
