@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import es.xism4.software.spigot.FastDecoderException;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInput;
@@ -55,7 +57,7 @@ public class NBTCompressedStreamTools {
         if (nbtbase instanceof NBTTagCompound) {
             return (NBTTagCompound) nbtbase;
         } else {
-            throw new net.shieldcommunity.spigot.FastDecoderException("Invalid data?");
+            throw new FastDecoderException("Invalid data?");
         }
     }
 

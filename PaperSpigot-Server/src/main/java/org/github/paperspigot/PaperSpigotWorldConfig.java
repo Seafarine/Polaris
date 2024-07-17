@@ -269,10 +269,10 @@ public class PaperSpigotWorldConfig
 
     public static boolean disableEntityAi;
 
-    private void shieldSpigotWorldConfig() {
+    private void polarisCommand() {
         disableEntityAi = getBoolean("disable-almost-all-mobs-ai", false);
-        optimizeTntMovement = getBoolean("settings.shieldspigot.optimizations.tnt-movements", false);
-        optimizeLiquidExplosions = getBoolean("settings.shieldspigot.optimizations.liquid-explosions", false);
+        optimizeTntMovement = getBoolean("settings.polaris.optimizations.tnt-movements", true);
+        optimizeLiquidExplosions = getBoolean("settings.polaris.optimizations.liquid-explosions", false);
     }
 
     public boolean fixCannons;
@@ -323,7 +323,7 @@ public class PaperSpigotWorldConfig
     public boolean optimizeExplosions;
     private void optimizeExplosions()
     {
-        optimizeExplosions = getBoolean( "optimize-explosions", false );
+        optimizeExplosions = getBoolean( "optimize-explosions", true );
     }
 
     public boolean fastDrainLava;

@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.ArrayList;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Vehicle;
@@ -24,11 +24,8 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 // CraftBukkit end
 
-import co.aikar.timings.SpigotTimings; // Spigot
-
 // PaperSpigot start
 import org.bukkit.Bukkit;
-import org.github.paperspigot.PaperSpigotConfig;
 import org.spigotmc.event.entity.EntityDismountEvent;
 // PaperSpigot end
 
@@ -900,9 +897,9 @@ public abstract class EntityLiving extends Entity {
         if (this.random.nextDouble() >= this.getAttributeInstance(GenericAttributes.c).getValue()) {
             this.ai = true;
             double magnitude = MathHelper.sqrt(d0 * d0 + d1 * d1);
-            double friction = ShieldSpigotConfigImpl.IMP.KNOCKBACK_FRICTION;
-            double horizontalKnockback = ShieldSpigotConfigImpl.IMP.KNOCKBACK_HORIZONTAL;
-            double verticalKnockback = ShieldSpigotConfigImpl.IMP.KNOCKBACK_VERTICAL;
+            double friction = PolarisConfigImpl.IMP.KNOCKBACK_FRICTION;
+            double horizontalKnockback = PolarisConfigImpl.IMP.KNOCKBACK_HORIZONTAL;
+            double verticalKnockback = PolarisConfigImpl.IMP.KNOCKBACK_VERTICAL;
 
             this.motX /= friction;
             this.motY /= friction;
@@ -911,8 +908,8 @@ public abstract class EntityLiving extends Entity {
             this.motY += verticalKnockback;
             this.motZ -= d1 / magnitude * horizontalKnockback;
 
-            if (this.motY > ShieldSpigotConfigImpl.IMP.KNOCKBACK_HORIZONTAL_LIMIT) {
-                this.motY = ShieldSpigotConfigImpl.IMP.KNOCKBACK_VERTICAL_LIMIT;
+            if (this.motY > PolarisConfigImpl.IMP.KNOCKBACK_HORIZONTAL_LIMIT) {
+                this.motY = PolarisConfigImpl.IMP.KNOCKBACK_VERTICAL_LIMIT;
             }
 
         }

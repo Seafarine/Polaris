@@ -4,20 +4,18 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.shieldcommunity.spigot.cache.CachedPacketM;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.cache.CachedPacketM;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.craftbukkit.util.CraftMagicNumbers;
-import org.bukkit.craftbukkit.util.LongHashSet;
 import org.bukkit.event.block.BlockCanBuildEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.generator.ChunkGenerator;
-import co.aikar.timings.SpigotTimings;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -26,7 +24,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.github.paperspigot.PaperSpigotConfig;
 import org.github.paperspigot.event.ServerExceptionEvent;
 import org.github.paperspigot.exception.ServerInternalException;
 // PaperSpigot end
@@ -417,7 +414,7 @@ public abstract class World implements IBlockAccess {
                     this.methodProfiler.b();
                 }
 
-                if(ShieldSpigotConfigImpl.IMP.CACHE_PLAYERS_MOVEMENT) {
+                if(PolarisConfigImpl.IMP.CACHE_PLAYERS_MOVEMENT) {
                     movementCache.clear();
                 }
 

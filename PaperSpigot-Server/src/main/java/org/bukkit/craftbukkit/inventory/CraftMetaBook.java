@@ -7,7 +7,7 @@ import java.util.Map;
 import net.minecraft.server.NBTTagCompound;
 import net.minecraft.server.NBTTagList;
 
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.DelegateDeserialization;
@@ -22,7 +22,6 @@ import net.minecraft.server.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.IChatBaseComponent;
 import net.minecraft.server.NBTTagString;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
-import org.github.paperspigot.PaperSpigotConfig;
 
 // Spigot start
 import static org.spigotmc.ValidateUtils.*;
@@ -36,9 +35,9 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
     static final ItemMetaKey RESOLVED = new ItemMetaKey("resolved");
     static final ItemMetaKey GENERATION = new ItemMetaKey("generation");
 
-    static final int MAX_PAGES = ShieldSpigotConfigImpl.IMP.MAX_PAGES;
-    static final int MAX_PAGE_LENGTH = ShieldSpigotConfigImpl.IMP.MAX_BOOK_PAGE_LENGTH;
-    static final int MAX_TITLE_LENGTH = ShieldSpigotConfigImpl.IMP.MAX_TITLE_LENGTH;
+    static final int MAX_PAGES = PolarisConfigImpl.IMP.MAX_PAGES;
+    static final int MAX_PAGE_LENGTH = PolarisConfigImpl.IMP.MAX_BOOK_PAGE_LENGTH;
+    static final int MAX_TITLE_LENGTH = PolarisConfigImpl.IMP.MAX_TITLE_LENGTH;
 
     protected String title;
     protected String author;

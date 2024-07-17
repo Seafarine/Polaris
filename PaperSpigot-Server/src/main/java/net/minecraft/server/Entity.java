@@ -7,8 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 // CraftBukkit start
-import net.shieldcommunity.spigot.cache.CachedPacketM;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -36,7 +35,6 @@ import org.bukkit.plugin.PluginManager;
 // CraftBukkit end
 
 // PaperSpigot start
-import org.github.paperspigot.PaperSpigotConfig;
 import org.spigotmc.event.entity.EntityDismountEvent;
 // PaperSpigot end
 
@@ -64,7 +62,7 @@ public abstract class Entity implements ICommandListener {
 
     private static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
 
-    public static int entityCount = ShieldSpigotConfigImpl.IMP.ARROW_DESYNC_FIX;
+    public static int entityCount = PolarisConfigImpl.IMP.ARROW_DESYNC_FIX;
     private int id;
     public double j;
     public boolean k;
@@ -465,10 +463,6 @@ public abstract class Entity implements ICommandListener {
             this.lastMotY = this.motY;
             this.lastMotZ = this.motZ;
 
-            if (ShieldSpigotConfigImpl.IMP.CACHE_PLAYERS_MOVEMENT && world.movementCache.move(this)) {
-                return;
-            }
-
             // ShieldSpigot end
             // CraftBukkit start - Don't do anything if we aren't moving
             // We need to do this regardless of whether or not we are moving thanks to portals
@@ -713,10 +707,6 @@ public abstract class Entity implements ICommandListener {
 
             if (d7 != d1) {
                 block.a(this.world, this);
-            }
-
-            if(ShieldSpigotConfigImpl.IMP.CACHE_PLAYERS_MOVEMENT) {
-                world.movementCache.cache(this);
             }
 
             // CraftBukkit start

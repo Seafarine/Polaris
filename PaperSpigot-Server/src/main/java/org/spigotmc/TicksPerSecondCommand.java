@@ -21,8 +21,8 @@ public class TicksPerSecondCommand extends Command
     }
 
 
-    public final String PREFIX = " §e§lShield§6§lSpigot §7-> ";
-    public final String VERSION = "§a[0.0.7]";
+    public final String PREFIX = " §9§lPolaris §7-> ";
+    public final String VERSION = "§a[0.0.1]";
 
     @Override
     public boolean execute(CommandSender sender, String currentAlias, String[] args)
@@ -36,20 +36,20 @@ public class TicksPerSecondCommand extends Command
         double[] tps = org.bukkit.Bukkit.spigot().getTPS();
         String[] tpsAvg = new String[tps.length];
 
-         for ( int i = 0; i < tps.length; i++) {
-             tpsAvg[i] = format( tps[i] );
+        for ( int i = 0; i < tps.length; i++) {
+            tpsAvg[i] = format( tps[i] );
         }
 
         sender.sendMessage(ChatColor.GRAY+"§n------------------------------------");
-         sender.sendMessage("");
-
-        sender.sendMessage(PREFIX+VERSION +ChatColor.YELLOW+" powered by shieldcommunity.net");
         sender.sendMessage("");
-         sender.sendMessage(
-                 ChatColor.translateAlternateColorCodes(
-                         '&', "&aTPS from last 1m, 5m, 15m: &e" +
-                                 org.apache.commons.lang.StringUtils.join(tpsAvg, ", "))
-         );
+
+        sender.sendMessage(PREFIX+VERSION +ChatColor.YELLOW+" powered by https://www.seafarine.com/");
+        sender.sendMessage("");
+        sender.sendMessage(
+                ChatColor.translateAlternateColorCodes(
+                        '&', "&aTPS from last 1m, 5m, 15m: &e" +
+                                org.apache.commons.lang.StringUtils.join(tpsAvg, ", "))
+        );
 
         sender.sendMessage("");
         sender.sendMessage(ChatColor.GRAY+"§n------------------------------------");

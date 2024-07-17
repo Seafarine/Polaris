@@ -4,13 +4,12 @@ import net.minecraft.server.Chunk;
 import net.minecraft.server.ChunkProviderServer;
 import net.minecraft.server.ChunkRegionLoader;
 import net.minecraft.server.World;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.bukkit.craftbukkit.util.AsynchronousExecutor;
-import org.github.paperspigot.PaperSpigotConfig;
 
 public class ChunkIOExecutor {
-    static final int BASE_THREADS = ShieldSpigotConfigImpl.IMP.CHUNK_THREADS; // PaperSpigot - Bumped value > ShieldSpigot - Make Configurable
-    static final int PLAYERS_PER_THREAD = ShieldSpigotConfigImpl.IMP.PLAYER_PER_CHUNK_THREAD; // ShieldSpigot - Make Configurable
+    static final int BASE_THREADS = PolarisConfigImpl.IMP.CHUNK_THREADS; // PaperSpigot - Bumped value > ShieldSpigot - Make Configurable
+    static final int PLAYERS_PER_THREAD = PolarisConfigImpl.IMP.PLAYER_PER_CHUNK_THREAD; // ShieldSpigot - Make Configurable
 
     private static final AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException> instance = new AsynchronousExecutor<QueuedChunk, Chunk, Runnable, RuntimeException>(new ChunkIOProvider(), BASE_THREADS);
 

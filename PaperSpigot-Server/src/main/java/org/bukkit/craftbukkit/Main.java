@@ -196,7 +196,7 @@ public class Main {
                     System.out.println("You have really low ram allocated, try to put more?");
                 }
                 // Spigot End
-                System.out.println("ShieldSpigot is loading libraries faster. Please wait...");
+                System.out.println("Polaris is starting. Please wait...");
                 net.minecraft.server.DispenserRegistry.c();
                 OptionSet finalOptions = options;
 

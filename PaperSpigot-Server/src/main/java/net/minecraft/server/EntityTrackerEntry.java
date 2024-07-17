@@ -1,11 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Sets;
-
 import java.util.*;
 
-import net.shieldcommunity.api.events.PlayerTrackEntityEvent;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.api.events.PlayerTrackEntityEvent;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -277,7 +275,7 @@ public class EntityTrackerEntry {
 
         if (datawatcher.a()) {
 
-            if (ShieldSpigotConfigImpl.IMP.HIDE_PLAYER_HEARTS && this.tracker instanceof EntityHuman) {
+            if (PolarisConfigImpl.IMP.HIDE_PLAYER_HEARTS && this.tracker instanceof EntityHuman) {
                 List<DataWatcher.WatchableObject> changedMetadata = datawatcher.c(); // Clone the data watcher elements
                 Iterator<DataWatcher.WatchableObject> iterator = changedMetadata.iterator();
                 boolean found = false;

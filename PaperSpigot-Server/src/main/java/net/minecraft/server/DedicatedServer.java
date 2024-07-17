@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import lombok.Getter;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,6 @@ import co.aikar.timings.SpigotTimings; // Spigot
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.craftbukkit.util.Waitable;
 import org.bukkit.event.server.RemoteServerCommandEvent;
-import org.github.paperspigot.PaperSpigotByteBuf;
 // CraftBukkit end
 
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
@@ -119,9 +118,9 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         thread.setDaemon(true);
         thread.start();
-        DedicatedServer.LOGGER.info("Starting ShieldSpigot server version 1.8.8");
+        DedicatedServer.LOGGER.info("Starting Polaris (1.8.8x version)");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
-            DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar ShieldSpigot.jar\"");
+            DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar Polaris.jar\"");
         }
 
         DedicatedServer.LOGGER.info("Loading properties");
@@ -205,20 +204,23 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             org.github.paperspigot.PaperSpigotConfig.registerCommands();
             // PaperSpigot end
 
-            ShieldSpigotConfigImpl.IMP.reload(new File("ShieldSpigot", "shieldspigot.yml").toPath());
+            PolarisConfigImpl.IMP.reload(new File("Polaris", "polaris.yml").toPath());
 
             DedicatedServer.LOGGER.info("Generating keypair");
             this.a(MinecraftEncryption.b());
             DedicatedServer.LOGGER.info("Starting Minecraft server on " + (this.getServerIp().length() == 0 ? "*" : this.getServerIp()) + ":" + this.R());
 
-            PaperSpigotByteBuf bufUtil = new PaperSpigotByteBuf();
+           // PaperSpigotByteBuf bufUtil = new PaperSpigotByteBuf();
 
+            /*
             if(!bufUtil.check()) {
                 sendLogger("Unvalid license?");
                 System.exit(0);
                 return true;
             }
                 otherLogger();
+
+             */
 
         if (!org.spigotmc.SpigotConfig.lateBind) {
             try {

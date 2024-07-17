@@ -331,7 +331,7 @@ public class Metrics {
      */
     private void postPlugin(final boolean isPing) throws IOException {
         // Server software specific section
-        String pluginName = "ShieldSpigot"; // PaperSpigot - We need some usage data
+        String pluginName = "Polaris"; // PaperSpigot - We need some usage data
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String serverVersion = Bukkit.getVersion();
         int playersOnline = Bukkit.getServer().getOnlinePlayers().size();

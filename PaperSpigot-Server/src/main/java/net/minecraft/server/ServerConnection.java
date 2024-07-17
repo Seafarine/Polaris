@@ -12,7 +12,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -106,7 +106,7 @@ public class ServerConnection {
 
             // PandaSpigot start - Add support for io_uring
             if ((io.netty.incubator.channel.uring.IOUring.isAvailable() || Epoll.isAvailable()) && this.f.ai()) {
-                if (ShieldSpigotConfigImpl.IMP.USE_IO_URING && io.netty.incubator.channel.uring.IOUring.isAvailable() && !(address instanceof io.netty.channel.unix.DomainSocketAddress) && this.f.aK() == -1) {
+                if (PolarisConfigImpl.IMP.USE_IO_URING && io.netty.incubator.channel.uring.IOUring.isAvailable() && !(address instanceof io.netty.channel.unix.DomainSocketAddress) && this.f.aK() == -1) {
                     oclass = io.netty.incubator.channel.uring.IOUringServerSocketChannel.class;
                     lazyinitvar = ServerConnection.SERVER_IO_URING_EVENT_GROUP;
                     ServerConnection.e.info("Using io_uring channel type");
@@ -133,8 +133,8 @@ public class ServerConnection {
             }
 
             // Paper start - indicate Velocity natives in use
-            e.info("ShieldSpigot is using " + Natives.compress.getLoadedVariant() + " compression compiled by NullCordX.");
-            e.info("ShieldSpigot is using  " + Natives.cipher.getLoadedVariant() + " ciphers compiled by Velocity.");
+            e.info("Polaris is using " + Natives.compress.getLoadedVariant() + " compression compiled by NullCordX.");
+            e.info("Polaris is using  " + Natives.cipher.getLoadedVariant() + " ciphers compiled by Velocity.");
             // Paper end
 
             this.g.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer() {
@@ -143,8 +143,8 @@ public class ServerConnection {
                         io.netty.channel.ChannelConfig config = channel.config();
                         channel.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(true));
                         config.setOption(ChannelOption.TCP_NODELAY, true);
-                        config.setOption(ChannelOption.TCP_FASTOPEN, ShieldSpigotConfigImpl.IMP.TCP_FAST_OPEN_MODE); //ShieldSpigot
-                        config.setOption(ChannelOption.TCP_FASTOPEN_CONNECT, ShieldSpigotConfigImpl.IMP.USE_TCP_FAST_OPEN); //ShieldSpigot
+                        config.setOption(ChannelOption.TCP_FASTOPEN, PolarisConfigImpl.IMP.TCP_FAST_OPEN_MODE); //ShieldSpigot
+                        config.setOption(ChannelOption.TCP_FASTOPEN_CONNECT, PolarisConfigImpl.IMP.USE_TCP_FAST_OPEN); //ShieldSpigot
                         config.setOption(ChannelOption.IP_TOS, 0x18);
                         config.setAllocator(io.netty.buffer.ByteBufAllocator.DEFAULT);
                     } catch (ChannelException channelexception) {

@@ -1,11 +1,10 @@
 package net.minecraft.server;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.CorruptedFrameException;
-import net.shieldcommunity.spigot.velocity.LegacyVarIntByteDecoder;
+import es.xism4.software.spigot.velocity.LegacyVarIntByteDecoder;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class PacketSplitter extends ByteToMessageDecoder {
     public PacketSplitter() {}
 
     //NullCordX - Start cached decoder exceptions
-    public static final boolean DEBUG = Boolean.getBoolean("shieldspigot-advanced-traces");
+    public static final boolean DEBUG = Boolean.getBoolean("shieldspigot-decoder-traces");
     private static final CorruptedFrameException DECODE_FAILED =
             new CorruptedFrameException("A packet did not decode successfully (invalid packet), enable print-full-stacktraces for more usefully information");
 

@@ -43,7 +43,9 @@ public class VersionCommand extends BukkitCommand {
         if (!testPermission(sender)) return true;
 
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bThis server is running &aShieldSpigot &bby xIsm4FlX"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes(
+                    '&', "&bThis server is running &9Polaris &bpowered by &7- &9https://www.seafarine.com/")
+            );
         } else {
             StringBuilder name = new StringBuilder();
 

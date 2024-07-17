@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 // CraftBukkit start
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.entity.CraftItem;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -21,7 +21,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.util.Vector;
-import org.github.paperspigot.PaperSpigotConfig;
 // CraftBukkit end
 
 public abstract class EntityHuman extends EntityLiving {
@@ -1005,9 +1004,9 @@ public abstract class EntityHuman extends EntityLiving {
                         if (i > 0) {
                             entity.g(
                                     -MathHelper.sin(this.yaw * 3.1415927F / 180.0F) * (float) i *
-                                            ShieldSpigotConfigImpl.IMP.KNOCKBACK_EXTRA_HORIZONTAL, ShieldSpigotConfigImpl.IMP.KNOCKBACK_EXTRA_VERTICAL,
+                                            PolarisConfigImpl.IMP.KNOCKBACK_EXTRA_HORIZONTAL, PolarisConfigImpl.IMP.KNOCKBACK_EXTRA_VERTICAL,
                                     MathHelper.cos(this.yaw * 3.1415927F / 180.0F) * (float) i *
-                                            ShieldSpigotConfigImpl.IMP.KNOCKBACK_EXTRA_HORIZONTAL);
+                                            PolarisConfigImpl.IMP.KNOCKBACK_EXTRA_HORIZONTAL);
                             this.motX *= 0.6D;
                             this.motZ *= 0.6D;
                             this.setSprinting(false);
@@ -1334,7 +1333,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
-    private final int interval = ShieldSpigotConfigImpl.IMP.PLAYER_STATIC_INTERVAL; //ShieldSpigot
+    private final int interval = PolarisConfigImpl.IMP.PLAYER_STATIC_INTERVAL; //ShieldSpigot
 
     public void b(Statistic statistic) {
         this.a(statistic, interval);

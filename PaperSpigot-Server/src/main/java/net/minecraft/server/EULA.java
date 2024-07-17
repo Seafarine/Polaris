@@ -53,7 +53,7 @@ public class EULA {
             Properties var2 = new Properties();
             var1 = new FileOutputStream(this.b);
             var2.setProperty("eula", "true");
-            var2.store(var1, "ShieldSpigot sets on true, but you must read (https://account.mojang.com/documents/minecraft_eula).");
+            var2.store(var1, "Polaris automaticaly sets true, but you MUST read eula (https://account.mojang.com/documents/minecraft_eula).");
         } catch (Exception var6) {
             a.warn("Failed to save " + this.b, var6);
         } finally {

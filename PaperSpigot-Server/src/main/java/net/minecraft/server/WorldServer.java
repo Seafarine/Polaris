@@ -4,7 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.ListenableFuture;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.WeatherType;
@@ -44,7 +44,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     // Add env and gen to constructor
 
-    public boolean hasPhysicsEvent = ShieldSpigotConfigImpl.IMP.USE_BLOCKPHISIC_EVENT;
+    public boolean hasPhysicsEvent = PolarisConfigImpl.IMP.USE_BLOCKPHISIC_EVENT;
     public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, MethodProfiler methodprofiler, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen) {
         super(idatamanager, worlddata, WorldProvider.byDimension(env.getId()), methodprofiler, false, gen, env);
         this.dimension = i;

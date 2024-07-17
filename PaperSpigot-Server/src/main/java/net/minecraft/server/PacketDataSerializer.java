@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import net.shieldcommunity.spigot.FastDecoderException;
+import es.xism4.software.spigot.FastDecoderException;
 import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -22,20 +22,20 @@ import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
-import net.shieldcommunity.spigot.utils.ProtocolSupportCheck;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
+import es.xism4.software.spigot.utils.ProtocolSupportCheck;
 import org.bukkit.craftbukkit.inventory.CraftItemStack; // CraftBukkit
-import org.github.paperspigot.PaperSpigotConfig;
+
 
 public class PacketDataSerializer extends ByteBuf {
 
     private final ByteBuf a;
 
-    private final boolean allowLargePackets; // ShieldSpigot - Allow large packets for 1.7x clients
+    private final boolean allowLargePackets; // SS - Allow large packets for 1.7x clients
 
-    public static final boolean DEBUG = Boolean.getBoolean("shieldspigot-advanced-traces");
+    public static final boolean DEBUG = Boolean.getBoolean("polaris-decoder-traces");
     private static final FastDecoderException DECODE_FAILED =
-            new FastDecoderException("A packet did not decode successfully (invalid packet), use -Dshieldspigot-advanced-traces=true " +
+            new FastDecoderException("A packet did not decode successfully (invalid packet), use -Dpolaris-decoder-traces=true " +
                     "for more usefully information");
 
     public PacketDataSerializer(ByteBuf bytebuf) {
@@ -59,10 +59,10 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     // Paper start
-    private static final int DEFAULT_LIMIT = Short.MAX_VALUE; //ShieldSpigot
-    private static final int LARGE_PACKET_LIMIT = Short.MAX_VALUE * ShieldSpigotConfigImpl.IMP.MAX_PACKET_MULTIPLIER; //ShieldSpigot
+    private static final int DEFAULT_LIMIT = Short.MAX_VALUE; //SS
+    private static final int LARGE_PACKET_LIMIT = Short.MAX_VALUE * PolarisConfigImpl.IMP.MAX_PACKET_MULTIPLIER; //SS
     public byte[] a() {
-        int limit = allowLargePackets ? LARGE_PACKET_LIMIT : DEFAULT_LIMIT; //ShieldSpigot
+        int limit = allowLargePackets ? LARGE_PACKET_LIMIT : DEFAULT_LIMIT; //SS
         return readByteArray(limit);
     }
 
@@ -101,7 +101,6 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public int e() {
-        //return net.shieldcommunity.spigot.velocity.VarIntHandler.readVarInt(this.a);
         int i = 0;
         int j = 0;
 
@@ -112,7 +111,7 @@ public class PacketDataSerializer extends ByteBuf {
             i |= (b0 & 127) << j++ * 7;
             if (j > 5) {
                 if(DEBUG) {
-                    throw DECODE_FAILED; //ShieldSpigot - Use cached exception instead generate other
+                    throw DECODE_FAILED; //ss - Use cached exception instead generate other
                 }
             }
         } while ((b0 & 128) == 128);
@@ -190,8 +189,8 @@ public class PacketDataSerializer extends ByteBuf {
             this.readerIndex(i);
             return NBTCompressedStreamTools.a(
                     new ByteBufInputStream(this),
-                    new NBTReadLimiter(ShieldSpigotConfigImpl.IMP.MAX_BYTES_PER_CONNECTION)
-            ); //ShieldSpigot - Make configurable the max bytes
+                    new NBTReadLimiter(PolarisConfigImpl.IMP.MAX_BYTES_PER_CONNECTION)
+            ); //ss - Make configurable the max bytes
         }
     }
 

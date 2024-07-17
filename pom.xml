@@ -14,7 +14,7 @@
     <version>dev-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>ShieldSpigot-Parent</name>
+    <name>Polaris-Parent</name>
     <description>Parent project for all PaperSpigot modules.</description>
     <url>https://github.com/PaperSpigot/Spigot</url>
 

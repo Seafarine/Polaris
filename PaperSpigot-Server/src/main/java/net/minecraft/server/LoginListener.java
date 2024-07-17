@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
 import io.netty.util.concurrent.GenericFutureListener;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
-import net.shieldcommunity.spigot.utils.PatternCheck;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
@@ -14,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.bukkit.craftbukkit.util.Waitable;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
-import org.github.paperspigot.PaperSpigotConfig;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -23,7 +21,6 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
 // CraftBukkit end
 
 public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBox {
@@ -57,13 +54,13 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     }
 
     private boolean checkPacketLimit() {
-        if (ShieldSpigotConfigImpl.IMP.USE_PACKET_FILTER) {
+        if (PolarisConfigImpl.IMP.USE_PACKET_FILTER) {
             if (this.packetsPerSecondTime < System.currentTimeMillis()) {
                 this.packetsPerSecondTime = System.currentTimeMillis() + 1000L;
                 this.packetsPerSecond = 0;
             }
 
-            if (++this.packetsPerSecond > ShieldSpigotConfigImpl.IMP.MAX_PACKETS_PER_SECOND) {
+            if (++this.packetsPerSecond > PolarisConfigImpl.IMP.MAX_PACKETS_PER_SECOND) {
                 this.disconnect("%prefix% Too many packets!".replace("%prefix%", "ShieldSpigot"));
                 return true;
             }
@@ -89,7 +86,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
             }
         }
 
-        if (this.h++ == ShieldSpigotConfigImpl.IMP.TIMEOUT_HANDLER) {
+        if (this.h++ == PolarisConfigImpl.IMP.TIMEOUT_HANDLER) {
             this.disconnect("Took too long to log in, say your server admin to increase the timeout handler!");
         }
 
@@ -179,7 +176,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     }
 
     public String d() {
-        String ip = ShieldSpigotConfigImpl.IMP.LOG_PLAYER_ADDRESS ? this.networkManager.getSocketAddress().toString() : "<ip address withheld>";
+        String ip = PolarisConfigImpl.IMP.LOG_PLAYER_ADDRESS ? this.networkManager.getSocketAddress().toString() : "<ip address withheld>";
         return this.i != null ? this.i + " (" + ip + ")" : ip;
     }
 

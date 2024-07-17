@@ -12,7 +12,7 @@ import io.netty.handler.timeout.TimeoutException;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -270,13 +270,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     private long packetsPerSecondTime;
 
     private void checkPacketLimit() {
-        if (ShieldSpigotConfigImpl.IMP.USE_PACKET_FILTER) {
+        if (PolarisConfigImpl.IMP.USE_PACKET_FILTER) {
             if (this.packetsPerSecondTime < System.currentTimeMillis()) {
                 this.packetsPerSecondTime = System.currentTimeMillis() + 1000L;
                 this.packetsPerSecond = 0;
             }
 
-            if (++this.packetsPerSecond > ShieldSpigotConfigImpl.IMP.MAX_PACKETS_PER_SECOND) {
+            if (++this.packetsPerSecond > PolarisConfigImpl.IMP.MAX_PACKETS_PER_SECOND) {
                 this.channel.close();
             }
         }

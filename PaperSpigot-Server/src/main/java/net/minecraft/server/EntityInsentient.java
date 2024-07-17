@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -8,7 +8,6 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.EntityUnleashEvent;
 import org.bukkit.event.entity.EntityUnleashEvent.UnleashReason;
 
-import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -473,7 +472,7 @@ public abstract class EntityInsentient extends EntityLiving {
         }
         // Spigot End
 
-        if(ShieldSpigotConfigImpl.IMP.DISABLE_MOB_AI) { //ShieldSpigot
+        if(PolarisConfigImpl.IMP.DISABLE_MOB_AI) { //ShieldSpigot
             return;
         }
 

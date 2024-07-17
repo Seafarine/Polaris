@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
-import org.github.paperspigot.PaperSpigotConfig;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 
 import java.util.Iterator;
 
@@ -53,7 +52,7 @@ public class BlockChest extends BlockContainer {
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
             final IBlockData iblockdata1 = world.isLoaded(blockposition1) ? world.getType(blockposition1) : null;
-            if (ShieldSpigotConfigImpl.IMP.OPTIMIZE_CHUNK_CHEST && iblockdata1 ==  null) {
+            if (PolarisConfigImpl.IMP.OPTIMIZE_CHUNK_CHEST && iblockdata1 ==  null) {
                 continue;
             }
 

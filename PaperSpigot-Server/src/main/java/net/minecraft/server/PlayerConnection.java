@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import net.shieldcommunity.spigot.FastDecoderException;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1857,7 +1856,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 }
             }
         } else {
-            disconnect("[ShieldSpigot] Disable creative mode");
+            disconnect("[Polaris filter] Disable creative mode");
         }
 
     }
@@ -1981,9 +1980,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         try { // CraftBukkit
         if ("MC|BEdit".equals(packetplayincustompayload.a())) {
             // PandaSpigot start - Cooldown on book edit
-            if (this.lastBookTick + ShieldSpigotConfigImpl.IMP.MAX_BOOK_TICKS > MinecraftServer.currentTick) {
+            if (this.lastBookTick + PolarisConfigImpl.IMP.MAX_BOOK_TICKS > MinecraftServer.currentTick) {
                 this.disconnect(
-                        ShieldSpigotConfigImpl.IMP.NETTY_HANDLER_PREFIX+" Book edited too quickly!"
+                        PolarisConfigImpl.IMP.NETTY_HANDLER_PREFIX+" Book edited too quickly!"
                 );
                 return;
             }
@@ -2011,7 +2010,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     return;
                 }
             } catch (Exception exception) {
-                if(ShieldSpigotConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
+                if(PolarisConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
                     PlayerConnection.c.error("Couldn\'t handle book info", exception);
                 }
                 this.disconnect("Invalid book data!"); // CraftBukkit
@@ -2023,8 +2022,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             return;
         } else if ("MC|BSign".equals(packetplayincustompayload.a())) {
             // PandaSpigot start - Cooldown on book sign
-            if (this.lastBookTick + ShieldSpigotConfigImpl.IMP.MAX_BOOK_TICKS > MinecraftServer.currentTick) {
-                this.disconnect(ShieldSpigotConfigImpl.IMP.NETTY_HANDLER_PREFIX +" Book edited too quickly!");
+            if (this.lastBookTick + PolarisConfigImpl.IMP.MAX_BOOK_TICKS > MinecraftServer.currentTick) {
+                this.disconnect(PolarisConfigImpl.IMP.NETTY_HANDLER_PREFIX +" Book edited too quickly!");
                 return;
             }
             this.lastBookTick = MinecraftServer.currentTick;
@@ -2115,7 +2114,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         this.player.sendMessage(new ChatMessage("advMode.setCommand.success", s));
                     }
                 } catch (Exception exception3) {
-                    if(ShieldSpigotConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
+                    if(PolarisConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
                         PlayerConnection.c.error("Couldn\'t set command block", exception3);
                     }
                     this.disconnect("Invalid CommandBlock data!"); // CraftBukkit
@@ -2143,7 +2142,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         iinventory.update();
                     }
                 } catch (Exception exception4) {
-                    if(ShieldSpigotConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
+                    if(PolarisConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
                         PlayerConnection.c.error("Couldn\'t set beacon", exception4);
                     }
                     this.disconnect("Invalid beacon data!"); // CraftBukkit
@@ -2170,7 +2169,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     getPlayer().addChannel(channel);
                 }
             } catch (Exception ex) {
-                if(ShieldSpigotConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
+                if(PolarisConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
                     PlayerConnection.c.error("Couldn\'t register custom payload", ex);
                 }
                 this.disconnect("Invalid payload REGISTER!");
@@ -2182,7 +2181,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     getPlayer().removeChannel(channel);
                 }
             } catch (Exception ex) {
-                if(ShieldSpigotConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
+                if(PolarisConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
                     PlayerConnection.c.error("Couldn\'t register custom payload", ex);
                 }
                 this.disconnect("Invalid payload UNREGISTER!");
@@ -2193,7 +2192,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 packetplayincustompayload.b().readBytes(data);
                 server.getMessenger().dispatchIncomingMessage(player.getBukkitEntity(), packetplayincustompayload.a(), data);
             } catch (Exception ex) {
-                if(ShieldSpigotConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
+                if(PolarisConfigImpl.IMP.LOG_PLAYER_CONNECTION_EXCEPTIONS) {
                     PlayerConnection.c.error("Couldn\'t register custom payload", ex);
                 }
                 this.disconnect("Invalid custom payload!");

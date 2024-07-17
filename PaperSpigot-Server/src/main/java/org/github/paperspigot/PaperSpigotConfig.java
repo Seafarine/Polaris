@@ -3,7 +3,7 @@ package org.github.paperspigot;
 import com.google.common.base.Throwables;
 import net.minecraft.server.Items;
 import net.minecraft.server.MinecraftServer;
-import net.shieldcommunity.spigot.commands.ShieldSpigotCommand;
+import es.xism4.software.spigot.commands.PolarisCommand;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -120,7 +120,7 @@ public class PaperSpigotConfig {
     }
 
     private static void shieldSpigotConfiguration() {
-        commands.put("shieldspigot", new ShieldSpigotCommand("shieldspigot"));
+        commands.put("polaris", new PolarisCommand("polaris"));
     }
 
     public static double babyZombieMovementSpeed;

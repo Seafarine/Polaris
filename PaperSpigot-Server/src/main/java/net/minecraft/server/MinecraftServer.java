@@ -10,19 +10,20 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import es.xism4.software.spigot.cache.CachedConcurrentLinkedQueue;
+import es.xism4.software.spigot.ticks.SecondaryTickHandler;
+import es.xism4.software.spigot.ticks.task.TaskPerTick;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
-import net.shieldcommunity.spigot.cache.CachedConcurrentLinkedQueue;
-import net.shieldcommunity.spigot.config.ShieldSpigotConfigImpl;
+import es.xism4.software.spigot.config.PolarisConfigImpl;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.craftbukkit.Main;
-import org.github.paperspigot.PaperSpigotConfig;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -40,7 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 // CraftBukkit end
 
-public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.SecondaryTickHandler<net.shieldcommunity.spigot.ticks.task.TaskPerTick> implements ICommandListener, IAsyncTaskHandler, IMojangStatistics {
+public abstract class MinecraftServer extends SecondaryTickHandler<TaskPerTick> implements ICommandListener, IAsyncTaskHandler, IMojangStatistics {
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static final File a = new File("usercache.json");
@@ -720,17 +721,17 @@ public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.S
     }
 
     @Override
-    protected net.shieldcommunity.spigot.ticks.task.TaskPerTick packUpRunnable(Runnable runnable) {
+    protected TaskPerTick packUpRunnable(Runnable runnable) {
         // anything that does try to post to main during watchdog crash, run on watchdog
         if (this.hasStopped && Thread.currentThread().equals(shutdownThread)) {
             runnable.run();
             runnable = () -> {};
         }
-        return new net.shieldcommunity.spigot.ticks.task.TaskPerTick(this.ticks, runnable);
+        return new TaskPerTick(this.ticks, runnable);
     }
 
     @Override
-    protected boolean shouldRun(net.shieldcommunity.spigot.ticks.task.TaskPerTick task) {
+    protected boolean shouldRun(TaskPerTick task) {
         return task.getTick() + 3 < this.ticks || this.haveTime();
     }
 
@@ -972,7 +973,7 @@ public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.S
             worldserver.timings.tracker.startTiming(); // Spigot
 
 
-            if (ShieldSpigotConfigImpl.IMP.DISABLE_SPIGOT_TRACKER) { //ShieldSpigot
+            if (PolarisConfigImpl.IMP.DISABLE_SPIGOT_TRACKER) { //ShieldSpigot
                 if (this.getPlayerList().getPlayerCount() > 0) {
                     worldserver.getTracker().updatePlayers();
                 }
@@ -1220,7 +1221,7 @@ public abstract class MinecraftServer extends net.shieldcommunity.spigot.ticks.S
     }
 
     public String getServerModName() {
-        return "ShieldSpigot"; // - > PaperSpigot - PaperSpigot > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
+        return "Polaris"; // - > PaperSpigot - PaperSpigot > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
     }
 
     public CrashReport b(CrashReport crashreport) {
